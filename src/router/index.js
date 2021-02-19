@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+// import BookmarkCard from '../views/BookmarkCard.vue'
+import Technology from '../views/Technology.vue'
 
 Vue.use(VueRouter)
 
@@ -8,8 +10,20 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home,
   },
+  {
+    path: '/:id',
+    name: 'Technology',
+    component: Technology,
+    props: true,
+  },
+  // {
+  //   path: '/:id/:tech',
+  //   name: 'BookmarkCard',
+  //   component: BookmarkCard,
+  //   props: true
+  // },
   {
     path: '/about',
     name: 'About',
@@ -20,8 +34,6 @@ const routes = [
   }
 ]
 
-const router = new VueRouter({
-  routes
-})
+const router = new VueRouter({ routes })
 
 export default router
