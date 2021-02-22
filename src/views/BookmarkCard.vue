@@ -19,17 +19,14 @@
 </template>
 
 <script>
-import linkPreviewGenerator from 'link-preview-generator';
-
 export default {
   name: 'BookmarkCard',
   props: {
     bookmark: { type: Object, required: true },
   },
   computed: {
-    async item() {
-      return await linkPreviewGenerator(this.bookmark.link);
-      // return this.bookmark;
+    item() {
+      return this.bookmark;
     },
     tags() {
       return this.bookmark.tags.join(', ');

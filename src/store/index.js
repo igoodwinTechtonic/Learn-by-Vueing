@@ -14,7 +14,10 @@ export default new Vuex.Store({
   mutations: {
   },
   actions: {
+    // async generatePreview(state, payload) {
+    // }
   },
   modules: {
   }
+
 })
