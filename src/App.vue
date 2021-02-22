@@ -5,26 +5,40 @@
         <v-list-item>
           <v-list-item-content>
             <v-list-item-title class="title">
-              Technologies
+              Folders
             </v-list-item-title>
             <v-list-item-subtitle>
-              Cilck to see available resources.
+              Cilck to see bookmarks.
             </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
 
+        <v-list-item>
+          <v-list-item-content>
+            <v-btn
+              class="subtitle"
+              @click="
+                {
+                }
+              "
+            >
+              Add Folder
+            </v-btn>
+          </v-list-item-content>
+        </v-list-item>
+
         <v-list-item
-          v-for="tech in techs"
-          :key="tech.name"
+          v-for="folder in folders"
+          :key="folder.name"
+          :to="{ name: 'Technology', params: { id: folder.name.toLowerCase(), name: folder.name } }"
           link
-          :to="{ name: 'Technology', params: { id: tech.name.toLowerCase(), name: tech.name } }"
         >
           <v-list-item-action>
-            <v-icon>{{ tech.icon }}</v-icon>
+            <v-icon>{{ mdi(folder.icon) }}</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>
-              {{ tech.name }}
+              {{ folder.name }}
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
@@ -87,7 +101,7 @@
 </template>
 
 <script>
-// import { mdiThemeLightDark } from '@mdi/js';
+import * as mdijs from '@mdi/js';
 
 export default {
   name: 'App',
@@ -97,14 +111,17 @@ export default {
   }),
 
   computed: {
-    techs() {
-      return this.$store.state.techs;
+    folders() {
+      return this.$store.state.folders;
     },
   },
 
   methods: {
     changeTheme() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+    },
+    mdi(icon) {
+      return mdijs[icon];
     },
   },
 

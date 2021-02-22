@@ -49,8 +49,8 @@ export default {
 }
 .card {
   margin-bottom: 2rem;
-  // width: auto;
   max-width: 300px;
+  // width: auto;
 }
 // @media screen and (min-width: 960px) {
 //   .container--grid {

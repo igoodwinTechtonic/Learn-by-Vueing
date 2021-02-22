@@ -5,13 +5,11 @@
 
     <div class="home-content">
       <h2>About</h2>
-      <p>Click on a link in the navigation view to display coding resources for each technology.</p>
+      <p>Click on a link in the navigation view to display your bookmarks in each folder.</p>
 
       <h2>Searching</h2>
-      <p>In the home page, you can search for any resource from any technology.</p>
-      <p>
-        If you click a technology, the search bar narrows its scope to search for resources just within that technology.
-      </p>
+      <p>In the home page, you can search for any bookmark from any folder.</p>
+      <p>If you click a folder, the search bar narrows its scope to search for bookmarks just within that folder.</p>
     </div>
 
     <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
