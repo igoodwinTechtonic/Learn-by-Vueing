@@ -4,7 +4,6 @@
     <div class="folder-header">
       <v-text-field :rules="validateName" :value="selectedFolder.name" @change="updateFolderName" solo> </v-text-field>
     </div>
-    <!-- <v-divider /> -->
 
     <div class="spacer"></div>
 
@@ -13,6 +12,22 @@
         <BookmarkCard :bookmark="bookmark" />
       </v-list-item>
     </v-list>
+
+    <v-col class="btn-container">
+      <v-row class="btn-row">
+        <v-col>
+          <v-btn
+            ><v-icon>{{ displayIcon('mdiFormatListBulletedSquare') }}</v-icon></v-btn
+          >
+        </v-col>
+        <v-col>
+          <v-btn
+            ><v-icon>{{ displayIcon('mdiViewDashboard') }}</v-icon></v-btn
+          >
+        </v-col>
+      </v-row>
+    </v-col>
+
     <DeleteFolderDialog />
   </v-container>
 </template>
@@ -21,6 +36,8 @@
 import BookmarkCard from './BookmarkCard.vue';
 import DeleteFolderDialog from '../components/DeleteFolderDialog.vue';
 import { mapState } from 'vuex';
+
+import * as mdijs from '@mdi/js';
 
 export default {
   name: 'Folder',
@@ -50,18 +67,14 @@ export default {
       const updatedFolder = { ...this.$store.state.selectedFolder, name: newFolderName };
       this.$store.dispatch('folders/updateFolderName', updatedFolder);
     },
+    displayIcon(item) {
+      return mdijs[item];
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-// .folder-header {
-//   display: flex;
-//   flex-direction: row;
-//   justify-content: space-between;
-//   // align-items: center;
-//   margin-bottom: 1rem;
-// }
 .spacer {
   padding: 0.5rem;
 }
@@ -73,5 +86,17 @@ export default {
 .card {
   margin-bottom: 2rem;
   max-width: 300px;
+}
+.btn-container {
+  position: fixed;
+  bottom: 1rem;
+  padding: 0;
+}
+.btn-row {
+  flex-wrap: nowrap;
+
+  > .col {
+    flex-grow: 0;
+  }
 }
 </style>

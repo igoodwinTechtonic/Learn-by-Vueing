@@ -27,7 +27,12 @@
 
       <!-- Left Nav drawer: Displays whatever is clicked on in the Right navigation drawer-->
       <v-col v-if="selectedItem == 'Folders'">
+        <!-- Display all folders in the drawer -->
         <NavDrawerFolders />
+      </v-col>
+      <v-col v-if="selectedItem == 'Bookmarks'">
+        <!-- Display all tags in the drawer -->
+        <NavDrawerTags />
       </v-col>
     </v-row>
   </v-navigation-drawer>
@@ -36,11 +41,13 @@
 <script>
 import * as mdijs from '@mdi/js';
 import NavDrawerFolders from './NavDrawerFolders.vue';
+import NavDrawerTags from './NavDrawerTags.vue';
 
 export default {
   name: 'NavDrawer',
   components: {
     NavDrawerFolders,
+    NavDrawerTags,
   },
 
   data() {
@@ -59,10 +66,28 @@ export default {
 
   methods: {
     navToItem(item) {
+      switch (item.title) {
+        case 'Folders' && item.title != 'Folders':
+          this.$router.push('/folders');
+          return;
+        case 'Bookmarks' && item.title != 'Bookmarks':
+          this.$router.push('/bookmarks');
+          return;
+        case 'Public' && item.title != 'Public':
+          this.$router.push('/public');
+          return;
+        case 'Settings' && item.title != 'Settings':
+          this.$router.push('/settings');
+          return;
+      }
       this.selectedItem = item.title;
     },
   },
 };
 </script>
 
-<style></style>
+<style>
+.title {
+  padding-bottom: 0.5rem;
+}
+</style>

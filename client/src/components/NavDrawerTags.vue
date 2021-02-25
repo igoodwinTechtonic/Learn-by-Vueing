@@ -3,36 +3,36 @@
     <v-list-item>
       <v-list-item-content>
         <v-list-item-title class="title">
-          Folders
+          All Bookmarks
         </v-list-item-title>
         <v-list-item-subtitle>
-          Cilck to see your bookmarks.
+          Cilck to filter bookmarks by tags.
         </v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
 
-    <v-list-item>
+    <!-- <v-list-item>
       <v-list-item-content>
-        <AddFolderDialog />
+        <AddTagDialog />
       </v-list-item-content>
-    </v-list-item>
+    </v-list-item> -->
 
     <v-list-item
-      v-for="folder in folders"
-      :key="folder.name"
-      :to="{ name: 'Folder', params: { name: folder.name.toLowerCase() } }"
-      @click="setSelectedFolder(folder)"
+      v-for="tag in tags"
+      :key="tag.name"
+      :to="{ name: 'Bookmarks', params: { name: tag.name.toLowerCase() } }"
+      @click="setSelectedTag(tag)"
       link
     >
       <!-- <v-list-item-action>
         <v-icon>{{ mdi(folder.icon) }}</v-icon>
       </v-list-item-action> -->
       <v-list-item-icon>
-        <v-icon>{{ displayIcon(folder.icon) }}</v-icon>
+        <v-icon>{{ mdi(tag.icon) }}</v-icon>
       </v-list-item-icon>
       <v-list-item-content>
         <v-list-item-title>
-          {{ folder.name }}
+          {{ tag.name }}
         </v-list-item-title>
       </v-list-item-content>
     </v-list-item>
@@ -43,12 +43,12 @@
 import * as mdijs from '@mdi/js';
 import { mapActions } from 'vuex';
 
-import AddFolderDialog from './AddFolderDialog.vue';
+// import AddTagDialog from './AddTagDialog.vue';
 
 export default {
   name: 'NavDrawerFolders',
   components: {
-    AddFolderDialog,
+    // AddTagDialog,
   },
   data() {
     return {
@@ -57,24 +57,24 @@ export default {
   },
 
   created() {
-    this.getFolders();
+    this.getTags();
   },
 
   computed: {
-    folders() {
-      return this.$store.state.folders.list;
+    tags() {
+      return this.$store.state.tags.list;
     },
   },
   methods: {
-    ...mapActions('folders', ['getFolders']),
+    ...mapActions('tags', ['getTags']),
     // changeTheme() {
     //   this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
     // },
-    displayIcon(icon) {
+    mdi(icon) {
       return mdijs[icon];
     },
-    setSelectedFolder(folder) {
-      this.$store.commit('setSelectedFolder', folder);
+    setSelectedFolder(tag) {
+      this.$store.commit('setSelectedTag', tag);
     },
   },
 };

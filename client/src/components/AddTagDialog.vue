@@ -1,12 +1,10 @@
 <template>
   <v-dialog v-model="dialog" width="500">
     <template v-slot:activator="{ on, attrs }">
-      <v-btn class="btn--small" v-bind="attrs" v-on="on"
-        ><v-icon>{{ displayIcon('mdiFolderPlus') }}</v-icon></v-btn
-      >
+      <v-btn class="subtitle" v-bind="attrs" v-on="on">Add Tag</v-btn>
     </template>
     <v-card>
-      <v-card-title class="dialog__title">Add a new folder</v-card-title>
+      <v-card-title class="dialog__title">Add a new tag</v-card-title>
 
       <!-- <v-select class="dialog__input" v-model="folderIcon" :items="folderIcons" label="Icon" required></v-select> -->
 
@@ -15,7 +13,7 @@
         v-model="name"
         label="Name"
         hint="A container for your bookmarks."
-        :prepend-inner-icon="displayIcon(icon)"
+        :prepend-inner-icon="folderIcon"
         :rules="validateName"
         persistent-hint
         clearable
@@ -25,10 +23,10 @@
         <template v-slot:activator="{ on, attrs }">
           <v-text-field
             class="dialog__input"
-            v-model="input"
-            label="Search for an icon"
-            hint="The icon cannot be changed once the folder has been added."
-            @keyup="searchIcons(input)"
+            v-model="icon"
+            label="Icon"
+            hint="Search and select a folder icon."
+            @change="searchIcons(input)"
             persistent-hint
             clearable
             v-bind="attrs"
@@ -37,11 +35,11 @@
         </template>
 
         <v-list>
-          <v-virtual-scroll height="224" item-height="56" :bench="4" :items="filteredIcons">
+          <v-virtual-scroll height="336" item-height="56" :bench="4" :items="iconList">
             <template v-slot:default="{ item }">
               <v-list-item :key="item" @click="setIcon(item)">
                 <!-- <v-icon></v-icon> -->
-                <v-icon>{{ displayIcon(item) }}</v-icon>
+                <v-icon>{{ searchIcon(item) }}</v-icon>
               </v-list-item>
             </template>
           </v-virtual-scroll>
@@ -70,26 +68,24 @@
 </template>
 
 <script>
-// import { mdiFolder } from '@mdi/js';
+import { mdiFolder } from '@mdi/js';
 import * as mdijs from '@mdi/js';
 // import { mapActions } from 'vuex';
 // import IconSearchMenu from './IconSearchMenu.vue';
 
 export default {
-  name: 'AddFolderDialog',
+  name: 'AddTagDialog',
   components: {
     // IconSearchMenu,
   },
   data() {
     return {
-      // folderIcon: mdiFolder,
+      folderIcon: mdiFolder,
       dialog: false,
       overlay: false,
       name: '',
-      icon: 'mdiFolder',
-      input: '',
-      icons: Object.keys(mdijs),
-      filteredIcons: Object.keys(mdijs),
+      icon: '',
+      icons: [],
       validateName: [(name) => (name && name.length > 0) || 'Required.'],
     };
   },
@@ -97,45 +93,41 @@ export default {
     iconList() {
       return Object.keys(mdijs);
     },
+    // searchIcon() {
+    //   // Use regex to search mdijs for icons matching folder name
+    //   // :prepend-icon="searchIcon"
+    //   const regex = new RegExp(this.folderName, 'gi');
+    //   const folderIcon = this.$store.state.folderIcons.find((icon) => icon.match(regex));
+    //   if (!this.folderName) return mdijs['mdiFolder'];
+    //   else return mdijs[folderIcon] || mdijs['mdiFolder'];
+    // },
+    // folderIcon() {
+    //   return mdiFolder;
+    //   // return this.$store.state.folderIcons.map((icon) => mdijs[icon]);
+    // },
   },
   methods: {
     submit() {
       if (this.name) {
         // Turn on loading
         this.overlay = true;
-        this.$store.dispatch('folders/addFolder', { name: this.name, icon: this.icon, count: 0 }).then(() => {
+        this.$store.dispatch('tags/addTag', { name: this.name, icon: this.icon }).then(() => {
           // Turn off loading
           this.overlay = false;
           this.dialog = false;
           setTimeout(() => {
             this.name = '';
-            this.icon = 'mdiFolder';
+            this.icon = '';
           }, 200);
         });
       }
     },
-    displayIcon(item) {
+    searchIcon(item) {
       return mdijs[item];
     },
-    searchIcons(input) {
-      this.filteredIcons = this.icons.filter((icon) =>
-        icon.includes('mdi' + input.charAt(0).toUpperCase() + input.slice(1))
-      );
-    },
-    setIcon(selectedIcon) {
-      this.icon = selectedIcon;
-    },
+    setIcon() {},
   },
 };
 </script>
 
-<style lang="scss">
-.dialog {
-  &__title {
-    background-color: lightgrey;
-  }
-  &__input {
-    margin: 1rem;
-  }
-}
-</style>
+<style></style>

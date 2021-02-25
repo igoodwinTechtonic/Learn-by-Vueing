@@ -1,11 +1,13 @@
 <template>
   <v-dialog v-model="dialog" width="500">
+    <!-- <v-tooltip top> -->
     <template v-slot:activator="{ on, attrs }">
-      <v-btn class="subtitle" v-bind="attrs" v-on="on"
-        ><v-icon>{{ trashcanIcon }}</v-icon
-        >Delete Folder</v-btn
+      <v-btn class="delete-button" v-bind="attrs" v-on="on"
+        ><v-icon>{{ trashcanIcon }}</v-icon></v-btn
       >
     </template>
+    <!-- <span>Delete Folder</span>
+    </v-tooltip> -->
     <v-card>
       <v-card-title class="dialog__title">Are you sure you want to delete {{ name }}?</v-card-title>
 
@@ -59,4 +61,11 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.delete-button {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  width: 50px;
+}
+</style>

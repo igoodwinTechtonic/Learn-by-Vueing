@@ -13,14 +13,14 @@ export default {
   },
   actions: {
     getFolders({ commit }) {
-      axios.get('/api/folder')
+      axios.get('/api/folders')
         .then((res) => commit('setFolders', res.data))
         .catch((err) => console.error(err))
     },
     addFolder({ commit, state }, folder) {
       const folders = [...state.list, folder];
       return axios
-        .post('/api/folder', JSON.stringify(folder), {
+        .post('/api/folders', JSON.stringify(folder), {
           headers: {
             "Content-Type": "application/json",
           }
@@ -32,7 +32,7 @@ export default {
       const folders = state.list.filter(folder => folder._id !== _id)
       folders.push(updatedFolder)
       return axios
-        .put('/api/folder/' + _id, JSON.stringify(folder), {
+        .put('/api/folders/' + _id, JSON.stringify(folder), {
           headers: {
             "Content-Type": "application/json",
           }
@@ -42,7 +42,7 @@ export default {
     deleteFolder({ commit, state }, id) {
       const folders = state.list.filter(folder => folder._id !== id);
       return axios
-        .delete('/api/folder/' + id)
+        .delete('/api/folders/' + id)
         .then(() => commit('setFolders', folders))
     }
   }

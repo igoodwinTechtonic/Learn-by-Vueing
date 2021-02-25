@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 
 import Home from '../views/Home.vue'
 import Folder from '../views/Folder.vue'
+import Bookmarks from '../views/Bookmarks.vue'
 
 Vue.use(VueRouter)
 
@@ -13,9 +14,15 @@ const routes = [
     component: Home,
   },
   {
-    path: '/:name',
+    path: '/folder/:name',
     name: 'Folder',
     component: Folder,
+    // props: true,
+  },
+  {
+    path: '/bookmarks',
+    name: 'Bookmarks',
+    component: Bookmarks,
     // props: true,
   },
   {
