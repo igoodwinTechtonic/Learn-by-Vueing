@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+
 import Home from '../views/Home.vue'
-// import BookmarkCard from '../views/BookmarkCard.vue'
-import Technology from '../views/Technology.vue'
+import Folder from '../views/Folder.vue'
 
 Vue.use(VueRouter)
 
@@ -13,17 +13,11 @@ const routes = [
     component: Home,
   },
   {
-    path: '/:id',
-    name: 'Technology',
-    component: Technology,
-    props: true,
+    path: '/:name',
+    name: 'Folder',
+    component: Folder,
+    // props: true,
   },
-  // {
-  //   path: '/:id/:tech',
-  //   name: 'BookmarkCard',
-  //   component: BookmarkCard,
-  //   props: true
-  // },
   {
     path: '/about',
     name: 'About',

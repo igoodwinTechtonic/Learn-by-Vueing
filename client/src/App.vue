@@ -1,49 +1,6 @@
 <template>
   <v-app id="learn-by-vueing">
-    <v-navigation-drawer app v-model="drawer" clipped hide-overlay permanent>
-      <v-list dense>
-        <v-list-item>
-          <v-list-item-content>
-            <v-list-item-title class="title">
-              Folders
-            </v-list-item-title>
-            <v-list-item-subtitle>
-              Cilck to see bookmarks.
-            </v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-list-item>
-          <v-list-item-content>
-            <v-btn
-              class="subtitle"
-              @click="
-                {
-                }
-              "
-            >
-              Add Folder
-            </v-btn>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-list-item
-          v-for="folder in folders"
-          :key="folder.name"
-          :to="{ name: 'Technology', params: { id: folder.name.toLowerCase(), name: folder.name } }"
-          link
-        >
-          <v-list-item-action>
-            <v-icon>{{ mdi(folder.icon) }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>
-              {{ folder.name }}
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
+    <NavDrawer />
 
     <v-app-bar app color="primary" dense clipped-left>
       <!-- <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon> -->
@@ -74,7 +31,7 @@
       <v-row align="center" style="max-width: 650px">
         <v-text-field
           :append-icon-cb="() => {}"
-          placeholder="Search..."
+          placeholder="Search all bookmarks..."
           single-line
           append-icon="mdi-magnify"
           color="white"
@@ -101,33 +58,12 @@
 </template>
 
 <script>
-import * as mdijs from '@mdi/js';
+import NavDrawer from './components/NavDrawer.vue';
 
 export default {
   name: 'App',
-
-  data: () => ({
-    drawer: null,
-  }),
-
-  computed: {
-    folders() {
-      return this.$store.state.folders;
-    },
-  },
-
-  methods: {
-    changeTheme() {
-      this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
-    },
-    mdi(icon) {
-      return mdijs[icon];
-    },
-  },
-
-  created() {
-    // this.$vuetify.theme.dark = true;
-    // console.log(this.$store.state.techs);
+  components: {
+    NavDrawer,
   },
 };
 </script>
