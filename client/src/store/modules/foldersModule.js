@@ -10,6 +10,7 @@ export default {
       state.list = folders;
       // console.log(folders)
     }
+
   },
   actions: {
     getFolders({ commit }) {
@@ -18,14 +19,18 @@ export default {
         .catch((err) => console.error(err))
     },
     addFolder({ commit, state }, folder) {
-      const folders = [...state.list, folder];
       return axios
         .post('/api/folders', JSON.stringify(folder), {
           headers: {
             "Content-Type": "application/json",
           }
         })
-        .then(() => commit('setFolders', folders))
+        .then((res) => {
+          const addedFolder = res.data.ops[0]
+          const folders = [...state.list, addedFolder];
+          commit('setSelectedFolder', addedFolder, { root: true })
+          commit('setFolders', folders)
+        })
     },
     updateFolderName({ commit, state }, updatedFolder) {
       const { _id, ...folder } = updatedFolder;

@@ -21,6 +21,6 @@ export default {
       return axios
         .post('/api/bookmarks', bookmark)
         .then(() => commit('setBookmarks', bookmarkList))
-    }
+    },
   }
 }

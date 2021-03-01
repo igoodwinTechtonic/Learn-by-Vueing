@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from 'axios'
 
 import foldersModule from './modules/foldersModule.js'
 import tagsModule from './modules/tagsModule.js'
@@ -9,23 +10,12 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    overlay: false,
     selectedFolder: {},
     selectedBookmark: {},
-    selectedTag: {},
-    // These are all the possible folder icons that autofill for the user
-    folderIcons: [
-      "mdiAngularjs",
-      "mdiLanguageCss3",
-      "mdiLanguageHtml5",
-      "mdiLanguageJava",
-      "mdiLanguageJavascript",
-      "mdiNodejs",
-      "mdiLanguagePython",
-      "mdiReact",
-      "mdiLanguageTypescript",
-      "mdiVuejs",
-      "mdiVuetify",
-    ]
+    selectedTags: [],
+    searchKeywords: '',
+    linkToAdd: '',
   },
   modules: {
     folders: foldersModule,
@@ -33,17 +23,21 @@ export default new Vuex.Store({
     bookmarks: bookmarksModule
   },
   mutations: {
-    setSelectedFolder(state, payload) {
-      state.selectedFolder = payload;
-    },
-    setSelectedTag(state, payload) {
-      state.selectedTag = payload;
-    },
-    setSelectedBookmark(state, payload) {
-      state.selectedBookmark = payload;
-    }
+    setOverlay(state, payload) { state.overlay = payload },
+    setSelectedFolder(state, payload) { state.selectedFolder = payload },
+    setSelectedBookmark(state, payload) { state.selectedBookmark = payload },
+    setSelectedTags(state, payload) { state.selectedTags = payload },
+    setSearchKeywords(state, payload) { state.searchKeywords = payload },
+    setLinkToAdd(state, payload) { state.linkToAdd = payload },
   },
-  // actions: {
-
-  // },
+  actions: {
+    scrapeUrl({ commit }, link) {
+      return axios.post('/scrape', JSON.stringify(link), {
+        headers: {
+          "Content-Type": "application/json",
+        }
+      })
+        .then((res) => commit('setSelectedBookmark', res.data))
+    }
+  }
 })

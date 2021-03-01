@@ -10,6 +10,7 @@
     </v-tooltip> -->
     <v-card>
       <v-card-title class="dialog__title">Are you sure you want to delete {{ name }}?</v-card-title>
+      <v-card-subtitle class="dialog__title">You cannot undo this action.</v-card-subtitle>
 
       <v-divider></v-divider>
 

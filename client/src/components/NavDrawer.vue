@@ -1,7 +1,7 @@
 <template>
   <v-navigation-drawer app clipped hide-overlay permanent width="300">
     <v-row class="fill-height" no-gutters>
-      <v-col>
+      <v-col style="position: fixed; height: 100%; ">
         <!-- Right Nav drawer: Account, Folders, Bookmarks, Public, Settings -->
         <v-navigation-drawer dark permanent mini-variant mini-variant-width="70">
           <v-list-item class="px-2">
@@ -9,6 +9,14 @@
               <v-img src="https://randomuser.me/api/portraits/women/75.jpg"></v-img>
             </v-list-item-avatar>
           </v-list-item>
+
+          <v-divider></v-divider>
+
+          <v-list>
+            <v-list-item>
+              <AddFolderDialog />
+            </v-list-item>
+          </v-list>
 
           <v-divider></v-divider>
 
@@ -26,11 +34,11 @@
       </v-col>
 
       <!-- Left Nav drawer: Displays whatever is clicked on in the Right navigation drawer-->
-      <v-col v-if="selectedItem == 'Folders'">
+      <v-col v-if="selectedItem == 'Folders'" style="margin-left: 70px">
         <!-- Display all folders in the drawer -->
         <NavDrawerFolders />
       </v-col>
-      <v-col v-if="selectedItem == 'Bookmarks'">
+      <v-col v-if="selectedItem == 'Bookmarks'" style="margin-left: 70px">
         <!-- Display all tags in the drawer -->
         <NavDrawerTags />
       </v-col>
@@ -42,12 +50,14 @@
 import * as mdijs from '@mdi/js';
 import NavDrawerFolders from './NavDrawerFolders.vue';
 import NavDrawerTags from './NavDrawerTags.vue';
+import AddFolderDialog from './AddFolderDialog.vue';
 
 export default {
   name: 'NavDrawer',
   components: {
     NavDrawerFolders,
     NavDrawerTags,
+    AddFolderDialog,
   },
 
   data() {

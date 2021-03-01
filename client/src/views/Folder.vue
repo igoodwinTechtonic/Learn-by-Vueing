@@ -5,10 +5,13 @@
       <v-text-field :rules="validateName" :value="selectedFolder.name" @change="updateFolderName" solo> </v-text-field>
     </div>
 
-    <div class="spacer"></div>
+    <!-- <div class="spacer"></div> -->
 
-    <v-list class="container--grid">
-      <v-list-item class="card" v-for="(bookmark, idx) in bookmarks" :key="idx">
+    <v-list class="container--grid" style="flex: 1;">
+      <v-list-item v-if="bookmarks.length === 0">
+        <NoItemsCard />
+      </v-list-item>
+      <v-list-item v-else class="card" v-for="(bookmark, idx) in bookmarks" :key="idx">
         <BookmarkCard :bookmark="bookmark" />
       </v-list-item>
     </v-list>
@@ -33,8 +36,9 @@
 </template>
 
 <script>
-import BookmarkCard from './BookmarkCard.vue';
+import BookmarkCard from '../components/BookmarkCard.vue';
 import DeleteFolderDialog from '../components/DeleteFolderDialog.vue';
+import NoItemsCard from '../components/NoItemsCard.vue';
 import { mapState } from 'vuex';
 
 import * as mdijs from '@mdi/js';
@@ -49,17 +53,19 @@ export default {
   components: {
     BookmarkCard,
     DeleteFolderDialog,
+    NoItemsCard,
   },
 
   computed: {
-    bookmarks() {
-      // Filter bookmarks based on tags from name
-      return this.$store.state.bookmarks.list.filter((bookmark) => bookmark.tags.includes(this.name));
-    },
     ...mapState(['selectedFolder']),
-    // selectedFolderName() {
-    //   return this.$store.state.selectedFolder.name;
-    // },
+    bookmarks() {
+      return this.$store.state.bookmarks.list.filter((bookmark) => {
+        return bookmark.folder
+          .toLowerCase()
+          .replace(/\s/, '-')
+          .match(this.$route.params.name);
+      });
+    },
   },
 
   methods: {

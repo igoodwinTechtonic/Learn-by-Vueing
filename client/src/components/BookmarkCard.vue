@@ -9,11 +9,11 @@
       </a>
 
       <!-- <v-card-subtitle class="pb-0" v-for="(tag, idx) in item.tags" :key="idx">{{ tag }}</v-card-subtitle> -->
-      <v-card-subtitle class="pb-0">{{ tags }}</v-card-subtitle>
+      <!-- <v-card-subtitle class="pb-0">{{ tags }}</v-card-subtitle> -->
 
-      <v-card-text class="text--primary">
-        <div>{{ item.description }}</div>
-      </v-card-text>
+      <v-card-text class="text--primary">{{ item.description }}</v-card-text>
+
+      <v-chip v-for="(tag, idx) in tags" :key="idx">{{ tag }}</v-chip>
     </v-card>
   </v-hover>
 </template>
@@ -29,7 +29,7 @@ export default {
       return this.bookmark;
     },
     tags() {
-      return this.bookmark.tags.join(', ');
+      return this.bookmark.tags;
     },
     link() {
       // console.log(this.bookmark.link);

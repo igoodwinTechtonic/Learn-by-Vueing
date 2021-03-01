@@ -5,7 +5,7 @@ const routes = require('./routes');
 
 const app = express();
 
-const corsOptions = { origin: 'http://localhost/8080' };
+const corsOptions = { origin: 'http://localhost:8080' };
 const PORT = process.env.PORT || 3000;
 
 app.use(logger('dev'))

@@ -8,8 +8,6 @@
     <v-card>
       <v-card-title class="dialog__title">Add a new folder</v-card-title>
 
-      <!-- <v-select class="dialog__input" v-model="folderIcon" :items="folderIcons" label="Icon" required></v-select> -->
-
       <v-text-field
         class="dialog__input"
         v-model="name"
@@ -40,7 +38,6 @@
           <v-virtual-scroll height="224" item-height="56" :bench="4" :items="filteredIcons">
             <template v-slot:default="{ item }">
               <v-list-item :key="item" @click="setIcon(item)">
-                <!-- <v-icon></v-icon> -->
                 <v-icon>{{ displayIcon(item) }}</v-icon>
               </v-list-item>
             </template>
@@ -63,16 +60,16 @@
       </v-card-actions>
     </v-card>
 
-    <v-overlay :value="overlay">
+    <!-- <v-overlay :value="overlay">
       <v-progress-circular indeterminate size="64"></v-progress-circular>
-    </v-overlay>
+    </v-overlay> -->
   </v-dialog>
 </template>
 
 <script>
 // import { mdiFolder } from '@mdi/js';
 import * as mdijs from '@mdi/js';
-// import { mapActions } from 'vuex';
+import { mapState } from 'vuex';
 // import IconSearchMenu from './IconSearchMenu.vue';
 
 export default {
@@ -84,7 +81,6 @@ export default {
     return {
       // folderIcon: mdiFolder,
       dialog: false,
-      overlay: false,
       name: '',
       icon: 'mdiFolder',
       input: '',
@@ -94,6 +90,7 @@ export default {
     };
   },
   computed: {
+    ...mapState(['overlay']),
     iconList() {
       return Object.keys(mdijs);
     },
@@ -101,12 +98,17 @@ export default {
   methods: {
     submit() {
       if (this.name) {
-        // Turn on loading
-        this.overlay = true;
-        this.$store.dispatch('folders/addFolder', { name: this.name, icon: this.icon, count: 0 }).then(() => {
-          // Turn off loading
-          this.overlay = false;
+        const newFolder = {
+          name: this.name,
+          icon: this.icon,
+          count: 0,
+        };
+        this.$store.commit('setOverlay', true);
+        this.$store.dispatch('folders/addFolder', newFolder).then(() => {
           this.dialog = false;
+          this.$store.commit('setOverlay', false);
+          // this.$store.commit('setSelectedFolder', newFolder);
+          this.$router.push({ name: 'Folder', params: { name: this.name.toLowerCase().replace(/\s/g, '-') } });
           setTimeout(() => {
             this.name = '';
             this.icon = 'mdiFolder';

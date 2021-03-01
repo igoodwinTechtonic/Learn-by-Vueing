@@ -6,36 +6,40 @@
           All Bookmarks
         </v-list-item-title>
         <v-list-item-subtitle>
-          Cilck to filter bookmarks by tags.
+          Click to filter bookmarks by tags.
         </v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
 
-    <!-- <v-list-item>
-      <v-list-item-content>
-        <AddTagDialog />
-      </v-list-item-content>
-    </v-list-item> -->
+    <v-list>
+      <v-list-item v-if="tags.length === 0">
+        <v-list-item-content>
+          <v-list-item-title>
+            You don't have any tags yet.
+          </v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
 
-    <v-list-item
-      v-for="tag in tags"
-      :key="tag.name"
-      :to="{ name: 'Bookmarks', params: { name: tag.name.toLowerCase() } }"
-      @click="setSelectedTag(tag)"
-      link
-    >
-      <!-- <v-list-item-action>
+      <v-list-item
+        v-for="tag in tags"
+        :key="tag.name"
+        :to="{ name: 'Bookmarks', params: { name: tag.name.toLowerCase() } }"
+        @click="setSelectedTag(tag)"
+        link
+      >
+        <!-- <v-list-item-action>
         <v-icon>{{ mdi(folder.icon) }}</v-icon>
       </v-list-item-action> -->
-      <v-list-item-icon>
-        <v-icon>{{ mdi(tag.icon) }}</v-icon>
-      </v-list-item-icon>
-      <v-list-item-content>
-        <v-list-item-title>
-          {{ tag.name }}
-        </v-list-item-title>
-      </v-list-item-content>
-    </v-list-item>
+        <v-list-item-icon>
+          <v-icon>{{ displayIcon(tag.icon) }}</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title>
+            {{ tag.name }}
+          </v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+    </v-list>
   </v-list>
 </template>
 
@@ -70,7 +74,7 @@ export default {
     // changeTheme() {
     //   this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
     // },
-    mdi(icon) {
+    displayIcon(icon) {
       return mdijs[icon];
     },
     setSelectedFolder(tag) {
