@@ -60,7 +60,7 @@ export default {
     };
   },
   created() {
-    this.getFolders();
+    // this.getFolders();
   },
   computed: {
     folders() {
@@ -80,7 +80,7 @@ export default {
       return mdijs[icon];
     },
     setSelectedFolder(folder) {
-      this.$store.commit('setSelectedFolder', folder);
+      this.$store.commit('folders/setSelectedFolder', folder);
     },
   },
 };

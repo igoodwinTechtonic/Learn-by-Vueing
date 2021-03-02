@@ -26,8 +26,13 @@ export default {
   name: 'TagSelector',
   data() {
     return {
-      chips: this.$store.state.tags.list,
+      chips: this.$store.state.tags.list.filter((tag) =>
+        tag.match(this.$store.state.folders.selectedFolder.name.toLowerCase())
+      ),
     };
+  },
+  mounted() {
+    this.$store.commit('tags/setCurrentBookmarkTags', this.chips);
   },
   computed: {
     items() {
@@ -40,15 +45,9 @@ export default {
       this.chips = [...this.chips];
       this.setTags();
     },
+    // Set tags in state, tags are psoted to db in parent component
     setTags() {
-      this.$store.commit(
-        'setSelectedTags',
-        this.chips.sort((a, b) => {
-          let tagA = a.name.toUpperCase();
-          let tagB = b.name.toUpperCase();
-          return tagA < tagB ? -1 : tagA > tagB ? 1 : 0;
-        })
-      );
+      this.$store.commit('tags/setCurrentBookmarkTags', this.chips);
     },
   },
 };

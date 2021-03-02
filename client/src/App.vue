@@ -31,7 +31,7 @@
       <v-text-field
         style="flex: 20 1 auto"
         placeholder="Add bookmark or search..."
-        hint="Paste a link to add a bookmark or begin typing to search all bookmarks."
+        hint="Paste a link to add a bookmark or begin typing to search."
         persistent-hint
         v-model="search"
         @keyup="searchBookmarks(search)"
@@ -62,13 +62,11 @@
 <script>
 import { mapState } from 'vuex';
 import NavDrawer from './components/NavDrawer.vue';
-// import AddFolderDialog from './components/AddFolderDialog.vue';
 
 export default {
   name: 'App',
   components: {
     NavDrawer,
-    // AddFolderDialog,
   },
   data() {
     return {
@@ -76,9 +74,13 @@ export default {
       disabled: false,
     };
   },
-  created() {
-    // Grab all user's bookmarks from server on app load, put into state
-    this.$store.dispatch('bookmarks/getBookmarks');
+  async created() {
+    // Grab all user's folders, bookmarks, tags from server on app load, put into state
+    this.$store.commit('setOverlay', true);
+    await this.$store.dispatch('bookmarks/getBookmarks');
+    await this.$store.dispatch('folders/getFolders');
+    await this.$store.dispatch('tags/getTags');
+    this.$store.commit('setOverlay', false);
   },
   computed: {
     ...mapState(['overlay']),

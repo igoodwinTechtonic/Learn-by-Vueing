@@ -11,11 +11,16 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     overlay: false,
-    selectedFolder: {},
-    selectedBookmark: {},
-    selectedTags: [],
     searchKeywords: '',
     linkToAdd: '',
+    displaySettings: {
+      title: true,
+      url: true,
+      image: true,
+      favicon: false,
+      description: true,
+      tags: true,
+    }
   },
   modules: {
     folders: foldersModule,
@@ -24,9 +29,6 @@ export default new Vuex.Store({
   },
   mutations: {
     setOverlay(state, payload) { state.overlay = payload },
-    setSelectedFolder(state, payload) { state.selectedFolder = payload },
-    setSelectedBookmark(state, payload) { state.selectedBookmark = payload },
-    setSelectedTags(state, payload) { state.selectedTags = payload },
     setSearchKeywords(state, payload) { state.searchKeywords = payload },
     setLinkToAdd(state, payload) { state.linkToAdd = payload },
   },
@@ -37,7 +39,7 @@ export default new Vuex.Store({
           "Content-Type": "application/json",
         }
       })
-        .then((res) => commit('setSelectedBookmark', res.data))
+        .then((res) => commit('bookmarks/setBookmarkToAdd', res.data))
     }
   }
 })

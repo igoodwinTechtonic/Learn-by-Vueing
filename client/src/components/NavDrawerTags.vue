@@ -21,65 +21,52 @@
       </v-list-item>
 
       <v-list-item
-        v-for="tag in tags"
-        :key="tag.name"
-        :to="{ name: 'Bookmarks', params: { name: tag.name.toLowerCase() } }"
+        v-for="(tag, idx) in tags"
+        :key="idx"
+        :to="{ name: 'Bookmarks', params: { tag: tag.toLowerCase() } }"
         @click="setSelectedTag(tag)"
         link
       >
-        <!-- <v-list-item-action>
-        <v-icon>{{ mdi(folder.icon) }}</v-icon>
-      </v-list-item-action> -->
-        <v-list-item-icon>
-          <v-icon>{{ displayIcon(tag.icon) }}</v-icon>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title>
-            {{ tag.name }}
-          </v-list-item-title>
-        </v-list-item-content>
+        <v-chip>
+          <v-list-item-content>
+            <v-list-item-title>
+              {{ tag }}
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-chip>
       </v-list-item>
     </v-list>
   </v-list>
 </template>
 
 <script>
-import * as mdijs from '@mdi/js';
-import { mapActions } from 'vuex';
-
-// import AddTagDialog from './AddTagDialog.vue';
+// import * as mdijs from '@mdi/js';
 
 export default {
   name: 'NavDrawerFolders',
-  components: {
-    // AddTagDialog,
-  },
-  data() {
-    return {
-      drawer: null,
-    };
-  },
-
-  created() {
-    this.getTags();
-  },
-
   computed: {
     tags() {
       return this.$store.state.tags.list;
     },
   },
   methods: {
-    ...mapActions('tags', ['getTags']),
-    // changeTheme() {
-    //   this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+    setSelectedTag(tag) {
+      this.$store.commit('tags/setSelectedTag', tag);
+    },
+    // sortedTags(tags) {
+    //   if (tags.length === 0) return [];
+    //   else if (tags.length === 1) return tags;
+    //   else {
+    //     // Prevents infinite loop because of changing tags by reference
+    //     const sortedTags = [...tags];
+    //     sortedTags.sort((a, b) => {
+    //       let tagA = a.toUpperCase();
+    //       let tagB = b.toUpperCase();
+    //       return tagA < tagB ? -1 : tagA > tagB ? 1 : 0;
+    //     });
+    //     return sortedTags;
+    //   }
     // },
-    displayIcon(icon) {
-      return mdijs[icon];
-    },
-    setSelectedFolder(tag) {
-      this.$store.commit('setSelectedTag', tag);
-    },
   },
 };
 </script>

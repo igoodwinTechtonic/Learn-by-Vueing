@@ -3,19 +3,14 @@
     <v-card class="insert-bookmark-card">
       <v-row>
         <v-col class="inner-grid">
-          <!-- Title -->
           <v-card-title
             ><v-text-field :placeholder="title" :value="title" :rules="validateField"></v-text-field
           ></v-card-title>
           <div class="img-link-grid">
-            <!-- Image -->
             <v-img v-if="favicon" :src="favicon" max-height="40" max-width="40" style="align-self: center;"></v-img>
-            <!-- Link -->
             <v-card-subtitle>{{ url }}</v-card-subtitle>
           </div>
-          <!-- Desc -->
           <v-card-text><v-textarea :placeholder="description" :value="description"></v-textarea></v-card-text>
-          <!-- Tags -->
           <TagSelector />
         </v-col>
       </v-row>
@@ -49,45 +44,50 @@ export default {
   },
   computed: {
     title() {
-      return this.$store.state.selectedBookmark.title;
+      return this.$store.state.bookmarks.bookmarkToAdd.title;
     },
     description() {
-      return this.$store.state.selectedBookmark.description;
+      return this.$store.state.bookmarks.bookmarkToAdd.description;
     },
     url() {
-      return this.$store.state.selectedBookmark.url;
+      return this.$store.state.bookmarks.bookmarkToAdd.url;
     },
     image() {
-      const images = this.$store.state.selectedBookmark.images;
+      const images = this.$store.state.bookmarks.bookmarkToAdd.images;
       return images && images.length != 0 && images[0];
     },
     favicon() {
-      const favicons = this.$store.state.selectedBookmark.favicons;
+      const favicons = this.$store.state.bookmarks.bookmarkToAdd.favicons;
       return favicons && favicons.length != 0 && favicons[0];
     },
     selectedFolder() {
-      return this.$store.state.selectedFolder;
+      return this.$store.state.folders.selectedFolder;
     },
     selectedFolderIcon() {
-      return this.displayIcon(this.$store.state.selectedFolder.icon);
+      return this.displayIcon(this.$store.state.folders.selectedFolder.icon);
     },
   },
   methods: {
     submit() {
+      // Post tags to db
+      this.$store.dispatch('tags/updateTagList'); //, this.$store.state.tags.setCurrentBookmarkTags);
+      // Post bookmark to db
       this.$store
         .dispatch('bookmarks/addBookmark', {
-          ...this.$store.state.selectedBookmark,
-          folder: this.$store.state.selectedFolder.name,
-          tags: this.$store.state.selectedTags,
+          ...this.$store.state.bookmarks.bookmarkToAdd,
+          folderId: this.$store.state.folders.selectedFolder._id,
+          tags: this.$store.state.tags.currentBookmarkTags,
           dateCreated: new Date(),
-          public: true,
+          public: false,
         })
-        .then(() =>
+        .then(() => {
           this.$router.push({
             name: 'Folder',
-            params: { name: this.$store.state.selectedFolder.name.toLowerCase().replace(/\s/g, '-') },
-          })
-        );
+            params: { name: this.$store.state.folders.selectedFolder.name.toLowerCase().replace(/\s/g, '-') },
+          });
+          // Clear selected tags from state
+          this.$store.commit('tags/setCurrentBookmarkTags', []);
+        });
     },
     displayIcon(icon) {
       return mdijs[icon];

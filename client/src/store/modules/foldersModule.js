@@ -3,18 +3,21 @@ import axios from 'axios';
 export default {
   namespaced: true,
   state: {
-    list: []
+    selectedFolder: {},
+    list: [],
   },
   mutations: {
     setFolders(state, folders) {
       state.list = folders;
       // console.log(folders)
-    }
-
+    },
+    setSelectedFolder(state, payload) {
+      state.selectedFolder = payload
+    },
   },
   actions: {
     getFolders({ commit }) {
-      axios.get('/api/folders')
+      return axios.get('/api/folders')
         .then((res) => commit('setFolders', res.data))
         .catch((err) => console.error(err))
     },
@@ -28,9 +31,10 @@ export default {
         .then((res) => {
           const addedFolder = res.data.ops[0]
           const folders = [...state.list, addedFolder];
-          commit('setSelectedFolder', addedFolder, { root: true })
+          commit('setSelectedFolder', addedFolder)
           commit('setFolders', folders)
         })
+        .catch((err) => console.error(err));
     },
     updateFolderName({ commit, state }, updatedFolder) {
       const { _id, ...folder } = updatedFolder;
@@ -43,12 +47,14 @@ export default {
           }
         })
         .then(() => commit('setFolders', folders))
+        .catch((err) => console.error(err));
     },
     deleteFolder({ commit, state }, id) {
       const folders = state.list.filter(folder => folder._id !== id);
       return axios
         .delete('/api/folders/' + id)
         .then(() => commit('setFolders', folders))
+        .catch((err) => console.error(err));
     }
   }
 }

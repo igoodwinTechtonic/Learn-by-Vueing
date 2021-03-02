@@ -15,7 +15,7 @@ export default {
   name: 'NoItemsCard',
   computed: {
     selectedFolder() {
-      return this.$store.state.selectedFolder;
+      return this.$store.state.folders.selectedFolder;
     },
   },
 };

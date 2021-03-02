@@ -12,11 +12,9 @@
 
           <v-divider></v-divider>
 
-          <v-list>
-            <v-list-item>
-              <AddFolderDialog />
-            </v-list-item>
-          </v-list>
+          <v-list-item>
+            <AddFolderDialog />
+          </v-list-item>
 
           <v-divider></v-divider>
 

@@ -25,7 +25,7 @@ const routes = [
     component: AddBookmark,
   },
   {
-    path: '/bookmarks',
+    path: '/bookmarks/:tag',
     name: 'Bookmarks',
     component: Bookmarks,
   },

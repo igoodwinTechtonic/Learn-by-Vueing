@@ -43,12 +43,12 @@ export default {
   }),
   computed: {
     name() {
-      return this.$store.state.selectedFolder.name;
+      return this.$store.state.folders.selectedFolder.name;
     },
   },
   methods: {
     deleteFolder() {
-      const id = this.$store.state.selectedFolder._id;
+      const id = this.$store.state.folders.selectedFolder._id;
       // Turn on loading
       this.overlay = true;
       this.$store.dispatch('folders/deleteFolder', id).then(() => {

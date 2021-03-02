@@ -14,6 +14,16 @@ const main = async () => {
       return db.collection(path)
     }
 
+    // User routes
+    router.route('/users/tags')
+      .get(async (req, res) => {
+        res.send(await collection('users').findOne({ "username": "iantheg" }, { projection: { tags: 1 } }));
+      })
+      .put(async (req, res) => {
+        // console.log(req.body)
+        res.send(await collection('users').updateOne({ "username": "iantheg" }, { "$set": { "tags": req.body } }))
+      })
+
     router.route('/:path')
       // Get all items from path
       .get(async (req, res) => {
@@ -26,21 +36,22 @@ const main = async () => {
       })
       // Post a new item to the path
       .post(async (req, res) => {
+        // console.log(req.body);
         res.send(await collection(req.params.path).insertOne(req.body))
       })
 
     router.route('/:path/:id')
       // Get one item from the path
       .get(async (req, res) => {
-        res.send(await collection(req.params.path).findOne({ "_id": ObjectId(req.params.id) }))
+        res.send(await collection(req.params.path).findOne({ "_id": new ObjectId(req.params.id) }))
       })
       // Update an item in the path
       .put(async (req, res) => {
-        res.send(await collection(req.params.path).replaceOne({ "_id": ObjectId(req.params.id) }, req.body))
+        res.send(await collection(req.params.path).replaceOne({ "_id": new ObjectId(req.params.id) }, req.body))
       })
       // Delete an item PERMANENTLY
       .delete(async (req, res) => {
-        res.send(await collection(req.params.path).deleteOne({ "_id": ObjectId(req.params.id) }))
+        res.send(await collection(req.params.path).deleteOne({ "_id": new ObjectId(req.params.id) }))
       })
 
   } catch (err) {
