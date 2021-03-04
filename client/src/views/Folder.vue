@@ -31,14 +31,12 @@ export default {
     DeleteFolderDialog,
     NoItemsCard,
   },
-
   computed: {
     ...mapState('folders', ['selectedFolder']),
     bookmarks() {
-      return this.$store.state.bookmarks.list.filter((bookmark) => bookmark.folderId);
-      // .toLowerCase()
-      // .replace(/\s/, '-')
-      // .match(this.$route.params.name);
+      return this.$store.state.bookmarks.list.filter(
+        (bookmark) => bookmark.folderId === this.$store.state.folders.selectedFolder._id
+      );
     },
   },
 
@@ -50,9 +48,6 @@ export default {
     displayIcon(item) {
       return mdijs[item];
     },
-    // deleteBookmark(_id) {
-    //   this.$store.dispatch('bookmarks/deleteBookmark', _id);
-    // },
   },
 };
 </script>

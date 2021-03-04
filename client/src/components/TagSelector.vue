@@ -29,12 +29,12 @@ export default {
       chips: [],
     };
   },
-  mounted() {
-    this.$store.commit('tags/setCurrentBookmarkTags', this.chips);
-  },
+  // mounted() {
+  //   this.$store.commit('tags/setCurrentBookmarkTags', this.chips);
+  // },
   computed: {
     items() {
-      return this.$store.state.tags.list.map((tag) => tag.name);
+      return this.$store.state.tags.list;
     },
   },
   methods: {
@@ -45,16 +45,16 @@ export default {
     },
     // Set tag list in state, tags are posted to db in parent component, AddBookmark, when bookmark is submitted
     setTags() {
-      const updatedTags = this.chips.map((tag) => {
-        if (this.items.includes(tag)) {
-          let tagCountToIncrement = this.$store.state.tags.list.find((tagInState) => tagInState.name === tag).count;
-          // If the tag is in state.list, don't add, increase count by 1
-          return { name: tag, count: (tagCountToIncrement += 1) };
-        }
-        // If the tag is not in state.list, add a new object { name: tag, count: 1 }
-        return { name: tag, count: 1 };
-      });
-      this.$store.commit('tags/setCurrentBookmarkTags', updatedTags);
+      // const updatedTags = this.chips.map((tag) => {
+      //   if (this.items.includes(tag)) {
+      //     let tagCountToIncrement = this.$store.state.tags.list.find((tagInState) => tagInState.name === tag).count;
+      //     // If the tag is in state.list, don't add, increase count by 1
+      //     return { name: tag, count: (tagCountToIncrement += 1) };
+      //   }
+      //   // If the tag is not in state.list, add a new object { name: tag, count: 1 }
+      //   return { name: tag, count: 1 };
+      // });
+      this.$store.commit('tags/setCurrentBookmarkTags', this.chips);
     },
   },
 };

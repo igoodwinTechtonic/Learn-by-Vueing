@@ -109,8 +109,11 @@ const main = async () => {
         res.send(await collection(bookmarks).deleteOne({ "_id": new ObjectId(req.params.id) }))
       })
 
-
-
+    // TAG ROUTES ============================== TAG ROUTES //
+    router.route('/tags')
+      .get(async (req, res) => {
+        res.send(await collection(bookmarks).find({ "user_id": { "$eq": "604109a74c3b1cc5f71e9f00" } }).project({ "tags": 1, "_id": 0 }).toArray())
+      })
 
 
 

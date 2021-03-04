@@ -45,8 +45,6 @@
         </v-list>
       </v-menu>
 
-      <!-- <IconSearchMenu /> -->
-
       <v-divider></v-divider>
 
       <v-card-actions>
@@ -59,27 +57,17 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-
-    <!-- <v-overlay :value="overlay">
-      <v-progress-circular indeterminate size="64"></v-progress-circular>
-    </v-overlay> -->
   </v-dialog>
 </template>
 
 <script>
-// import { mdiFolder } from '@mdi/js';
 import * as mdijs from '@mdi/js';
 import { mapState } from 'vuex';
-// import IconSearchMenu from './IconSearchMenu.vue';
 
 export default {
   name: 'AddFolderDialog',
-  components: {
-    // IconSearchMenu,
-  },
   data() {
     return {
-      // folderIcon: mdiFolder,
       dialog: false,
       name: '',
       icon: 'mdiFolder',
@@ -102,7 +90,6 @@ export default {
           user_id: this.$store.state.users.currentUser._id,
           name: this.name,
           icon: this.icon,
-          count: 0,
         };
         this.$store.commit('setOverlay', true);
         this.$store.dispatch('folders/addFolder', newFolder).then(() => {

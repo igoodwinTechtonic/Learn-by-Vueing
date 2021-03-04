@@ -21,7 +21,9 @@ export default {
   computed: {
     bookmarks() {
       if (this.$route.params.name) {
-        return this.$store.state.bookmarks.list.filter((bookmark) => bookmark.folderId);
+        return this.$store.state.bookmarks.list.filter(
+          (bookmark) => bookmark.folderId === this.$store.state.folders.selectedFolder._id
+        );
       } else if (this.$route.params.tag) {
         return this.$store.state.bookmarks.list.filter((bookmark) => bookmark.tags.includes(this.$route.params.tag));
       }

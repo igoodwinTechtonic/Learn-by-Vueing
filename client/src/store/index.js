@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-import createPersistedState from 'vuex-persistedstate'
+// import createPersistedState from 'vuex-persistedstate'
 
 import bookmarksModule from './modules/bookmarksModule.js'
 import foldersModule from './modules/foldersModule.js'
@@ -14,15 +14,6 @@ export default new Vuex.Store({
   state: {
     overlay: false,
     searchKeywords: '',
-    linkToAdd: '',
-    displaySettings: {
-      title: true,
-      url: true,
-      image: true,
-      favicon: false,
-      description: true,
-      tags: true,
-    }
   },
   modules: {
     bookmarks: bookmarksModule,
@@ -33,7 +24,6 @@ export default new Vuex.Store({
   mutations: {
     setOverlay(state, payload) { state.overlay = payload },
     setSearchKeywords(state, payload) { state.searchKeywords = payload },
-    setLinkToAdd(state, payload) { state.linkToAdd = payload },
   },
   actions: {
     scrapeUrl({ commit }, link) {
@@ -45,5 +35,5 @@ export default new Vuex.Store({
         .then((res) => commit('bookmarks/setBookmarkToAdd', res.data))
     }
   },
-  plugins: [createPersistedState()]
+  // plugins: [createPersistedState()]
 })

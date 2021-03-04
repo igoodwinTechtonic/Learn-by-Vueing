@@ -23,14 +23,14 @@
       <v-list-item
         v-for="(tag, idx) in tags"
         :key="idx"
-        :to="{ name: 'Bookmarks', params: { tag: tag.name } }"
+        :to="{ name: 'Bookmarks', params: { tag } }"
         @click="setSelectedTag(tag)"
         link
       >
         <v-chip>
           <v-list-item-content>
             <v-list-item-title>
-              {{ tag.name }}
+              {{ tag }}
             </v-list-item-title>
           </v-list-item-content>
         </v-chip>

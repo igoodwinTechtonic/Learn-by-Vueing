@@ -101,10 +101,15 @@ export default {
     },
     onPaste(event) {
       const link = event.clipboardData.getData('text/plain');
-      if (this.$route.path != `${this.$route.path}/add` && link.match(/^(https?|www)/)) {
-        this.$store.commit('setLinkToAdd', link);
-        this.$router.push(`${this.$route.path}/add`);
+      // Some logic to prevent pushing to /add or folder/vue/add/add paths
+      if (!this.$store.state.folders.selectedFolder.name) {
+        console.log('Please select a folder first before adding a new bookmark');
+        return;
+      }
+      if (link.match(/^(https?|www)/)) {
         this.$store.dispatch('scrapeUrl', { link }).then(() => {
+          const toThisFolder = this.$store.state.folders.selectedFolder.name.toLowerCase().replace(/\s/g, '-');
+          this.$router.push({ name: 'AddBookmark', params: { name: toThisFolder } });
           this.$store.commit('setOverlay', false);
           this.search = '';
         });
