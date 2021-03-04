@@ -3,10 +3,10 @@
     <v-list-item>
       <v-list-item-content>
         <v-list-item-title class="title">
-          All Bookmarks
+          Tags
         </v-list-item-title>
         <v-list-item-subtitle>
-          Click to filter bookmarks by tags.
+          Click to filter bookmarks by tag.
         </v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
@@ -23,14 +23,14 @@
       <v-list-item
         v-for="(tag, idx) in tags"
         :key="idx"
-        :to="{ name: 'Bookmarks', params: { tag: tag.toLowerCase() } }"
+        :to="{ name: 'Bookmarks', params: { tag: tag.name } }"
         @click="setSelectedTag(tag)"
         link
       >
         <v-chip>
           <v-list-item-content>
             <v-list-item-title>
-              {{ tag }}
+              {{ tag.name }}
             </v-list-item-title>
           </v-list-item-content>
         </v-chip>
@@ -40,8 +40,6 @@
 </template>
 
 <script>
-// import * as mdijs from '@mdi/js';
-
 export default {
   name: 'NavDrawerFolders',
   computed: {
@@ -53,20 +51,6 @@ export default {
     setSelectedTag(tag) {
       this.$store.commit('tags/setSelectedTag', tag);
     },
-    // sortedTags(tags) {
-    //   if (tags.length === 0) return [];
-    //   else if (tags.length === 1) return tags;
-    //   else {
-    //     // Prevents infinite loop because of changing tags by reference
-    //     const sortedTags = [...tags];
-    //     sortedTags.sort((a, b) => {
-    //       let tagA = a.toUpperCase();
-    //       let tagB = b.toUpperCase();
-    //       return tagA < tagB ? -1 : tagA > tagB ? 1 : 0;
-    //     });
-    //     return sortedTags;
-    //   }
-    // },
   },
 };
 </script>

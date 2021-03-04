@@ -5,7 +5,7 @@
       <v-text-field :rules="validateName" :value="selectedFolder.name" @change="updateFolderName" solo> </v-text-field>
     </div>
     <NoItemsCard v-if="bookmarks.length === 0" />
-    <Bookmark v-else />
+    <Bookmarks v-else />
     <DeleteFolderDialog />
   </v-container>
 </template>
@@ -13,7 +13,7 @@
 <script>
 import { mapState } from 'vuex';
 
-import Bookmark from '../components/Bookmark.vue';
+import Bookmarks from './Bookmarks.vue';
 import DeleteFolderDialog from '../components/DeleteFolderDialog.vue';
 import NoItemsCard from '../components/NoItemsCard.vue';
 
@@ -27,7 +27,7 @@ export default {
     };
   },
   components: {
-    Bookmark,
+    Bookmarks,
     DeleteFolderDialog,
     NoItemsCard,
   },
@@ -50,9 +50,9 @@ export default {
     displayIcon(item) {
       return mdijs[item];
     },
-    deleteBookmark(_id) {
-      this.$store.dispatch('bookmarks/deleteBookmark', _id);
-    },
+    // deleteBookmark(_id) {
+    //   this.$store.dispatch('bookmarks/deleteBookmark', _id);
+    // },
   },
 };
 </script>

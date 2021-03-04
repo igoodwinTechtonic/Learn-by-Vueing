@@ -4,13 +4,13 @@
       <v-row>
         <v-col class="inner-grid">
           <v-card-title
-            ><v-text-field :placeholder="title" :value="title" :rules="validateField"></v-text-field
+            ><v-text-field :placeholder="title" :rules="validateField" v-model="customTitle"></v-text-field
           ></v-card-title>
           <div class="img-link-grid">
             <v-img v-if="favicon" :src="favicon" max-height="40" max-width="40" style="align-self: center;"></v-img>
             <v-card-subtitle>{{ url }}</v-card-subtitle>
           </div>
-          <v-card-text><v-textarea :placeholder="description" :value="description"></v-textarea></v-card-text>
+          <v-card-text><v-textarea :placeholder="description" v-model="customDesc"></v-textarea></v-card-text>
           <TagSelector />
         </v-col>
       </v-row>
@@ -19,9 +19,8 @@
           ><v-icon style="padding-right: 1rem;">mdi-bookmark</v-icon>Add Bookmark</v-btn
         >
         <v-card-title
-          >to <v-icon style="padding: 0 4px;">{{ selectedFolderIcon }}</v-icon>
-          {{ selectedFolder.name }} folder</v-card-title
-        >
+          >to <v-icon style="padding: 0 4px;">{{ selectedFolderIcon }}</v-icon> {{ selectedFolder.name }} folder
+        </v-card-title>
       </v-card-actions>
     </v-card>
   </v-container>
@@ -39,6 +38,8 @@ export default {
   },
   data() {
     return {
+      customTitle: this.$store.state.bookmarks.bookmarkToAdd.title,
+      customDesc: this.$store.state.bookmarks.bookmarkToAdd.description,
       validateField: [(field) => (field && field.length > 0) || 'Required.'],
     };
   },
@@ -75,8 +76,11 @@ export default {
       this.$store
         .dispatch('bookmarks/addBookmark', {
           ...this.$store.state.bookmarks.bookmarkToAdd,
+          title: this.customTitle,
+          description: this.customDesc,
+          user_id: this.$store.state.users.currentUser._id,
           folderId: this.$store.state.folders.selectedFolder._id,
-          tags: this.$store.state.tags.currentBookmarkTags,
+          tags: this.$store.state.tags.currentBookmarkTags.map((tag) => tag.name), //.toLowerCase().replace(/\s/g, '-')),
           dateCreated: new Date(),
           public: false,
         })
@@ -93,12 +97,12 @@ export default {
       return mdijs[icon];
     },
   },
-  mounted() {
-    this.$refs.btn.$el.focus();
-  },
-  updated() {
-    this.$refs.btn.$el.focus();
-  },
+  // mounted() {
+  //   this.$refs.btn.$el.focus();
+  // },
+  // updated() {
+  //   this.$refs.btn.$el.focus();
+  // },
 };
 </script>
 

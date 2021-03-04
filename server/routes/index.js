@@ -7,7 +7,7 @@ const scrapeRoute = require('./scrape');
 router.use('/scrape', scrapeRoute);
 router.use('/api', apiRoutes);
 
-router.route('/*')
+router.route('/')
   .get((req, res) => {
     res.sendFile(path.join(__dirname, '../../client/public/index.html'));
   });

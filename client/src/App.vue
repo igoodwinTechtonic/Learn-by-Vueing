@@ -1,11 +1,11 @@
 <template>
   <v-app id="learn-by-vueing">
-    <NavDrawer />
+    <NavDrawer v-if="$auth.isAuthenticated" />
 
     <v-app-bar app clipped-left>
       <!-- <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon> -->
 
-      <div class="d-flex align-center" style="width: 300px;">
+      <!-- <div class="d-flex align-center" style="width: 300px;">
         <v-img
           alt="Vuetify Logo"
           class="shrink mr-2"
@@ -23,8 +23,11 @@
           src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
           width="100"
         />
+      </div> -->
+
+      <div class="d-flex align-center" style="width: 300px;">
+        <h2>{{ $auth.user.name }}</h2>
       </div>
-      <!-- <v-spacer></v-spacer> -->
 
       <!-- Search bar should search all topics or just within the chosen technology? -->
       <!-- <v-row align="center"> -->
@@ -33,10 +36,19 @@
         placeholder="Add bookmark or search..."
         hint="Paste a link to add a bookmark or begin typing to search."
         persistent-hint
+        v-if="$auth.isAuthenticated"
         v-model="search"
         @keyup="searchBookmarks(search)"
         @paste="onPaste"
       ></v-text-field>
+
+      <v-spacer></v-spacer>
+      <!-- <v-card class="elevation-12 pa-4"> -->
+      <!-- <v-card-title>Log in with Auth0 </v-card-title> -->
+      <v-btn class="success" v-if="!$auth.isAuthenticated" @click="login">Log in</v-btn>
+      <v-btn v-if="$auth.isAuthenticated" @click="logout">Log out</v-btn>
+      <!-- </v-card> -->
+
       <!-- append-icon="mdi-magnify" -->
       <!-- </v-row> -->
 
@@ -50,6 +62,8 @@
 
     <v-main>
       <v-container fluid class="container--flex">
+        <!-- <Home v-if="!$auth.isAuthenticated" /> -->
+        <!-- <router-view v-if="$auth.isAuthenticated && !$auth.isLoading" /> -->
         <router-view />
         <v-overlay :value="overlay">
           <v-progress-circular indeterminate size="64"> </v-progress-circular>
@@ -74,14 +88,6 @@ export default {
       disabled: false,
     };
   },
-  async created() {
-    // Grab all user's folders, bookmarks, tags from server on app load, put into state
-    this.$store.commit('setOverlay', true);
-    await this.$store.dispatch('bookmarks/getBookmarks');
-    await this.$store.dispatch('folders/getFolders');
-    await this.$store.dispatch('tags/getTags');
-    this.$store.commit('setOverlay', false);
-  },
   computed: {
     ...mapState(['overlay']),
   },
@@ -96,7 +102,6 @@ export default {
     onPaste(event) {
       const link = event.clipboardData.getData('text/plain');
       if (this.$route.path != `${this.$route.path}/add` && link.match(/^(https?|www)/)) {
-        this.$store.commit('setOverlay', true);
         this.$store.commit('setLinkToAdd', link);
         this.$router.push(`${this.$route.path}/add`);
         this.$store.dispatch('scrapeUrl', { link }).then(() => {
@@ -105,14 +110,22 @@ export default {
         });
       }
     },
+    login() {
+      this.$auth.loginWithRedirect();
+    },
+    logout() {
+      // this.$store.commit('setOverlay', true);
+      this.$auth.logout(); //.then(() => this.$store.commit('setOverlay', false));
+      this.$router.push({ path: '/' });
+    },
   },
 };
 </script>
 
 <style lang="scss">
-.container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
+// .container {
+//   display: flex;
+//   flex-direction: column;
+//   height: 100%;
+// }
 </style>

@@ -6,7 +6,7 @@
         <v-navigation-drawer dark permanent mini-variant mini-variant-width="70">
           <v-list-item class="px-2">
             <v-list-item-avatar>
-              <v-img src="https://randomuser.me/api/portraits/women/75.jpg"></v-img>
+              <v-img :src="this.$auth.user.picture"></v-img>
             </v-list-item-avatar>
           </v-list-item>
 
@@ -71,7 +71,6 @@ export default {
       ],
     };
   },
-
   methods: {
     navToItem(item) {
       switch (item.title) {

@@ -9,16 +9,18 @@ export default {
   mutations: {
     setFolders(state, folders) {
       state.list = folders;
-      // console.log(folders)
     },
     setSelectedFolder(state, payload) {
       state.selectedFolder = payload
     },
   },
   actions: {
-    getFolders({ commit }) {
-      return axios.get('/api/folders')
-        .then((res) => commit('setFolders', res.data))
+    // Retrieves all folders from a given user id
+    getFolders({ commit }, user_id) {
+      return axios.get('/api/folders?id=' + user_id)
+        .then((res) => {
+          commit('setFolders', res.data)
+        })
         .catch((err) => console.error(err))
     },
     addFolder({ commit, state }, folder) {

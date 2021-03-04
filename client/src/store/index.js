@@ -1,10 +1,12 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+import createPersistedState from 'vuex-persistedstate'
 
+import bookmarksModule from './modules/bookmarksModule.js'
 import foldersModule from './modules/foldersModule.js'
 import tagsModule from './modules/tagsModule.js'
-import bookmarksModule from './modules/bookmarksModule.js'
+import usersModule from './modules/usersModule.js'
 
 Vue.use(Vuex)
 
@@ -23,9 +25,10 @@ export default new Vuex.Store({
     }
   },
   modules: {
+    bookmarks: bookmarksModule,
     folders: foldersModule,
     tags: tagsModule,
-    bookmarks: bookmarksModule
+    users: usersModule,
   },
   mutations: {
     setOverlay(state, payload) { state.overlay = payload },
@@ -41,5 +44,6 @@ export default new Vuex.Store({
       })
         .then((res) => commit('bookmarks/setBookmarkToAdd', res.data))
     }
-  }
+  },
+  plugins: [createPersistedState()]
 })

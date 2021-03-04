@@ -1,12 +1,14 @@
 <template>
   <v-list class="container--grid" style="flex: 1;">
-    <NoItemsCard v-if="bookmarksWithTag.length === 0" />
-    <Bookmark v-else />
+    <NoItemsCard v-if="bookmarks.length === 0" />
+    <v-list v-else three-line id="bookmarks-list">
+      <Bookmark v-for="(bookmark, idx) in bookmarks" :key="idx" :bookmark="bookmark" />
+    </v-list>
   </v-list>
 </template>
 
 <script>
-// Display all bookmarks when navigating to this component
+// Display all bookmarks from either a selected folder or tag
 import NoItemsCard from '../components/NoItemsCard.vue';
 import Bookmark from '../components/Bookmark.vue';
 
@@ -16,14 +18,14 @@ export default {
     Bookmark,
     NoItemsCard,
   },
-  // props: ['tag'],
   computed: {
     bookmarks() {
-      return this.$store.state.bookmarks.list;
-    },
-    bookmarksWithTag() {
-      // console.log(this.$route.params.tag);
-      return this.$store.state.bookmarks.list.filter((bookmark) => bookmark.tags.includes(this.$route.params.tag));
+      if (this.$route.params.name) {
+        return this.$store.state.bookmarks.list.filter((bookmark) => bookmark.folderId);
+      } else if (this.$route.params.tag) {
+        return this.$store.state.bookmarks.list.filter((bookmark) => bookmark.tags.includes(this.$route.params.tag));
+      }
+      return {};
     },
   },
 };

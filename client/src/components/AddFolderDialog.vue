@@ -99,6 +99,7 @@ export default {
     submit() {
       if (this.name) {
         const newFolder = {
+          user_id: this.$store.state.users.currentUser._id,
           name: this.name,
           icon: this.icon,
           count: 0,
