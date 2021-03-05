@@ -15,6 +15,10 @@ export default {
     // Sets the bookmark to add or edit here
     setBookmarkToAdd(state, bookmark) {
       state.bookmarkToAdd = bookmark;
+    },
+    // Sets the search results and displays in bookmarks view
+    searchResults(state, bookmarks) {
+      state.searchResults = bookmarks;
     }
   },
   actions: {
@@ -25,8 +29,9 @@ export default {
         .catch((err) => console.error(err));
     },
     // Searches bookmarks given a keyword entered from the search menu
-    searchBookmarks({ commit }, keywords) {
-      return axios.get('api/bookmarks?search=' + keywords)
+    searchBookmarks({ commit, rootState }, keywords) {
+      if (keywords === '') return;
+      return axios.get(`api/bookmarks?id=${rootState.users.currentUser._id}&search=${keywords}`)
         .then((res) => commit('searchResults', res.data))
         .catch((err) => console.error(err))
     },

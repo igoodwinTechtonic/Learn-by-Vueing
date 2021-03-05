@@ -27,7 +27,7 @@
         @click="setSelectedTag(tag)"
         link
       >
-        <v-chip>
+        <v-chip style="cursor: pointer;">
           <v-list-item-content>
             <v-list-item-title>
               {{ tag }}

@@ -27,7 +27,7 @@
         @click="setSelectedFolder(folder)"
         link
       >
-        <v-list-item-icon>
+        <v-list-item-icon style="margin-right: 1rem;">
           <v-icon>{{ displayIcon(folder.icon) }}</v-icon>
         </v-list-item-icon>
         <v-list-item-content>

@@ -15,6 +15,7 @@
         persistent-hint
         v-if="$auth.isAuthenticated"
         v-model="search"
+        @click="navToSearch()"
         @keyup="searchBookmarks(search)"
         @paste="onPaste"
         :disabled="disabledSearch"
@@ -27,7 +28,7 @@
     </v-app-bar>
 
     <v-main>
-      <v-container fluid class="container--flex">
+      <v-container fluid>
         <router-view />
         <v-overlay :value="overlay">
           <v-progress-circular indeterminate size="64"> </v-progress-circular>
@@ -62,11 +63,15 @@ export default {
     },
   },
   methods: {
+    navToSearch() {
+      if (this.$route.fullPath !== '/search') this.$router.push({ name: 'Search' });
+    },
     searchBookmarks() {
       // Ignores updating search term if the previous input is the same as the new input
       // or if the input is a link that matches the regex pattern
       if (this.search !== this.$store.state.searchKeywords && !this.search.match(/^(https?|www)/)) {
         this.$store.commit('setSearchKeywords', this.search);
+        this.$store.dispatch('bookmarks/searchBookmarks', this.search);
       }
     },
     onPaste(event) {
@@ -77,6 +82,7 @@ export default {
         return;
       }
       if (link.match(/^(https?|www)/)) {
+        this.$store.commit('setOverlay', true);
         this.$store.dispatch('scrapeUrl', { link }).then(() => {
           const toThisFolder = this.$store.state.folders.selectedFolder.name.toLowerCase().replace(/\s/g, '-');
           this.$router.push({ name: 'AddBookmark', params: { name: toThisFolder, action: 'add' } });
