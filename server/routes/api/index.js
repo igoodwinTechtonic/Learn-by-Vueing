@@ -34,6 +34,7 @@ const main = async () => {
       .post(async (req, res) => {
         res.send(await collection('users').insertOne(req.body))
       })
+
     // FOLDER ROUTES ================================================= FOLDER ROUTES //
     const folders = "folders";
     router.route('/folders')
@@ -73,19 +74,20 @@ const main = async () => {
           // Performs a search if there is a query parameter like /api/bookmarks?search=
           // This endpoint is hit if the user begins typing in the search field
           res.send(await collection(bookmarks).find(
-            { "user_id": req.query.id },
             {
+              "user_id": req.query.id,
               "$or": [
                 { "title": { "$regex": req.query.search, "$options": 'i' } },
                 { "siteName": { "$regex": req.query.search, "$options": 'i' } },
                 { "description": { "$regex": req.query.search, "$options": 'i' } },
                 { "url": { "$regex": req.query.search, "$options": 'i' } },
                 { "dateCreated": { "$regex": req.query.search, "$options": 'i' } },
-                // CREATE LOGIC TO QUERY TAGS!
+                { "tags": { "$elemMatch": { "$regex": req.query.search, "$options": 'i' } } },
               ]
             }
-          ).toArray())
+          ).sort({ "title": 1 }).toArray())
         } else {
+          // Return all bookmarks if req.query.search is empty
           res.send(await collection(bookmarks).find().toArray())
         }
       })

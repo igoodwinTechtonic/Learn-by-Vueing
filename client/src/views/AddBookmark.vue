@@ -18,11 +18,13 @@
         <v-btn ref="btn" @click="submit()"
           ><v-icon style="padding-right: 1rem;">mdi-bookmark</v-icon>{{ action }} Bookmark</v-btn
         >
+      </v-card-actions>
+      <!-- <v-card-actions style="justify-content: center; padding-bottom: 2rem;">
         <v-card-title
           >{{ action2 }} <v-icon style="padding: 0 4px;">{{ selectedFolderIcon }}</v-icon>
           {{ selectedFolder.name }} folder
         </v-card-title>
-      </v-card-actions>
+      </v-card-actions> -->
     </v-card>
   </v-container>
 </template>
@@ -73,10 +75,10 @@ export default {
     url() {
       return this.$store.state.bookmarks.bookmarkToAdd.url;
     },
-    image() {
-      const images = this.$store.state.bookmarks.bookmarkToAdd.images;
-      return images && images.length != 0 && images[0];
-    },
+    // image() {
+    //   const images = this.$store.state.bookmarks.bookmarkToAdd.images;
+    //   return images && images.length != 0 && images[0];
+    // },
     favicon() {
       const favicons = this.$store.state.bookmarks.bookmarkToAdd.favicons;
       return favicons && favicons.length != 0 && favicons[0];

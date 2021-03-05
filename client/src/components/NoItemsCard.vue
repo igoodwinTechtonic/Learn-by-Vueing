@@ -22,8 +22,9 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .no-items-container {
+  align-self: center;
   justify-content: center;
   align-items: center;
 }

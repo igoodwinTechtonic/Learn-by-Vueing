@@ -81,3 +81,17 @@ updated() {
   this.$refs.btn.$el.focus();
 },
 ```
+
+```js
+db.bookmarks.find({
+  user_id: '604109a74c3b1cc5f71e9f00',
+
+  $or: [
+    { title: { $regex: 'vue', $options: 'i' } },
+    { siteName: { $regex: 'vue', $options: 'i' } },
+    { description: { $regex: 'vue', $options: 'i' } },
+    { url: { $regex: 'vue', $options: 'i' } },
+    { dateCreated: { $regex: 'vue', $options: 'i' } },
+  ],
+});
+```
