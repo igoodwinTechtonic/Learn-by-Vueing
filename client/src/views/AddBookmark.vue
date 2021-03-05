@@ -69,29 +69,29 @@ export default {
     },
   },
   methods: {
-    submit() {
+    async submit() {
       // Post tags to db
-      this.$store.dispatch('tags/updateTagList'); //, this.$store.state.tags.setCurrentBookmarkTags);
+      // this.$store.dispatch('tags/updateTagList'); //, this.$store.state.tags.setCurrentBookmarkTags);
       // Post bookmark to db
-      this.$store
-        .dispatch('bookmarks/addBookmark', {
-          ...this.$store.state.bookmarks.bookmarkToAdd,
-          title: this.customTitle,
-          description: this.customDesc,
-          user_id: this.$store.state.users.currentUser._id,
-          folderId: this.$store.state.folders.selectedFolder._id,
-          tags: this.$store.state.tags.currentBookmarkTags.map((tag) => tag.name), //.toLowerCase().replace(/\s/g, '-')),
-          dateCreated: new Date(),
-          public: false,
-        })
-        .then(() => {
-          this.$router.push({
-            name: 'Folder',
-            params: { name: this.$store.state.folders.selectedFolder.name.toLowerCase().replace(/\s/g, '-') },
-          });
-          // Clear selected tags from state
-          this.$store.commit('tags/setCurrentBookmarkTags', []);
-        });
+      // Update tags when a bookmark is added or deleted
+      await this.$store.dispatch('bookmarks/addBookmark', {
+        ...this.$store.state.bookmarks.bookmarkToAdd,
+        title: this.customTitle,
+        description: this.customDesc,
+        user_id: this.$store.state.users.currentUser._id,
+        folderId: this.$store.state.folders.selectedFolder._id,
+        tags: this.$store.state.tags.currentBookmarkTags,
+        dateCreated: new Date(),
+        public: false,
+      });
+      await this.$store.dispatch('tags/getUserTags', this.$store.state.users.currentUser._id);
+      this.$router.push({
+        name: 'Folder',
+        params: { name: this.$store.state.folders.selectedFolder.name.toLowerCase().replace(/\s/g, '-') },
+      });
+
+      // Clear selected tags from state
+      this.$store.commit('tags/setCurrentBookmarkTags', []);
     },
     displayIcon(icon) {
       return mdijs[icon];
@@ -116,9 +116,6 @@ export default {
   grid-template-columns: 50px 1fr;
 }
 .inner-grid > * {
-  /* display: flex;
-  justify-content: center;
-  align-items: center; */
   padding: 0 1rem;
 }
 </style>

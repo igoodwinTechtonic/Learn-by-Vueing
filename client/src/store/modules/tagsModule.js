@@ -15,7 +15,7 @@ export default {
       if (tags.length === 1) state.list = tags;
       else {
         const sortedTags = [...tags];
-        sortedTags.sort((a, b) => a.name.toUpperCase() > b.name.toUpperCase() ? 1 : -1)
+        sortedTags.sort((a, b) => a.toUpperCase() > b.toUpperCase() ? 1 : -1)
         state.list = sortedTags;
       }
     },
@@ -30,40 +30,46 @@ export default {
     },
   },
   actions: {
-    // GETS tags, updates local module state.list
-    getTags({ commit }) {
-      return axios.get('/api/users/tags')
-        .then((res) => commit('setTags', res.data.tags))
+    // GETS tags by querying all user's bookmarks, updates local module state.list
+    getUserTags({ commit }, user_id) {
+      return axios.get('/api/tags?id=' + user_id)
+        .then((res) => {
+          let tagList = [];
+          res.data.forEach((i) => {
+            i.tags.forEach(tag => {
+              // Does not add duplicate tags to list
+              if (!tagList.includes(tag)) return tagList.push(tag)
+            })
+          })
+          commit('setTags', tagList)
+        })
         .catch((err) => console.error(err))
     },
+    // getTags({ commit }) {
+    //   return axios.get('/api/users/tags')
+    //     .then((res) => commit('setTags', res.data.tags))
+    //     .catch((err) => console.error(err))
+    // },
     // POSTS new tags and/or UPDATES count of existing tags from the AddBookmark.vue dialog
-    updateTagList({ commit, state, rootState }) {
-      let updatedTags = [...state.currentBookmarkTags];
-      state.list.forEach(tagInState => {
-        if (!(updatedTags.map(tag => tag.name).includes(tagInState.name))) {
-          // If a tag in state is not in currentBookmarkTags, keep it the same and readd to list
-          updatedTags = [...updatedTags, tagInState]
-        }
-      })
-      commit('setTags', updatedTags)
+    // updateTagList({ commit, state, rootState }) {
+    //   let updatedTags = [...state.currentBookmarkTags];
+    //   state.list.forEach(tagInState => {
+    //     if (!(updatedTags.map(tag => tag.name).includes(tagInState.name))) {
+    //       // If a tag in state is not in currentBookmarkTags, keep it the same and readd to list
+    //       updatedTags = [...updatedTags, tagInState]
+    //     }
+    //   })
+    //   commit('setTags', updatedTags)
 
-      const putTags = {
-        _id: rootState.users.currentUser._id,
-        tags: updatedTags
-      }
+    //   const putTags = {
+    //     _id: rootState.users.currentUser._id,
+    //     tags: updatedTags
+    //   }
 
-      return axios
-        .put('/api/users/tags', putTags)
-        .then(() => commit('setTags', updatedTags))
-        .catch((err) => console.error(err));
-    },
-    // Deletes a tag
-    deleteTag({ commit, state }, id) {
-      const tags = state.list.filter(tag => tag._id !== id);
-      return axios
-        .delete('/api/users/tags' + id)
-        .then(() => commit('setTags', tags))
-        .catch((err) => console.error(err));
-    }
+    //   return axios
+    //     .put('/api/users/tags', putTags)
+    //     .then(() => commit('setTags', updatedTags))
+    //     .catch((err) => console.error(err));
+    // },
   }
 }

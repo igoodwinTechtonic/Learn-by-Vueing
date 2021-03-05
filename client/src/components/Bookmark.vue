@@ -4,7 +4,7 @@
       <v-tooltip bottom transition="v-fade-transition">
         <!-- This is the actual bookmark content -->
         <template v-slot:activator="{ on, attrs }">
-          <span class="bookmark-item" v-bind="attrs" v-on="on">
+          <span class="bookmark-item" style="flex: 1;" v-bind="attrs" v-on="on">
             <v-list-item-avatar size="30" style="margin: 0 1rem 0 0;">
               <!-- <v-img src="bookmark.images[0]"></v-img> -->
               <v-img :src="bookmark.favicons[0]"></v-img>
@@ -18,14 +18,10 @@
           <v-list-item-subtitle v-html="bookmark.description"></v-list-item-subtitle>
           <v-list-item-subtitle v-html="bookmark.url"></v-list-item-subtitle>
           <v-list style="background: none;">
-            <v-chip v-for="(tag, idx) in sortedTags(bookmark.tags)" :key="idx" style="margin-right: 0.2rem;">{{
-              tag
-            }}</v-chip>
+            <v-chip v-for="(tag, idx) in tags" :key="idx" style="margin-right: 0.2rem;">{{ tag }}</v-chip>
           </v-list>
         </span>
       </v-tooltip>
-
-      <v-divider></v-divider>
 
       <!-- This exists in the custom right-click menu -->
       <v-menu v-model="showMenu" :position-x="x" :position-y="y" absolute offset-y>
@@ -64,6 +60,11 @@ export default {
       ],
     };
   },
+  computed: {
+    tags() {
+      return this.$store.state.tags.list.filter((tag) => this.bookmark.tags.includes(tag));
+    },
+  },
   methods: {
     // Copies url of selected bookmark to clipboard
     copyUrl() {
@@ -74,25 +75,25 @@ export default {
       console.log('edit bookmark', this.bookmark);
     },
     // DELETES a bookmark and removes tags if it's the last bookmark with the tag
-    deleteBookmark() {
-      console.log(this.bookmark);
-      this.$store.dispatch('bookmarks/deleteBookmark', { id: this.bookmark._id, tags: this.bookmark.tags });
+    async deleteBookmark() {
+      await this.$store.dispatch('bookmarks/deleteBookmark', { id: this.bookmark._id, tags: this.bookmark.tags });
+      await this.$store.dispatch('tags/getUserTags', this.$store.state.users.currentUser._id);
     },
-    // Sorts tags alphabetically by name
-    sortedTags(tags) {
-      if (tags.length === 0) return [];
-      else if (tags.length === 1) return tags;
-      else {
-        // Prevents infinite loop because of changing tags by reference
-        const sortedTags = [...tags];
-        sortedTags.sort((a, b) => {
-          let tagA = a.toUpperCase();
-          let tagB = b.toUpperCase();
-          return tagA < tagB ? -1 : tagA > tagB ? 1 : 0;
-        });
-        return sortedTags;
-      }
-    },
+    // // Sorts tags alphabetically by name
+    // sortedTags(tags) {
+    //   if (tags.length === 0) return [];
+    //   else if (tags.length === 1) return tags;
+    //   else {
+    //     // Prevents infinite loop because of changing tags by reference
+    //     const sortedTags = [...tags];
+    //     sortedTags.sort((a, b) => {
+    //       let tagA = a.toUpperCase();
+    //       let tagB = b.toUpperCase();
+    //       return tagA < tagB ? -1 : tagA > tagB ? 1 : 0;
+    //     });
+    //     return sortedTags;
+    //   }
+    // },
     // Shows / hides the custom right-click menu
     show(e) {
       e.preventDefault();

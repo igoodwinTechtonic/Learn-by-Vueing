@@ -26,7 +26,7 @@ export default {
         // User was successfully received from db
         if (res.status === 200 || res.status === 304) {
           commit('setUser', res.data); // Also receives tags
-          commit('tags/setTags', res.data.tags, { root: true });
+          // commit('tags/setTags', res.data.tags, { root: true });
           await dispatch('getUserData', state.currentUser._id);
         }
       } catch (err) {
@@ -36,7 +36,7 @@ export default {
     async getUserData({ dispatch }, id) {
       await dispatch('folders/getFolders', id, { root: true });
       await dispatch('bookmarks/getBookmarks', id, { root: true });
-      // await dispatch('tags/getTags', id, { root: true });
+      await dispatch('tags/getUserTags', id, { root: true });
     }
   },
 }
