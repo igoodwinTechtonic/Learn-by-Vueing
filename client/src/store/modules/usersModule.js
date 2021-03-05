@@ -1,7 +1,5 @@
 import axios from 'axios';
 
-// Tags are stored under the user endpoint as an array of objects with a "name" and "count" properties
-
 export default {
   namespaced: true,
   state: {
@@ -14,6 +12,7 @@ export default {
     }
   },
   actions: {
+    // GETS a user from db if exists, otherwise POSTS new user
     async getUser({ commit, dispatch, state }, user) {
       try {
         // Check if user exists in db with GET using email
@@ -26,13 +25,13 @@ export default {
         // User was successfully received from db
         if (res.status === 200 || res.status === 304) {
           commit('setUser', res.data); // Also receives tags
-          // commit('tags/setTags', res.data.tags, { root: true });
           await dispatch('getUserData', state.currentUser._id);
         }
       } catch (err) {
         return console.error(err);
       }
     },
+    // Dispatches actions to get data from db when user logs in
     async getUserData({ dispatch }, id) {
       await dispatch('folders/getFolders', id, { root: true });
       await dispatch('bookmarks/getBookmarks', id, { root: true });

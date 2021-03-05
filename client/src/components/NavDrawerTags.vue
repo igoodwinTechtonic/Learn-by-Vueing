@@ -23,7 +23,7 @@
       <v-list-item
         v-for="(tag, idx) in tags"
         :key="idx"
-        :to="{ name: 'Bookmarks', params: { tag } }"
+        :to="{ name: 'Tags', params: { tag } }"
         @click="setSelectedTag(tag)"
         link
       >
@@ -40,6 +40,9 @@
 </template>
 
 <script>
+// NavDrawerTags.vue displays a nav drawer that contains chip tags
+// When a chip link is clicked, the tag's bookmarks are displayed in the main router-view
+// in the Bookmarks.vue view
 export default {
   name: 'NavDrawerFolders',
   computed: {

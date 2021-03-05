@@ -2,14 +2,18 @@ import axios from 'axios';
 
 export default {
   namespaced: true,
+  // State contains the currently selected folder, displayed in the url when clicked
+  // And a list of all of the user's folders pulled from the db
   state: {
     selectedFolder: {},
     list: [],
   },
   mutations: {
+    // Sets all folders to state
     setFolders(state, folders) {
       state.list = folders;
     },
+    // Sets selected folder when user clicks on folder link in nav menu
     setSelectedFolder(state, payload) {
       state.selectedFolder = payload
     },
@@ -23,6 +27,7 @@ export default {
         })
         .catch((err) => console.error(err))
     },
+    // Adds a folder to the user's folders
     addFolder({ commit, state }, folder) {
       return axios
         .post('/api/folders', JSON.stringify(folder), {
@@ -38,6 +43,7 @@ export default {
         })
         .catch((err) => console.error(err));
     },
+    // Updates the folder's name
     updateFolderName({ commit, state }, updatedFolder) {
       const { _id, ...folder } = updatedFolder;
       const folders = state.list.filter(folder => folder._id !== _id)
@@ -51,12 +57,17 @@ export default {
         .then(() => commit('setFolders', folders))
         .catch((err) => console.error(err));
     },
-    deleteFolder({ commit, state }, id) {
+    // Deletes a folder and all bookmarks with the same folder_id, re-gets all tags after deletion
+    async deleteFolder({ commit, dispatch, state, rootState }, id) {
       const folders = state.list.filter(folder => folder._id !== id);
-      return axios
-        .delete('/api/folders/' + id)
-        .then(() => commit('setFolders', folders))
-        .catch((err) => console.error(err));
+      try {
+        await axios.delete('/api/folders/' + id);
+        await dispatch('bookmarks/deleteAllBookmarksInFolder', id, { root: true })
+        await dispatch('tags/getUserTags', rootState.users.currentUser._id, { root: true })
+        commit('setFolders', folders);
+      } catch (err) {
+        return console.error(err);
+      }
     }
   }
 }

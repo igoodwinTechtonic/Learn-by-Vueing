@@ -42,15 +42,12 @@
         <img class="logo" alt="Vue logo" src="../assets/logo.png" sm6 />
       </v-col>
     </v-row>
-
-    <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-// import HelloWorld from '@/components/HelloWorld.vue'
-
+// Home.vue view displays app landing page and details once logged in
+// Router path: /
 export default {
   name: 'Home',
 };
@@ -70,7 +67,4 @@ export default {
 .logo {
   margin-bottom: 50px;
 }
-// .home-content > p {
-//   text-align: center;
-// }
 </style>

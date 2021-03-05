@@ -8,21 +8,23 @@
 </template>
 
 <script>
-// Display all bookmarks from either a selected folder or tag
+// Tags.vue displays all bookmarks with a tag
+// Router path: /bookmarks/:name
 import NoItemsCard from '../components/NoItemsCard.vue';
 import Bookmark from '../components/Bookmark.vue';
 
 export default {
-  name: 'AllBookmarksList',
+  name: 'Tags',
   components: {
     Bookmark,
     NoItemsCard,
   },
   computed: {
+    // Displays bookmarks based on route parameter, either a folder or tag name
     bookmarks() {
       if (this.$route.params.name) {
         return this.$store.state.bookmarks.list.filter(
-          (bookmark) => bookmark.folderId === this.$store.state.folders.selectedFolder._id
+          (bookmark) => bookmark.folder_id === this.$store.state.folders.selectedFolder._id
         );
       } else if (this.$route.params.tag) {
         return this.$store.state.bookmarks.list.filter((bookmark) => bookmark.tags.includes(this.$route.params.tag));

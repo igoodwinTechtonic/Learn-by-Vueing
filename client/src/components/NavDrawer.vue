@@ -45,6 +45,8 @@
 </template>
 
 <script>
+// NavDrawer.vue displays the main nav drawer that contains two sub nav drawers:
+// NavDrawerFolders and NavDrawerTags to display bookmarks by folders or tags.
 import * as mdijs from '@mdi/js';
 import NavDrawerFolders from './NavDrawerFolders.vue';
 import NavDrawerTags from './NavDrawerTags.vue';
@@ -72,6 +74,7 @@ export default {
     };
   },
   methods: {
+    // Pushes router to route based on clicked item
     navToItem(item) {
       switch (item.title) {
         case 'Folders' && item.title != 'Folders':

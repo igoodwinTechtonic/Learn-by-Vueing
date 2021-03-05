@@ -95,6 +95,11 @@ const main = async () => {
         res.send(await collection(bookmarks).insertOne(req.body))
       })
 
+    router.route('/bookmarks/all/:id')
+      .delete(async (req, res) => {
+        res.send(await collection(bookmarks).deleteMany({ "folder_id": req.params.id }))
+      })
+
     router.route('/bookmarks/:id')
       // Get all bookmarks from the path
       .get(async (req, res) => {
@@ -114,89 +119,6 @@ const main = async () => {
       .get(async (req, res) => {
         res.send(await collection(bookmarks).find({ "user_id": { "$eq": "604109a74c3b1cc5f71e9f00" } }).project({ "tags": 1, "_id": 0 }).toArray())
       })
-
-
-
-    // router.route('/:path/:model?id')
-    //   // Get all items from path
-    //   .get(async (req, res) => {
-    //     // if (req.query.search) {
-    //     //   // Performs a search if there is a query parameter like /api/folders?search=
-    //     //   res.send(await collection(req.params.path).find({ "name": { "$regex": req.query.search, "$options": 'i' } }).toArray())
-    //     // }
-    //     console.log(req.params)
-    //     if (req.params.path === 'users') {
-    //       const response = await collection('users').findOne({ "email": req.params.model })
-    //       if (response) res.send(response)
-    //       // Send code 202 to tell front-end to POST a new user
-    //       else res.status(202).send(null)
-    //     }
-    //     else if (req.params.path === 'folders' && req.query.id) {
-    //       res.send(await collection(req.params.path).find({ "user_id": { "$regex": req.query.id, "$options": 'i' } }).toArray())
-    //     }
-    //   })
-    //   // Post a new item to the path
-    //   .post(async (req, res) => {
-    //     // console.log(req.body);
-    //     res.send(await collection(req.params.path).insertOne(req.body))
-    //   })
-
-
-
-
-
-
-
-
-
-
-
-
-    // User routes
-    // router.route('/users/tags')
-    //   .get(async (req, res) => {
-    //     res.send(await collection('users').findOne({ "username": "iantheg" }, { projection: { tags: 1 } }));
-    //   })
-    //   .put(async (req, res) => {
-    //     // console.log(req.body)
-    //     res.send(await collection('users').updateOne({ "username": "iantheg" }, { "$set": { "tags": req.body } }))
-    //   })
-    // router.route('/users/:email')
-    //   .get(async (req, res) => {
-    //     const response = await collection('users').findOne({ "email": req.params.email })
-    //     if (response) res.send(response)
-    //     else res.status(202).send(null)
-    //   })
-
-    // router.route('/:path')
-    //   // Get all items from path
-    //   .get(async (req, res) => {
-    //     if (req.query.search) {
-    //       // Performs a search if there is a query parameter like /api/folders?search=
-    //       res.send(await collection(req.params.path).find({ "name": { "$regex": req.query.search, "$options": 'i' } }).toArray())
-    //     } else {
-    //       res.send(await collection(req.params.path).find().toArray())
-    //     }
-    //   })
-    //   // Post a new item to the path
-    //   .post(async (req, res) => {
-    //     // console.log(req.body);
-    //     res.send(await collection(req.params.path).insertOne(req.body))
-    //   })
-
-    // router.route('/:path/:id')
-    //   // Get one item from the path
-    //   .get(async (req, res) => {
-    //     res.send(await collection(req.params.path).findOne({ "_id": new ObjectId(req.params.id) }))
-    //   })
-    //   // Update an item in the path
-    //   .put(async (req, res) => {
-    //     res.send(await collection(req.params.path).replaceOne({ "_id": new ObjectId(req.params.id) }, req.body))
-    //   })
-    //   // Delete an item PERMANENTLY
-    //   .delete(async (req, res) => {
-    //     res.send(await collection(req.params.path).deleteOne({ "_id": new ObjectId(req.params.id) }))
-    //   })
 
   } catch (err) {
     console.error(err)

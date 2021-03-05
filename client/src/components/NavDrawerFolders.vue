@@ -27,9 +27,6 @@
         @click="setSelectedFolder(folder)"
         link
       >
-        <!-- <v-list-item-action>
-        <v-icon>{{ mdi(folder.icon) }}</v-icon>
-      </v-list-item-action> -->
         <v-list-item-icon>
           <v-icon>{{ displayIcon(folder.icon) }}</v-icon>
         </v-list-item-icon>
@@ -44,25 +41,21 @@
 </template>
 
 <script>
+// NavDrawerFolders.vue displays a nav drawer that contains a list of folder links.
+// When a folder link is clicked, the folders's bookmarks are displayed in the main
+// router-view in the Bookmarks.vue view
 import * as mdijs from '@mdi/js';
 import { mapActions } from 'vuex';
 
-// import AddFolderDialog from './AddFolderDialog.vue';
-
 export default {
   name: 'NavDrawerFolders',
-  components: {
-    // AddFolderDialog,
-  },
   data() {
     return {
       drawer: null,
     };
   },
-  created() {
-    // this.getFolders();
-  },
   computed: {
+    // Displays folders in alphabetical order
     folders() {
       let sortedFolders = this.$store.state.folders.list;
       sortedFolders.sort((a, b) => {
@@ -79,6 +72,7 @@ export default {
     displayIcon(icon) {
       return mdijs[icon];
     },
+    // Sets currently selected folder when clicked
     setSelectedFolder(folder) {
       this.$store.commit('folders/setSelectedFolder', folder);
     },
@@ -86,14 +80,4 @@ export default {
 };
 </script>
 
-<style lang="scss">
-.fixed-nav {
-  // position: fixed;
-  padding: 0;
-  background-color: white;
-  z-index: 1;
-
-  &__head {
-  }
-}
-</style>
+<style></style>
