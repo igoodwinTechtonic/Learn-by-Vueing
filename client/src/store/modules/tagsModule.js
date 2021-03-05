@@ -26,7 +26,6 @@ export default {
     // Contains a list of tags selected in the AddBookmark component view
     setCurrentBookmarkTags(state, payload) {
       state.currentBookmarkTags = payload
-      console.log(state.currentBookmarkTags)
     },
   },
   actions: {
@@ -45,31 +44,5 @@ export default {
         })
         .catch((err) => console.error(err))
     },
-    // getTags({ commit }) {
-    //   return axios.get('/api/users/tags')
-    //     .then((res) => commit('setTags', res.data.tags))
-    //     .catch((err) => console.error(err))
-    // },
-    // POSTS new tags and/or UPDATES count of existing tags from the AddBookmark.vue dialog
-    // updateTagList({ commit, state, rootState }) {
-    //   let updatedTags = [...state.currentBookmarkTags];
-    //   state.list.forEach(tagInState => {
-    //     if (!(updatedTags.map(tag => tag.name).includes(tagInState.name))) {
-    //       // If a tag in state is not in currentBookmarkTags, keep it the same and readd to list
-    //       updatedTags = [...updatedTags, tagInState]
-    //     }
-    //   })
-    //   commit('setTags', updatedTags)
-
-    //   const putTags = {
-    //     _id: rootState.users.currentUser._id,
-    //     tags: updatedTags
-    //   }
-
-    //   return axios
-    //     .put('/api/users/tags', putTags)
-    //     .then(() => commit('setTags', updatedTags))
-    //     .catch((err) => console.error(err));
-    // },
   }
 }

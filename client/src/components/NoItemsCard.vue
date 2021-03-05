@@ -11,6 +11,7 @@
 </template>
 
 <script>
+// NoItemsCard.vue displays a card when a folder has no bookmarks
 export default {
   name: 'NoItemsCard',
   computed: {

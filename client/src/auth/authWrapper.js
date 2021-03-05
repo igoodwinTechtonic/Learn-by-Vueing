@@ -99,7 +99,7 @@ export const useAuth0 = ({
         this.user = await this.auth0Client.getUser();
         this.loading = false;
         // Dispatch action to set user in state and remove loading overlay
-        this.$store.dispatch('users/getUser', this.user)
+        if (this.user) this.$store.dispatch('users/getUser', this.user)
         this.$store.commit('setOverlay', false);
       }
     }

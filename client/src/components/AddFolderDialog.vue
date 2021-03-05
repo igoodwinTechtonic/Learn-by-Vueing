@@ -8,42 +8,43 @@
     <v-card>
       <v-card-title class="dialog__title">Add a new folder</v-card-title>
 
-      <v-text-field
-        class="dialog__input"
-        v-model="name"
-        label="Name"
-        hint="A container for your bookmarks."
-        :prepend-inner-icon="displayIcon(icon)"
-        :rules="validateName"
-        persistent-hint
-        clearable
-      ></v-text-field>
+      <form autocomplete="off">
+        <v-text-field
+          class="dialog__input"
+          v-model="name"
+          label="Name"
+          hint="A container for your bookmarks."
+          :prepend-inner-icon="displayIcon(icon)"
+          :rules="validateName"
+          persistent-hint
+          clearable
+        ></v-text-field>
 
-      <v-menu offset-y>
-        <template v-slot:activator="{ on, attrs }">
-          <v-text-field
-            class="dialog__input"
-            v-model="input"
-            label="Search for an icon"
-            hint="The icon cannot be changed once the folder has been added."
-            @keyup="searchIcons(input)"
-            persistent-hint
-            clearable
-            v-bind="attrs"
-            v-on="on"
-          ></v-text-field>
-        </template>
-
-        <v-list>
-          <v-virtual-scroll height="224" item-height="56" :bench="4" :items="filteredIcons">
-            <template v-slot:default="{ item }">
-              <v-list-item :key="item" @click="setIcon(item)">
-                <v-icon>{{ displayIcon(item) }}</v-icon>
-              </v-list-item>
-            </template>
-          </v-virtual-scroll>
-        </v-list>
-      </v-menu>
+        <v-menu offset-y>
+          <template v-slot:activator="{ on, attrs }">
+            <v-text-field
+              class="dialog__input"
+              v-model="input"
+              label="Search for an icon"
+              hint="The icon cannot be changed once the folder has been added."
+              @keyup="searchIcons(input)"
+              persistent-hint
+              clearable
+              v-bind="attrs"
+              v-on="on"
+            ></v-text-field>
+          </template>
+          <v-list>
+            <v-virtual-scroll height="224" item-height="56" :bench="4" :items="filteredIcons">
+              <template v-slot:default="{ item }">
+                <v-list-item :key="item" @click="setIcon(item)">
+                  <v-icon>{{ displayIcon(item) }}</v-icon>
+                </v-list-item>
+              </template>
+            </v-virtual-scroll>
+          </v-list>
+        </v-menu>
+      </form>
 
       <v-divider></v-divider>
 
@@ -61,6 +62,8 @@
 </template>
 
 <script>
+// AddFolder.vue displays a dialog the add folder button in the main nav is clicked.
+// Includes logic to search for a folder icon using the whole mdijs icon library. It's cool!
 import * as mdijs from '@mdi/js';
 import { mapState } from 'vuex';
 
@@ -84,6 +87,7 @@ export default {
     },
   },
   methods: {
+    // POSTS a new folder and sets the currently selected folder to this new folder
     submit() {
       if (this.name) {
         const newFolder = {
@@ -95,8 +99,8 @@ export default {
         this.$store.dispatch('folders/addFolder', newFolder).then(() => {
           this.dialog = false;
           this.$store.commit('setOverlay', false);
-          // this.$store.commit('setSelectedFolder', newFolder);
           this.$router.push({ name: 'Folder', params: { name: this.name.toLowerCase().replace(/\s/g, '-') } });
+          // Resets name and icon after a short delay
           setTimeout(() => {
             this.name = '';
             this.icon = 'mdiFolder';

@@ -10,6 +10,7 @@
     </v-tooltip> -->
     <v-card>
       <v-card-title class="dialog__title">Are you sure you want to delete {{ name }}?</v-card-title>
+      <v-card-subtitle class="dialog__title">This will delete ALL bookmarks in this folder.</v-card-subtitle>
       <v-card-subtitle class="dialog__title">You cannot undo this action.</v-card-subtitle>
 
       <v-divider></v-divider>
@@ -32,15 +33,18 @@
 </template>
 
 <script>
+// DeleteFolderDialog.vue displays a dialog when the trash can icon in the Folder.vue view is clicked
 import { mdiTrashCanOutline } from '@mdi/js';
 
 export default {
   name: 'DeleteFolderDialog',
-  data: () => ({
-    dialog: false,
-    overlay: false,
-    trashcanIcon: mdiTrashCanOutline,
-  }),
+  data() {
+    return {
+      dialog: false,
+      overlay: false,
+      trashcanIcon: mdiTrashCanOutline,
+    };
+  },
   computed: {
     name() {
       return this.$store.state.folders.selectedFolder.name;
@@ -49,10 +53,8 @@ export default {
   methods: {
     deleteFolder() {
       const id = this.$store.state.folders.selectedFolder._id;
-      // Turn on loading
       this.overlay = true;
       this.$store.dispatch('folders/deleteFolder', id).then(() => {
-        // Turn off loading
         this.overlay = false;
         this.dialog = false;
         this.$router.push('/');

@@ -4,7 +4,7 @@
       <v-tooltip bottom transition="v-fade-transition">
         <!-- This is the actual bookmark content -->
         <template v-slot:activator="{ on, attrs }">
-          <span class="bookmark-item" style="flex: 1;" v-bind="attrs" v-on="on">
+          <span style="display: flex; flex: 1;" v-bind="attrs" v-on="on">
             <v-list-item-avatar size="30" style="margin: 0 1rem 0 0;">
               <!-- <v-img src="bookmark.images[0]"></v-img> -->
               <v-img :src="bookmark.favicons[0]"></v-img>
@@ -37,7 +37,7 @@
 </template>
 
 <script>
-// Displays one bookmark, includes logic for editing, deleting, and click a bookmark
+// Bookmark.vue displays one bookmark, includes logic for editing, deleting, and click a bookmark
 import { mdiContentCopy, mdiSquareEditOutline, mdiTrashCan } from '@mdi/js';
 
 export default {
@@ -72,28 +72,15 @@ export default {
     },
     // Reopens AddBookmark vue with data to update the bookmark
     editBookmark() {
-      console.log('edit bookmark', this.bookmark);
+      this.$store.commit('bookmarks/setBookmarkToAdd', this.bookmark);
+      const toThisFolder = this.$store.state.folders.selectedFolder.name.toLowerCase().replace(/\s/g, '-');
+      this.$router.push({ name: 'AddBookmark', params: { name: toThisFolder, action: 'edit' } });
     },
     // DELETES a bookmark and removes tags if it's the last bookmark with the tag
     async deleteBookmark() {
       await this.$store.dispatch('bookmarks/deleteBookmark', { id: this.bookmark._id, tags: this.bookmark.tags });
       await this.$store.dispatch('tags/getUserTags', this.$store.state.users.currentUser._id);
     },
-    // // Sorts tags alphabetically by name
-    // sortedTags(tags) {
-    //   if (tags.length === 0) return [];
-    //   else if (tags.length === 1) return tags;
-    //   else {
-    //     // Prevents infinite loop because of changing tags by reference
-    //     const sortedTags = [...tags];
-    //     sortedTags.sort((a, b) => {
-    //       let tagA = a.toUpperCase();
-    //       let tagB = b.toUpperCase();
-    //       return tagA < tagB ? -1 : tagA > tagB ? 1 : 0;
-    //     });
-    //     return sortedTags;
-    //   }
-    // },
     // Shows / hides the custom right-click menu
     show(e) {
       e.preventDefault();
@@ -108,14 +95,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-// .v-card {
-//   transition: opacity 0.4s ease-in-out;
-// }
-// .v-card:not(.on-hover) {
-//   opacity: 0.8;
-// }
-.bookmark-item {
-  display: flex;
-}
-</style>
+<style></style>

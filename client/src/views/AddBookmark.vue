@@ -16,10 +16,11 @@
       </v-row>
       <v-card-actions style="justify-content: center; padding-bottom: 2rem;">
         <v-btn ref="btn" @click="submit()"
-          ><v-icon style="padding-right: 1rem;">mdi-bookmark</v-icon>Add Bookmark</v-btn
+          ><v-icon style="padding-right: 1rem;">mdi-bookmark</v-icon>{{ action }} Bookmark</v-btn
         >
         <v-card-title
-          >to <v-icon style="padding: 0 4px;">{{ selectedFolderIcon }}</v-icon> {{ selectedFolder.name }} folder
+          >{{ action2 }} <v-icon style="padding: 0 4px;">{{ selectedFolderIcon }}</v-icon>
+          {{ selectedFolder.name }} folder
         </v-card-title>
       </v-card-actions>
     </v-card>
@@ -27,6 +28,9 @@
 </template>
 
 <script>
+// AddBookmark.vue displays a bookmark to add after a link has been pasted into the search field
+// or displays a bookmark to edit. Router :action parameter is 'add' or 'edit'.
+// Router path: /bookmarks/:name/:action
 import * as mdijs from '@mdi/js';
 
 import TagSelector from '../components/TagSelector.vue';
@@ -43,7 +47,23 @@ export default {
       validateField: [(field) => (field && field.length > 0) || 'Required.'],
     };
   },
+  created() {
+    if (this.$route.params.action === 'edit') {
+      this.$store.commit('tags/setCurrentBookmarkTags', this.$store.state.bookmarks.bookmarkToAdd.tags);
+    }
+    if (this.$route.params.action === 'add') this.$store.commit('tags/setCurrentBookmarkTags', []);
+  },
   computed: {
+    // action and action2 display different words based on route parameters
+    action() {
+      if (this.$route.params.action === 'add') return 'Add';
+      return 'Edit';
+    },
+    action2() {
+      if (this.$route.params.action === 'add') return 'to';
+      return 'in';
+    },
+    // Displays currently selected bookmark's parts and displays them in <template>
     title() {
       return this.$store.state.bookmarks.bookmarkToAdd.title;
     },
@@ -61,6 +81,7 @@ export default {
       const favicons = this.$store.state.bookmarks.bookmarkToAdd.favicons;
       return favicons && favicons.length != 0 && favicons[0];
     },
+    // Displays the currently selected folder's parts and displays them in <template>
     selectedFolder() {
       return this.$store.state.folders.selectedFolder;
     },
@@ -70,39 +91,38 @@ export default {
   },
   methods: {
     async submit() {
-      // Post tags to db
-      // this.$store.dispatch('tags/updateTagList'); //, this.$store.state.tags.setCurrentBookmarkTags);
-      // Post bookmark to db
-      // Update tags when a bookmark is added or deleted
-      await this.$store.dispatch('bookmarks/addBookmark', {
+      const newBookmark = {
         ...this.$store.state.bookmarks.bookmarkToAdd,
         title: this.customTitle,
         description: this.customDesc,
         user_id: this.$store.state.users.currentUser._id,
-        folderId: this.$store.state.folders.selectedFolder._id,
+        folder_id: this.$store.state.folders.selectedFolder._id,
         tags: this.$store.state.tags.currentBookmarkTags,
         dateCreated: new Date(),
-        public: false,
-      });
+      };
+      // POST bookmark if adding
+      if (this.$route.params.action === 'add') {
+        await this.$store.dispatch('bookmarks/addBookmark', newBookmark);
+      }
+      // UPDATE bookmark if editing
+      else if (this.$route.params.action === 'edit') {
+        await this.$store.dispatch('bookmarks/editBookmark', newBookmark);
+      }
+      // GET tags and update list
       await this.$store.dispatch('tags/getUserTags', this.$store.state.users.currentUser._id);
+      // Push to folder once async actions are completed
       this.$router.push({
         name: 'Folder',
         params: { name: this.$store.state.folders.selectedFolder.name.toLowerCase().replace(/\s/g, '-') },
       });
-
       // Clear selected tags from state
       this.$store.commit('tags/setCurrentBookmarkTags', []);
     },
+    // Display icon for selected folder icon in <template>
     displayIcon(icon) {
       return mdijs[icon];
     },
   },
-  // mounted() {
-  //   this.$refs.btn.$el.focus();
-  // },
-  // updated() {
-  //   this.$refs.btn.$el.focus();
-  // },
 };
 </script>
 

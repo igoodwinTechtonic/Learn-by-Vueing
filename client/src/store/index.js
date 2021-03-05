@@ -22,10 +22,14 @@ export default new Vuex.Store({
     users: usersModule,
   },
   mutations: {
+    // Sets loading overlay when long async actions are dispatched (app loading)
     setOverlay(state, payload) { state.overlay = payload },
+    // Sets the search keywords for searching bookmarks
     setSearchKeywords(state, payload) { state.searchKeywords = payload },
   },
   actions: {
+    // Scrapes URL and commits results to bookmarkToAdd in
+    // bookmarks module when link is pasted into search field
     scrapeUrl({ commit }, link) {
       return axios.post('/scrape', JSON.stringify(link), {
         headers: {

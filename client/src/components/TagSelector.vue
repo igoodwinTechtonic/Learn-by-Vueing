@@ -22,22 +22,22 @@
 </template>
 
 <script>
+// TagSelector.vue displays a combo box where the user can select or edit tags when adding or editing a bookmark
 export default {
   name: 'TagSelector',
   data() {
     return {
-      chips: [],
+      // If editing a bookmark, pull in the bookmark's tags, otherwise display no chip tags
+      chips: this.$store.state.tags.currentBookmarkTags || [],
     };
   },
-  // mounted() {
-  //   this.$store.commit('tags/setCurrentBookmarkTags', this.chips);
-  // },
   computed: {
     items() {
       return this.$store.state.tags.list;
     },
   },
   methods: {
+    // Removes a chip from the list when the x is clicked
     remove(item) {
       this.chips.splice(this.chips.indexOf(item), 1);
       this.chips = [...this.chips];
@@ -45,15 +45,6 @@ export default {
     },
     // Set tag list in state, tags are posted to db in parent component, AddBookmark, when bookmark is submitted
     setTags() {
-      // const updatedTags = this.chips.map((tag) => {
-      //   if (this.items.includes(tag)) {
-      //     let tagCountToIncrement = this.$store.state.tags.list.find((tagInState) => tagInState.name === tag).count;
-      //     // If the tag is in state.list, don't add, increase count by 1
-      //     return { name: tag, count: (tagCountToIncrement += 1) };
-      //   }
-      //   // If the tag is not in state.list, add a new object { name: tag, count: 1 }
-      //   return { name: tag, count: 1 };
-      // });
       this.$store.commit('tags/setCurrentBookmarkTags', this.chips);
     },
   },
