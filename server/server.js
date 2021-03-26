@@ -1,20 +1,20 @@
 const express = require('express');
 const cors = require('cors');
-const { join } = require("path");
+const path = require("path");
 const logger = require('morgan');
 
 const routes = require('./routes');
 
 const app = express();
 
-const corsOptions = { origin: 'http://localhost:8080' };
+const corsOptions = { origin: 'http://localhost:3000' };
 const PORT = process.env.PORT || 3001;
 
 app.use(logger('dev'))
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(join(__dirname, "dist")));
+if (process.env.NODE_ENV === 'production') app.use(express.static(path.dirname(__dirname) + "/client/dist"));
 
 app.use(routes);
 

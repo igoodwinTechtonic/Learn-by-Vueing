@@ -1,0 +1,28 @@
+{
+  "name": "learn-by-vueing",
+  "version": "1.0.0",
+  "description": "## BUG REPORT - 25 March 2021",
+  "main": "index.js",
+  "scripts": {
+    "install": "cd server && npm install",
+    "start": "node server/server.js"
+  },
+  "engines": {
+    "node": "14.x",
+    "npm": "7.6.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/igoodwinTechtonic/Learn-by-Vueing.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/igoodwinTechtonic/Learn-by-Vueing/issues"
+  },
+  "homepage": "https://github.com/igoodwinTechtonic/Learn-by-Vueing#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
