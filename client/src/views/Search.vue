@@ -2,7 +2,7 @@
   <v-container class="no-items-container">
     <v-card v-if="searchKeywords === ''" class="no-items-card mx-auto" style="margin-top: 6rem">
       <h2 style="text-align: center;">
-        Start typing to search
+        Start typing to search all bookmarks.
       </h2>
       <v-divider style="margin: 1rem;"></v-divider>
       <h2 style="text-align: center;">
