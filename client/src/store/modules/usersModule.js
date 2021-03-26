@@ -8,11 +8,16 @@ export default {
   mutations: {
     setUser(state, payload) {
       state.currentUser = payload;
-      console.log(payload)
+      // console.log(payload)
     }
   },
   actions: {
-    // GETS a user from db if exists, otherwise POSTS new user
+    /** GETS a user from db if exists, otherwise POSTS new user
+     * 
+     * @param {Object} param0 - Destructured into commit, dispatch, state.
+     * @param {Object} user - The user object retrieved from Auth0.
+     * @returns {Promise} A promise after the user is loaded or created.
+     */
     async getUser({ commit, dispatch, state }, user) {
       try {
         // Check if user exists in db with GET using email
@@ -31,7 +36,12 @@ export default {
         return console.error(err);
       }
     },
-    // Dispatches actions to get data from db when user logs in
+    /** Dispatches actions to get data from db when user logs in
+     * 
+     * @param {Object} param0 - Dispatches into commit.
+     * @param {string} id - The user id to retrieve data with.
+     * @returns {Promise} A promise after the user info is retrieved from the mongo db.
+     */
     async getUserData({ dispatch }, id) {
       await dispatch('folders/getFolders', id, { root: true });
       await dispatch('bookmarks/getBookmarks', id, { root: true });

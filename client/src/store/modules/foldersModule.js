@@ -19,15 +19,23 @@ export default {
     },
   },
   actions: {
-    // Retrieves all folders from a given user id
+    /** Retrieves all folders from a given user id
+     * 
+     * @param {Object} param0 - Destructed into commit.
+     * @param {string} user_id - The user id.
+     * @returns {Promise} A promise after the folders state is set.
+     */
     getFolders({ commit }, user_id) {
       return axios.get('/api/folders?id=' + user_id)
-        .then((res) => {
-          commit('setFolders', res.data)
-        })
+        .then((res) => commit('setFolders', res.data))
         .catch((err) => console.error(err))
     },
-    // Adds a folder to the user's folders
+    /** Adds a folder to the user's folders.
+     * 
+     * @param {Object} param0 - Destructed into commit and state.
+     * @param {Object} folder - The folder object to add to the user's account.
+     * @returns {Promise} A promise after the folders state is updated.
+     */
     addFolder({ commit, state }, folder) {
       return axios
         .post('/api/folders', JSON.stringify(folder), {
@@ -43,7 +51,12 @@ export default {
         })
         .catch((err) => console.error(err));
     },
-    // Updates the folder's name
+    /** Updates the folder's name
+     * 
+     * @param {Object} param0 - Destructed into commit and state.
+     * @param {Object} updatedFolder - A folder with an updated name.
+     * @returns {Promise} A promise after the folder and folder state is updated.
+     */
     updateFolderName({ commit, state }, updatedFolder) {
       const { _id, ...folder } = updatedFolder;
       const folders = state.list.filter(folder => folder._id !== _id)
@@ -57,7 +70,12 @@ export default {
         .then(() => commit('setFolders', folders))
         .catch((err) => console.error(err));
     },
-    // Deletes a folder and all bookmarks with the same folder_id, re-gets all tags after deletion
+    /** Deletes a folder and all bookmarks with the same folder_id, re-gets all tags after deletion
+     * 
+     * @param {Object} param0 - Destructed into commit, dispatch, state, and rootState.
+     * @param {*} id - The folder id to delete.
+     * @returns {Promise} A promise that awaits the completion of three async calls to the db to delete a folder.
+     */
     async deleteFolder({ commit, dispatch, state, rootState }, id) {
       const folders = state.list.filter(folder => folder._id !== id);
       try {

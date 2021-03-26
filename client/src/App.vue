@@ -51,8 +51,12 @@ export default {
     return {
       search: '',
       disabled: false,
+      debounce: null,
     };
   },
+  // mounted() {
+  //   this.$store.commit('folders/setSelectedFolder', this.$store.state.folders.list[0])
+  // },
   computed: {
     ...mapState(['overlay']),
     disabledSearch() {
@@ -70,8 +74,11 @@ export default {
       // Ignores updating search term if the previous input is the same as the new input
       // or if the input is a link that matches the regex pattern
       if (this.search !== this.$store.state.searchKeywords && !this.search.match(/^(https?|www)/)) {
-        this.$store.commit('setSearchKeywords', this.search);
-        this.$store.dispatch('bookmarks/searchBookmarks', this.search);
+        clearTimeout(this.debounce);
+        this.debounce = setTimeout(() => {
+          this.$store.commit('setSearchKeywords', this.search);
+          this.$store.dispatch('bookmarks/searchBookmarks', this.search);
+        }, 500);
       }
     },
     onPaste(event) {

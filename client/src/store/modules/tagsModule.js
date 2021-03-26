@@ -29,7 +29,12 @@ export default {
     },
   },
   actions: {
-    // GETS tags by querying all user's bookmarks, updates local module state.list
+    /** GETS tags by querying all user's bookmarks, updates local module state.list
+     * 
+     * @param {Object} param0 - Destructed into commit.
+     * @param {string} user_id - The user id.
+     * @returns {Promise} A promise after the tags state is updated.
+     */
     getUserTags({ commit }, user_id) {
       return axios.get('/api/tags?id=' + user_id)
         .then((res) => {
