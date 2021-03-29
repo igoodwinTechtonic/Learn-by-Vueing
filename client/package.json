@@ -35,5 +35,5 @@
     "vue-template-compiler": "^2.6.11",
     "vuetify-loader": "^1.7.0"
   },
-  "proxy": "if-env NODE_ENV=production && https://learn-by-vueing.herokuapp.com/ || http://localhost:3001"
+  "proxy": "http://localhost:3001"
 }

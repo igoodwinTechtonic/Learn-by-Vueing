@@ -102,8 +102,9 @@ export default {
       this.$auth.loginWithRedirect();
     },
     logout() {
-      this.$auth.logout();
-      this.$router.push({ path: '/' });
+      console.log(window.location.origin)
+      this.$auth.logout({ returnTo: window.location.origin });
+      // this.$router.push({ path: '/' });
     },
   },
 };
