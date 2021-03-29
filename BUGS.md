@@ -2,7 +2,7 @@
 
 ## BUG REPORT - 25 March 2021
 
-> Bug 001 - When adding a folder, searching icons does not display correct results
+> *Bug 001 - When adding a folder, searching icons does not display correct results*
 
 ### To replicate
 
@@ -39,8 +39,26 @@ export declare const mdiLanguageRubyOnRails: string;
 // ...
 ```
 
-### Proposed functionality
+### What it should do
 
 Logic to search based on matches at any point in the string, rather than what comes immediately after `mdi`.
 
 ---
+
+## BUG REPORT - 26 March 2021
+
+> *Bug 002 - Logging out on live app redirects to localhost:3001, not homepage url!*
+
+### To replicate
+
+1. Navigate to the app https://learn-by-vueing.herokuapp.com/
+2. Click Log in and log in with Google.
+3. Log out. The page cannot be displayed! :(
+
+### Current functionality
+
+Auth0 or Vue reroutes to the localhost instead of the webpage url. This is a breaking bug!
+
+### What it should do
+
+Redirect user to homepage instead of localhost by reconfiguring route in Auth0 properties online or in Vue app.

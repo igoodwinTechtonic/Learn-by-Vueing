@@ -12,6 +12,7 @@
     "@mdi/js": "^5.9.55",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "if-env": "^1.0.4",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
     "vuetify": "^2.4.0",
@@ -34,5 +35,5 @@
     "vue-template-compiler": "^2.6.11",
     "vuetify-loader": "^1.7.0"
   },
-  "proxy": "http://localhost:3001"
+  "proxy": "if-env NODE_ENV=production && https://learn-by-vueing.herokuapp.com/ || http://localhost:3001"
 }
