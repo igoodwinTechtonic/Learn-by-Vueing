@@ -2,8 +2,6 @@ const router = require('express').Router();
 
 const { MongoClient, ObjectId } = require('mongodb');
 
-let collection;
-
 const main = async () => {
   // const uri = "mongodb+srv://m001-student:m001-mongodb-basics@sandbox.zutlo.mongodb.net/LBV?retryWrites=true&w=majority";
   const uri = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@sandbox.zutlo.mongodb.net/LBV?retryWrites=true&w=majority`;
@@ -13,27 +11,28 @@ const main = async () => {
     const mongoClient = await client.connect()
     const db = mongoClient.db('LBV')
 
-    collection = (path) => {
+    const collection = (path) => {
       return db.collection(path)
     }
 
     // USER ROUTES ================================================= USER ROUTES //
+    const users = 'users'
     router.route('/users/tags')
       // This route is used for updating the whole tag list, including add or removing tags
       .put(async (req, res) => {
-        res.send(await collection('users').updateOne({ "_id": new ObjectId(req.body._id) }, { "$set": { "tags": req.body.tags } }))
+        res.send(await collection(users).updateOne({ "_id": new ObjectId(req.body._id) }, { "$set": { "tags": req.body.tags } }))
       })
     router.route('/users/:id')
       // Get data for whole account given the user's email after logging in
       .get(async (req, res) => {
-        const response = await collection('users').findOne({ "email": req.params.id })
+        const response = await collection(users).findOne({ "email": req.params.id })
         if (response) res.send(response)
         // Sends a 202 and null if user is not found, client then makes a POST request to add user
         else res.status(202).send(null)
       })
     router.route('/users')
       .post(async (req, res) => {
-        res.send(await collection('users').insertOne(req.body))
+        res.send(await collection(users).insertOne(req.body))
       })
 
     // FOLDER ROUTES ================================================= FOLDER ROUTES //
@@ -94,7 +93,6 @@ const main = async () => {
       })
       // Post a new item to the path
       .post(async (req, res) => {
-        // console.log(req.body);
         res.send(await collection(bookmarks).insertOne(req.body))
       })
 
@@ -112,12 +110,12 @@ const main = async () => {
       .put(async (req, res) => {
         res.send(await collection(bookmarks).replaceOne({ "_id": new ObjectId(req.params.id) }, req.body))
       })
-      // Delete an item PERMANENTLY
+      // Delete a bookmark PERMANENTLY
       .delete(async (req, res) => {
         res.send(await collection(bookmarks).deleteOne({ "_id": new ObjectId(req.params.id) }))
       })
 
-    // TAG ROUTES ============================== TAG ROUTES //
+    // TAG ROUTES ============================================================ TAG ROUTES //
     router.route('/tags')
       .get(async (req, res) => {
         res.send(await collection(bookmarks).find({ "user_id": { "$eq": req.query.id } }).project({ "tags": 1, "_id": 0 }).toArray())
