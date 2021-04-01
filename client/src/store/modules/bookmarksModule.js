@@ -4,8 +4,8 @@ export default {
   namespaced: true,
   state: {
     list: [],
-    searchResults: [],
     bookmarkToAdd: {},
+    searchResults: [],
   },
   mutations: {
     // Sets all user's bookmarks in state
@@ -19,6 +19,11 @@ export default {
     // Sets the search results and displays in bookmarks view
     searchResults(state, bookmarks) {
       state.searchResults = bookmarks;
+    },
+    resetState(state) {
+      state.list = []
+      state.bookmarkToAdd = {}
+      state.searchResults = []
     }
   },
   actions: {

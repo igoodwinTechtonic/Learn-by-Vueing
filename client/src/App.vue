@@ -23,7 +23,7 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn class="success" v-if="!$auth.isAuthenticated" @click="login">Log in</v-btn>
+      <v-btn id="login-btn" class="success" v-if="!$auth.isAuthenticated" @click="login">Log in</v-btn>
       <v-btn v-if="$auth.isAuthenticated" @click="logout">Log out</v-btn>
     </v-app-bar>
 
@@ -54,9 +54,11 @@ export default {
       debounce: null,
     };
   },
-  // mounted() {
-  //   this.$store.commit('folders/setSelectedFolder', this.$store.state.folders.list[0])
-  // },
+  updated() {
+    if (!this.$auth.isAuthenticated) {
+      this.$store.dispatch('users/clearUserData');
+    }
+  },
   computed: {
     ...mapState(['overlay']),
     disabledSearch() {
@@ -102,7 +104,6 @@ export default {
       this.$auth.loginWithRedirect();
     },
     logout() {
-      console.log(window.location.origin)
       this.$auth.logout({ returnTo: window.location.origin });
       // this.$router.push({ path: '/' });
     },

@@ -17,6 +17,10 @@ export default {
     setSelectedFolder(state, payload) {
       state.selectedFolder = payload
     },
+    resetState(state) {
+      state.list = []
+      state.selectedFolder = {}
+    }
   },
   actions: {
     /** Retrieves all folders from a given user id

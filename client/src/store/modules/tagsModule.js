@@ -27,6 +27,11 @@ export default {
     setCurrentBookmarkTags(state, payload) {
       state.currentBookmarkTags = payload
     },
+    resetState(state) {
+      state.list = []
+      state.selectedTag = {}
+      state.currentBookmarkTags = []
+    }
   },
   actions: {
     /** GETS tags by querying all user's bookmarks, updates local module state.list

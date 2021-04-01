@@ -87,9 +87,9 @@ const main = async () => {
               ]
             }
           ).sort({ "title": 1 }).toArray())
-        } else {
+        } else if (req.query.id) {
           // Return all bookmarks if req.query.search is empty
-          res.send(await collection(bookmarks).find().toArray())
+          res.send(await collection(bookmarks).find({ "user_id": req.query.id }).toArray())
         }
       })
       // Post a new item to the path
@@ -120,7 +120,7 @@ const main = async () => {
     // TAG ROUTES ============================== TAG ROUTES //
     router.route('/tags')
       .get(async (req, res) => {
-        res.send(await collection(bookmarks).find({ "user_id": { "$eq": "604109a74c3b1cc5f71e9f00" } }).project({ "tags": 1, "_id": 0 }).toArray())
+        res.send(await collection(bookmarks).find({ "user_id": { "$eq": req.query.id } }).project({ "tags": 1, "_id": 0 }).toArray())
       })
 
   } catch (err) {
