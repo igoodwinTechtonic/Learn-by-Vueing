@@ -5,6 +5,7 @@
     <v-app-bar app clipped-left>
       <div class="d-flex align-center" style="width: 300px;">
         <h2 v-if="$auth.isAuthenticated">{{ $auth.user.name }}</h2>
+        <h2 v-if="!$auth.isAuthenticated" style="margin-left: 10vw">Bookmarkd</h2>
       </div>
 
       <v-text-field
@@ -21,8 +22,18 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn id="login-btn" class="success" v-if="!$auth.isAuthenticated" @click="login">Log in</v-btn>
-      <v-btn v-if="$auth.isAuthenticated" @click="logout">Log out</v-btn>
+      <!-- <v-btn id="login-btn" class="success" v-if="!$auth.isAuthenticated" @click="login">Log in</v-btn> -->
+      <div class="app-funcs-container" v-if="$auth.isAuthenticated">
+        <v-btn style="margin-right: 1rem;" @click="logout">Log out</v-btn>
+        <v-switch
+          style="display: flex; justify-content: center;"
+          v-model="$vuetify.theme.dark"
+          inset
+          hide-details="true"
+        >
+        </v-switch>
+        <v-icon>{{ themeIcon }}</v-icon>
+      </div>
     </v-app-bar>
 
     <v-main>
@@ -38,6 +49,7 @@
 
 <script>
 import { mapState } from 'vuex';
+import { mdiWhiteBalanceSunny, mdiWeatherNight } from '@mdi/js';
 import NavDrawer from './components/NavDrawer.vue';
 
 export default {
@@ -64,6 +76,10 @@ export default {
         return true;
       }
       return false;
+    },
+    themeIcon() {
+      if (this.$vuetify.theme.dark) return mdiWeatherNight;
+      return mdiWhiteBalanceSunny;
     }
   },
   methods: {
@@ -98,9 +114,6 @@ export default {
         });
       }
     },
-    login() {
-      this.$auth.loginWithRedirect();
-    },
     logout() {
       this.$auth.logout({ returnTo: window.location.origin });
       // this.$router.push({ path: '/' });
@@ -109,4 +122,10 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.app-funcs-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+</style>

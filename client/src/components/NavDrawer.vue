@@ -67,7 +67,7 @@ export default {
 
       items: [
         { title: 'Folders', icon: mdijs['mdiFolderMultiple'] },
-        { title: 'Bookmarks', icon: mdijs['mdiBookmark'] },
+        { title: 'Bookmarks', icon: mdijs['mdiTag'] },
         { title: 'Public', icon: mdijs['mdiWeb'] },
         { title: 'Settings', icon: mdijs['mdiCog'] },
       ],
