@@ -7,12 +7,10 @@
         <h2 v-if="$auth.isAuthenticated">{{ $auth.user.name }}</h2>
       </div>
 
-      <!-- Search bar should search all topics or just within the chosen technology? -->
       <v-text-field
         style="flex: 20 1 auto"
         placeholder="Add bookmark or search..."
-        hint="Paste a link to add a bookmark or begin typing to search."
-        persistent-hint
+        hide-details="auto"
         v-if="$auth.isAuthenticated"
         v-model="search"
         @click="navToSearch()"
@@ -66,7 +64,7 @@ export default {
         return true;
       }
       return false;
-    },
+    }
   },
   methods: {
     navToSearch() {

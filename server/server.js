@@ -1,4 +1,4 @@
-require('dotenv').config()
+// require('dotenv').config()
 const express = require('express');
 const cors = require('cors');
 const path = require("path");
@@ -8,7 +8,9 @@ const routes = require('./routes');
 
 const app = express();
 
-const corsOptions = { origin: 'http://localhost:3000' };
+let origin = 'http://localhost:3000';
+if (process.env.NODE_ENV === 'production') origin = 'https://learn-by-vueing.herokuapp.com/';
+const corsOptions = { origin };
 const PORT = process.env.PORT || 3001;
 
 app.use(logger('dev'))

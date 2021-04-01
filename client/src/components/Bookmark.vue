@@ -2,21 +2,23 @@
   <v-list three-line style="padding: 0;">
     <v-list-item class="card" style="min-height: 48px;" :href="bookmark.url" target="_blank" @contextmenu="show">
       <v-tooltip bottom transition="v-fade-transition">
+
         <!-- This is the actual bookmark content -->
         <template v-slot:activator="{ on, attrs }">
-          <span style="display: flex; flex: 1;" v-bind="attrs" v-on="on">
-            <v-list-item-avatar size="30" style="margin: 0 1rem 0 0;">
+          <span class="bookmark-span" v-bind="attrs" v-on="on">
+            <v-list-item-avatar class="bookmark-span__item" size="30" style="margin: 0 1rem 0 0;">
               <!-- <v-img src="bookmark.images[0]"></v-img> -->
               <v-img :src="bookmark.favicons[0]"></v-img>
             </v-list-item-avatar>
-            <v-list-item-title v-html="bookmark.title"></v-list-item-title>
+            <v-list-item-title class="bookmark-span__item" v-html="bookmark.title"></v-list-item-title>
           </span>
         </template>
 
         <!-- This exists in the tooltip -->
         <span>
-          <v-list-item-subtitle v-html="bookmark.description"></v-list-item-subtitle>
-          <v-list-item-subtitle v-html="bookmark.url"></v-list-item-subtitle>
+          <v-list-item-subtitle style="font-weight: bold;">{{ bookmark.title }}</v-list-item-subtitle>
+          <v-list-item-subtitle style="white-space: pre-line;">{{ bookmark.description }}</v-list-item-subtitle>
+          <v-list-item-subtitle>{{ bookmark.url }}</v-list-item-subtitle>
           <v-list style="background: none;">
             <v-chip v-for="(tag, idx) in tags" :key="idx" style="margin-right: 0.2rem;">{{ tag }}</v-chip>
           </v-list>
@@ -63,7 +65,7 @@ export default {
   computed: {
     tags() {
       return this.$store.state.tags.list.filter((tag) => this.bookmark.tags.includes(tag));
-    },
+    }
   },
   methods: {
     // Copies url of selected bookmark to clipboard
@@ -95,4 +97,17 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped lang="scss">
+
+.bookmark-span {
+  display: flex;
+  flex: 1;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+
+  &_item {
+    flex: 0 0 auto;
+  }
+}
+
+</style>

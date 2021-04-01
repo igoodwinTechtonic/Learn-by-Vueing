@@ -1,10 +1,8 @@
 const router = require('express').Router();
 
-const { getLinkPreview, getPreviewFromContent } = require('link-preview-js');
-// const scraper = require('website-scraper');
+const { getLinkPreview } = require('link-preview-js');
 
 router.post('/', (req, res) => {
-  // console.log(req.body.link)
   getLinkPreview(req.body.link, {
     headers: {
       "user-agent": "googlebot"
