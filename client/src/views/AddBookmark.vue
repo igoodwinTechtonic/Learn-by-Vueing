@@ -7,7 +7,12 @@
             ><v-text-field :placeholder="bookmarkToAdd.title" :rules="validateField" v-model="customTitle"></v-text-field
           ></v-card-title>
           <div class="img-link-grid">
-            <v-img v-if="bookmarkToAdd.favicon" :src="bookmarkToAdd.favicon" max-height="40" max-width="40" style="align-self: center;"></v-img>
+            <v-img
+              v-if="bookmarkToAdd.favicon"
+              :src="bookmarkToAdd.favicon"
+              max-height="40" max-width="40"
+              style="align-self: center;">
+            </v-img>
             <v-card-subtitle>{{ bookmarkToAdd.url }}</v-card-subtitle>
           </div>
           <v-card-text><v-textarea :placeholder="bookmarkToAdd.description" v-model="customDesc"></v-textarea></v-card-text>

@@ -5,6 +5,7 @@ import { authGuard } from "../auth";
 import Home from '../views/Home.vue'
 import Search from '../views/Search.vue'
 import Folder from '../views/Folder.vue'
+import PublicFolder from '../views/PublicFolder.vue'
 import Tags from '../views/Bookmarks.vue'
 import AddBookmark from '../views/AddBookmark.vue'
 
@@ -25,7 +26,7 @@ const routes = [
   {
     path: '/public/:name/:id',
     name: 'ShareableFolder',
-    component: Folder,
+    component: PublicFolder,
   },
   {
     path: '/folder/:name/:id',

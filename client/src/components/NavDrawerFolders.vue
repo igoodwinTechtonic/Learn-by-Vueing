@@ -5,23 +5,24 @@
         <v-list-item-title class="title">
           {{ shareable ? 'Public Folders' : 'Folders' }}
         </v-list-item-title>
-        <!-- <v-list-item-subtitle v-if="shareable">
-          Click
-        </v-list-item-subtitle>
-        <v-list-item-subtitle v-else>
-          Click to see your bookmarks.
-        </v-list-item-subtitle> -->
-        <v-list-item-subtitle>
-          Click to see your bookmarks.
-        </v-list-item-subtitle>
+        <v-text-field
+          clearable
+          dense
+          hide-details
+          placeholder="Filter your folders"
+          v-model="filter"
+        ></v-text-field>
       </v-list-item-content>
     </v-list-item>
 
     <v-list>
       <v-list-item v-if="folders.length === 0">
-        <v-list-item-content>
+        <v-list-item-content v-if="filter === ''">
           <v-list-item-title>You don't have any folders yet.</v-list-item-title>
           <v-list-item-title>Click <v-icon>{{ displayIcon('mdiFolderPlus') }}</v-icon> on the left to add one.</v-list-item-title>
+        </v-list-item-content>
+        <v-list-item-content v-if="filter !== ''">
+          <v-list-item-title>No folders found</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
       <v-list-item
@@ -60,6 +61,7 @@ export default {
   data() {
     return {
       drawer: null,
+      filter: '',
     };
   },
   computed: {
@@ -69,6 +71,10 @@ export default {
       if (this.shareable) {
         const shareableFolders = sortedFolders.filter(folder => folder.shareable === true)
         sortedFolders = shareableFolders
+      }
+      if (this.filter) {
+        const filteredFolders = sortedFolders.filter(folder => folder.name.toLowerCase().includes(this.filter.toLowerCase()))
+        sortedFolders = filteredFolders
       }
       sortedFolders.sort((a, b) => {
         let folderA = a.name.toUpperCase()
