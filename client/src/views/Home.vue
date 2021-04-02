@@ -48,13 +48,13 @@
           <v-icon class="icon-pos">{{ tagIcon }}</v-icon>. Each bookmark lives in one folder and can
           have multiple tags. By default, bookmarks are sorted alphabetically, ascending.
         </p>
-        <p>Create a folder by clicking the Add Folder icon<v-icon class="icon-pos">{{ addFolderIcon }}</v-icon>on the left.</p>
+        <p>
+          Create a folder by clicking the Add Folder icon<v-icon class="icon-pos">{{ addFolderIcon }}</v-icon>on the left. 
+          Public folders cannot be renamed!
+        </p>
 
         <h2>Navigation</h2>
-        <p>
-          Click on a icon in the navigation view to display all folders, all tags, all public
-          folders, and your personalized settings.
-        </p>
+        <p>Click on a icon in the navigation view to display your folders, tags, and public folders.</p>
 
         <h2>Adding or Editing a Bookmark</h2>
         <ol>
@@ -87,7 +87,6 @@ export default {
       addFolderIcon: mdijs.mdiFolderPlus,
       bookmarkIcon: mdijs.mdiBookmark,
       folderIcon: mdijs.mdiFolder,
-      googleIcon: mdijs.mdiGoogle,
       publicIcon: mdijs.mdiWeb,
       tagIcon: mdijs.mdiTag,
       icons: Object.keys(mdijs),

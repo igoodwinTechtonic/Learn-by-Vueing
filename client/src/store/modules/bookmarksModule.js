@@ -41,6 +41,22 @@ export default {
         console.error(e)
       }
     },
+    /** GETS all bookmarks from db given a public folder id
+     * 
+     * @param {Object} param0 - Destructed into commit.
+     * @param {string} folder_id - The folder id to get.
+     */
+    async getBookmarksFromPublicFolder({ commit }, folder_id) {
+      try {
+        const bookmarks = await axios.get('/api/bookmarks/all/' + folder_id)
+        const folder = await axios.get('/api/folders/' + folder_id)
+        commit('setBookmarks', bookmarks.data)
+        commit('folders/setSelectedFolder', folder.data, { root: true })
+      } catch (e) {
+        // If 404, the folder was deleted or is empty
+        console.error(e)
+      }
+    },
     /** Searches bookmarks given a keyword entered from the search menu
      * 
      * @param {Object} param0 - Destructed into commit and rootState.

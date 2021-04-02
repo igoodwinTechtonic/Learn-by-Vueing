@@ -20,9 +20,15 @@ const routes = [
     path: '/search',
     name: 'Search',
     component: Search,
+    beforeEnter: authGuard
   },
   {
-    path: '/folder/:name',
+    path: '/public/:name/:id',
+    name: 'ShareableFolder',
+    component: Folder,
+  },
+  {
+    path: '/folder/:name/:id',
     name: 'Folder',
     component: Folder,
     beforeEnter: authGuard

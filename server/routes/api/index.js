@@ -56,6 +56,12 @@ const main = async () => {
         res.send(await collection(folders).insertOne(req.body))
       })
     router.route('/folders/:id')
+      // Retrieve a single folder
+      .get(async (req, res) => {
+        const response = await collection(folders).findOne({ "_id": new ObjectId(req.params.id) })
+        if (response) res.send(response)
+        else res.status(404).end()
+      })
       // Update an folder name given folder id
       .put(async (req, res) => {
         res.send(await collection(folders).replaceOne({ "_id": new ObjectId(req.params.id) }, req.body))
@@ -97,6 +103,16 @@ const main = async () => {
       })
 
     router.route('/bookmarks/all/:id')
+      // Gets all bookmarks from a folder
+      .get(async (req, res) => {
+        // res.send(await collection(bookmarks).find({ "folder_id": req.params.id }).toArray())
+        const response = await collection(bookmarks).find({ "folder_id": req.params.id }).toArray()
+        if (response.length !== 0) res.send(response)
+        else res.status(404).end()
+        // Dead link to test 404
+        // http://localhost:3000/folder/public/earth-photos/606775bdd91532ddd76dc871
+      })
+      // Deletes all bookmarks from a folder
       .delete(async (req, res) => {
         res.send(await collection(bookmarks).deleteMany({ "folder_id": req.params.id }))
       })
