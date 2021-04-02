@@ -22,7 +22,7 @@
 
       <v-spacer></v-spacer>
 
-      <!-- <v-btn id="login-btn" class="success" v-if="!$auth.isAuthenticated" @click="login">Log in</v-btn> -->
+      <v-btn id="login-btn" class="success" style="min-width: auto;" v-if="!$auth.isAuthenticated" @click="login">Log in</v-btn>
       <div class="app-funcs-container" v-if="$auth.isAuthenticated">
         <v-btn style="margin-right: 1rem;" @click="logout">Log out</v-btn>
         <v-switch
@@ -113,6 +113,9 @@ export default {
           this.search = '';
         });
       }
+    },
+    login() {
+      this.$auth.loginWithRedirect();
     },
     logout() {
       this.$auth.logout({ returnTo: window.location.origin });

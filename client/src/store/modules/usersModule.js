@@ -41,11 +41,10 @@ export default {
      * @param {string} id - The user id to retrieve data with.
      * @returns {Void}
      */
-    async getUserData({ dispatch, rootState }, id) {
+    async getUserData({ dispatch }, id) {
       await dispatch('folders/getFolders', id, { root: true });
       await dispatch('bookmarks/getBookmarks', id, { root: true });
       await dispatch('tags/getUserTags', id, { root: true });
-      console.log(rootState)
     },
     /** Commits actions to clear all app state
      * 
