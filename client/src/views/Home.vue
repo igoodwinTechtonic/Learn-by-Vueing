@@ -1,16 +1,21 @@
 <template>
   <div class="home-wrapper">
-    <v-row cols="12">
-      <v-col class="home-content" v-if="!$auth.isAuthenticated" xs="12" sm="8" md="8" lg="6">
-        <v-card class="website-name">
-          <h1>A new and intuitive method of creating and sharing bookmarks</h1>
-          <!-- <h3 class="website-description"></h3> -->
+    <v-row class="row-wrapper" cols="12">
+      <v-col class="right-columm" sm="12" md="4" lg="6" v-if="!$auth.isAuthenticated">
+        <img class="logo" alt="Vue logo" src="../assets/logo.png"/>
+        <!-- <v-btn id="login-btn" class="success" @click="login">Log in</v-btn> -->
+      </v-col>
+
+      <v-col class="home-content" v-if="!$auth.isAuthenticated" sm="12" md="8" lg="6">
+        <v-card class="hero-text">
+          <h1>A new and intuitive method of creating and sharing bookmarks, for free!</h1>
+          <!-- <h3 class="website-description">Also... it's free!</h3> -->
         </v-card>
         <h2>Getting Started</h2>
-        <p>Log In with a Google account.</p>
+        <p>Log In with a Google account</p>
         <p style="margin-bottom: 0;">Add a folder<v-icon class="icon-pos">{{ folderIcon }}</v-icon>and select an
           <a href="https://materialdesignicons.com/" target="_blank" style="color: inherit;">icon</a>
-          <v-tooltip right>
+          <v-tooltip top>
             <template v-slot:activator="{ on, attrs }">
               <v-icon
                 class="icon-clickable"
@@ -30,10 +35,11 @@
           <v-icon class="icon-pos">{{ tagIcon }}</v-icon></p>
         <p>It's that simple!</p>
 
-        <h2>More Features</h2>
-        <p>Your bookmarks are safely stored in the cloud.</p>
+        <h2 style="margin-top: 3rem;">More Features</h2>
+        <p>Your data is safely stored in the cloud.</p>
         <p>Share a link to a public folder with your friends.</p>
       </v-col>
+
       <v-col v-if="$auth.isAuthenticated">
         <h2 style="margin-top: 2rem;">Welcome to Bookmarkd!</h2>
         <p>
@@ -42,13 +48,13 @@
           <v-icon class="icon-pos">{{ tagIcon }}</v-icon>. Each bookmark lives in one folder and can
           have multiple tags. By default, bookmarks are sorted alphabetically, ascending.
         </p>
-        <p>Create a folder by clicking the Add Folder icon<v-icon class="icon-pos">{{ addFolderIcon }}</v-icon>on the left.</p>
+        <p>
+          Create a folder by clicking the Add Folder icon<v-icon class="icon-pos">{{ addFolderIcon }}</v-icon>on the left. 
+          Public folders cannot be renamed!
+        </p>
 
         <h2>Navigation</h2>
-        <p>
-          Click on a icon in the navigation view to display all folders, all tags, all public
-          folders, and your personalized settings.
-        </p>
+        <p>Click on a icon in the navigation view to display your folders, tags, and public folders.</p>
 
         <h2>Adding or Editing a Bookmark</h2>
         <ol>
@@ -63,12 +69,9 @@
         <h2>Searching</h2>
         <p>Search for any bookmark at any time by clicking and typing into the search bar at the top of the page.</p>
       </v-col>
-      <v-col class="right-columm" xs="12" sm="4" md="4" lg="6" v-if="!$auth.isAuthenticated">
-        <img class="logo" alt="Vue logo" src="../assets/logo.png"/>
-        <v-btn id="login-btn" class="success" @click="login">Log in</v-btn>
-      </v-col>
+
     </v-row>
-    <img class="logo" alt="Vue logo" src="../assets/logo.png" v-if="$auth.isAuthenticated"/>
+    <!-- <img class="logo" alt="Vue logo" src="../assets/logo.png" v-if="$auth.isAuthenticated"/> -->
   </div>
 </template>
 
@@ -84,7 +87,6 @@ export default {
       addFolderIcon: mdijs.mdiFolderPlus,
       bookmarkIcon: mdijs.mdiBookmark,
       folderIcon: mdijs.mdiFolder,
-      googleIcon: mdijs.mdiGoogle,
       publicIcon: mdijs.mdiWeb,
       tagIcon: mdijs.mdiTag,
       icons: Object.keys(mdijs),
@@ -114,16 +116,7 @@ export default {
   min-width: 50%;
 }
 .home-wrapper {
-  flex: 1 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 0 10vw;
-}
-.home-content {
-  & > p {
-    font-size: 1.2rem;
-  }
+  margin: 0 2vw;
 }
 .icon-pos {
   padding: 0 2px 4px 2px;
@@ -131,15 +124,10 @@ export default {
 .icon-clickable {
   padding: 5px;
 }
-.website-name {
+.hero-text {
   padding: 1rem;
-  margin: 50px 0;
-}
-.website-description {
-  margin: 0;
-  padding-top: 1rem;
-  font-style: italic;
-  font-weight: 400;
+  margin-bottom: 3rem;
+  font-size: 0.8rem;
 }
 .right-columm {
   display: flex;
@@ -149,6 +137,45 @@ export default {
 }
 .logo {
   max-width: 200px;
-  margin-bottom: 50px;
+}
+.row-wrapper {
+  flex-direction: column;
+}
+.home-content {
+  & > p {
+    font-size: 1rem;
+  }
+}
+@media screen and (min-width: 500px) {
+  .home-wrapper {
+    margin: 0 5vw;
+  }
+}
+@media screen and (min-width: 600px) {
+  .hero-text {
+    font-size: 0.9rem;
+  }
+  .home-wrapper {
+    margin: 0 10vw;
+  }
+  .home-content {
+    & > p {
+      font-size: 1.2rem;
+    }
+  }
+}
+@media screen and (min-width: 600px) and (min-height: 600px) {
+  .hero-text {
+    margin-bottom: 3rem;
+    font-size: 1.1rem;
+  }
+}
+@media screen and (min-width: 960px) {
+  .hero-text, .logo {
+    margin: 3rem 0;
+  }
+  .row-wrapper {
+    flex-direction: row-reverse;
+  }
 }
 </style>

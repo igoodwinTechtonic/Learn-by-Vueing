@@ -30,13 +30,17 @@ export default new Vuex.Store({
   actions: {
     // Scrapes URL and commits results to bookmarkToAdd in
     // bookmarks module when link is pasted into search field
-    scrapeUrl({ commit }, link) {
-      return axios.post('/scrape', JSON.stringify(link), {
-        headers: {
-          "Content-Type": "application/json",
-        }
-      })
-        .then((res) => commit('bookmarks/setBookmarkToAdd', res.data))
+    async scrapeUrl({ commit }, link) {
+      try {
+        const res = await axios.post('/scrape', JSON.stringify(link), {
+          headers: {
+            "Content-Type": "application/json",
+          }
+        })
+        commit('bookmarks/setBookmarkToAdd', res.data)
+      } catch (e) {
+        console.error(e)
+      }
     }
   },
   plugins: [createPersistedState()]

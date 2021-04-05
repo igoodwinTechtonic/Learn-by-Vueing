@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from 'axios'
 
 // Tags are stored under the user endpoint as an array of objects with a "name" and "count" properties
 
@@ -12,11 +12,11 @@ export default {
   mutations: {
     // Orders tags by name, ascending alphabetically, then sets state.list
     setTags(state, tags) {
-      if (tags.length === 1) state.list = tags;
+      if (tags.length === 1) state.list = tags
       else {
-        const sortedTags = [...tags];
+        const sortedTags = [...tags]
         sortedTags.sort((a, b) => a.toUpperCase() > b.toUpperCase() ? 1 : -1)
-        state.list = sortedTags;
+        state.list = sortedTags
       }
     },
     // When a tag is selected in the left-hand nav drawer, the UI renders Bookmarks with bookmarks that have this tag
@@ -40,19 +40,34 @@ export default {
      * @param {string} user_id - The user id.
      * @returns {Promise} A promise after the tags state is updated.
      */
-    getUserTags({ commit }, user_id) {
-      return axios.get('/api/tags?id=' + user_id)
-        .then((res) => {
-          let tagList = [];
-          res.data.forEach((i) => {
-            i.tags.forEach(tag => {
-              // Does not add duplicate tags to list
-              if (!tagList.includes(tag)) return tagList.push(tag)
-            })
+    async getUserTags({ commit }, user_id) {
+      try {
+        const res = await axios.get('/api/tags?id=' + user_id)
+        let tagList = [];
+        res.data.forEach((i) => {
+          i.tags.forEach(tag => {
+            // Does not add duplicate tags to list
+            if (!tagList.includes(tag)) return tagList.push(tag)
           })
-          commit('setTags', tagList)
         })
-        .catch((err) => console.error(err))
-    },
+        commit('setTags', tagList)
+      } catch (e) {
+        console.error(e)
+      }
+    }
+    // getUserTags({ commit }, user_id) {
+    //   return axios.get('/api/tags?id=' + user_id)
+    //     .then((res) => {
+    //       let tagList = [];
+    //       res.data.forEach((i) => {
+    //         i.tags.forEach(tag => {
+    //           // Does not add duplicate tags to list
+    //           if (!tagList.includes(tag)) return tagList.push(tag)
+    //         })
+    //       })
+    //       commit('setTags', tagList)
+    //     })
+    //     .catch((err) => console.error(err))
+    // },
   }
 }

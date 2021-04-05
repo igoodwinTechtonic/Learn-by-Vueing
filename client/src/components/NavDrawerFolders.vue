@@ -3,27 +3,35 @@
     <v-list-item>
       <v-list-item-content>
         <v-list-item-title class="title">
-          Folders
+          {{ shareable ? 'Public Folders' : 'Folders' }}
         </v-list-item-title>
-        <v-list-item-subtitle>
-          Click to see your bookmarks.
-        </v-list-item-subtitle>
+        <v-text-field
+          clearable
+          dense
+          hide-details
+          placeholder="Filter your folders"
+          v-model="filter"
+        ></v-text-field>
       </v-list-item-content>
     </v-list-item>
 
     <v-list>
       <v-list-item v-if="folders.length === 0">
-        <v-list-item-content>
-          <v-list-item-title>
-            You don't have any folders yet.
-          </v-list-item-title>
+        <v-list-item-content v-if="filter === ''">
+          <v-list-item-title>You don't have any folders yet.</v-list-item-title>
+          <v-list-item-title>Click <v-icon>{{ displayIcon('mdiFolderPlus') }}</v-icon> on the left to add one.</v-list-item-title>
+        </v-list-item-content>
+        <v-list-item-content v-if="filter !== ''">
+          <v-list-item-title>No folders found</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
       <v-list-item
         style="margin-bottom: 0;"
         v-for="folder in folders"
-        :key="folder.name"
-        :to="{ name: 'Folder', params: { name: folder.name.toLowerCase().replace(/\s/g, '-') } }"
+        :key="folder._id"
+        :to="shareable
+                ? { name: 'ShareableFolder', params: { name: folder.name.toLowerCase().replace(/\s/g, '-'), id: folder._id } }
+                : { name: 'Folder', params: { name: folder.name.toLowerCase().replace(/\s/g, '-'), id: folder._id } }"
         @click="setSelectedFolder(folder)"
         link
       >
@@ -49,35 +57,45 @@ import { mapActions } from 'vuex';
 
 export default {
   name: 'NavDrawerFolders',
+  props: ['shareable'],
   data() {
     return {
       drawer: null,
+      filter: '',
     };
   },
   computed: {
     // Displays folders in alphabetical order
     folders() {
-      let sortedFolders = this.$store.state.folders.list;
+      let sortedFolders = this.$store.state.folders.list
+      if (this.shareable) {
+        const shareableFolders = sortedFolders.filter(folder => folder.shareable === true)
+        sortedFolders = shareableFolders
+      }
+      if (this.filter) {
+        const filteredFolders = sortedFolders.filter(folder => folder.name.toLowerCase().includes(this.filter.toLowerCase()))
+        sortedFolders = filteredFolders
+      }
       sortedFolders.sort((a, b) => {
-        let folderA = a.name.toUpperCase();
-        let folderB = b.name.toUpperCase();
-        return folderA < folderB ? -1 : folderA > folderB ? 1 : 0;
-      });
-      return sortedFolders;
+        let folderA = a.name.toUpperCase()
+        let folderB = b.name.toUpperCase()
+        return folderA < folderB ? -1 : folderA > folderB ? 1 : 0
+      })
+      return sortedFolders
     },
   },
   methods: {
     ...mapActions('folders', ['getFolders']),
 
     displayIcon(icon) {
-      return mdijs[icon];
+      return mdijs[icon]
     },
     // Sets currently selected folder when clicked
     setSelectedFolder(folder) {
-      this.$store.commit('folders/setSelectedFolder', folder);
+      this.$store.commit('folders/setSelectedFolder', folder)
     },
   },
-};
+}
 </script>
 
 <style></style>

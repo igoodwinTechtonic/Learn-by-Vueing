@@ -1,37 +1,60 @@
 <template>
   <v-dialog v-model="dialog" width="500">
     <template v-slot:activator="{ on, attrs }">
-      <v-btn class="btn--small" v-bind="attrs" v-on="on"
-        ><v-icon>{{ displayIcon('mdiFolderPlus') }}</v-icon></v-btn
-      >
+      <v-btn class="btn--small" v-bind="attrs" v-on="on">
+        <v-icon>{{ displayIcon('mdiFolderPlus') }}</v-icon>
+      </v-btn>
     </template>
     <v-card>
-      <v-card-title class="dialog__title">Add a new folder</v-card-title>
+      <v-card-title>Add a new folder</v-card-title>
 
       <form autocomplete="off">
-        <v-text-field
-          class="dialog__input"
-          v-model="name"
-          label="Name"
-          hint="A container for your bookmarks."
-          :prepend-inner-icon="displayIcon(icon)"
-          :rules="validateName"
-          persistent-hint
-          clearable
-        ></v-text-field>
-
+        <v-row cols=12>
+          <v-col sm="9">
+            <v-text-field
+              class="dialog__input"
+              v-model="name"
+              label="Name"
+              hint="A container for your bookmarks."
+              :prepend-inner-icon="displayIcon(icon)"
+              :rules="validateName"
+              clearable
+              persistent-hint
+            ></v-text-field>
+          </v-col>
+          <v-col sm="3">
+            <v-checkbox
+              v-model="shareable"
+              label="Public"
+            >
+            </v-checkbox>
+            <!-- <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-checkbox
+                  v-model="shareable"
+                  v-on="on"
+                  v-bind="attrs"
+                  :label="`${shareable ? 'Public' : 'Private'}`"
+                >
+                </v-checkbox>
+              </template>
+              <span>Share a link</span>
+            </v-tooltip> -->
+          </v-col>
+        </v-row>
+        
         <v-menu offset-y>
           <template v-slot:activator="{ on, attrs }">
             <v-text-field
               class="dialog__input"
               v-model="input"
+              v-bind="attrs"
+              v-on="on"
               label="Search for an icon"
               hint="The icon cannot be changed once the folder has been added."
               @keyup="searchIcons(input)"
-              persistent-hint
               clearable
-              v-bind="attrs"
-              v-on="on"
+              persistent-hint
             ></v-text-field>
           </template>
           <v-list>
@@ -73,6 +96,7 @@ export default {
     return {
       dialog: false,
       name: '',
+      shareable: false,
       icon: 'mdiFolder',
       input: '',
       icons: Object.keys(mdijs),
@@ -94,6 +118,7 @@ export default {
           user_id: this.$store.state.users.currentUser._id,
           name: this.name,
           icon: this.icon,
+          shareable: this.shareable
         };
         this.$store.commit('setOverlay', true);
         this.$store.dispatch('folders/addFolder', newFolder).then(() => {
@@ -124,12 +149,7 @@ export default {
 </script>
 
 <style lang="scss">
-.dialog {
-  &__title {
-    background-color: lightgrey;
-  }
-  &__input {
-    margin: 1rem;
-  }
+.dialog__input {
+  margin: 1rem;
 }
 </style>

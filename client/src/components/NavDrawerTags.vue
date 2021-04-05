@@ -5,17 +5,24 @@
         <v-list-item-title class="title">
           Tags
         </v-list-item-title>
-        <v-list-item-subtitle>
-          Click to filter bookmarks by tag.
-        </v-list-item-subtitle>
+        <v-text-field
+          clearable
+          dense
+          hide-details
+          placeholder="Filter your tags"
+          v-model="filter"
+        ></v-text-field>
       </v-list-item-content>
     </v-list-item>
 
     <v-list>
       <v-list-item v-if="tags.length === 0">
         <v-list-item-content>
-          <v-list-item-title>
+          <v-list-item-title v-if="filter === ''">
             You don't have any tags yet.
+          </v-list-item-title>
+          <v-list-item-title v-if="filter !== ''">
+            No tags found.
           </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
@@ -45,9 +52,19 @@
 // in the Bookmarks.vue view
 export default {
   name: 'NavDrawerFolders',
+  data() {
+    return {
+      filter: ''
+    }
+  },
   computed: {
     tags() {
-      return this.$store.state.tags.list;
+      let tags = this.$store.state.tags.list
+      if (this.filter) {
+        const filteredTags = tags.filter(tag => tag.toLowerCase().includes(this.filter.toLowerCase()))
+        tags = filteredTags
+      }
+      return tags;
     },
   },
   methods: {

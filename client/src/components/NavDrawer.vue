@@ -32,9 +32,9 @@
       </v-col>
 
       <!-- Left Nav drawer: Displays whatever is clicked on in the Right navigation drawer-->
-      <v-col v-if="selectedItem == 'Folders'" style="margin-left: 70px">
+      <v-col v-if="selectedItem == 'Folders' || selectedItem == 'Public'" style="margin-left: 70px">
         <!-- Display all folders in the drawer -->
-        <NavDrawerFolders />
+        <NavDrawerFolders :shareable="selectedItem === 'Public' ? true : false" />
       </v-col>
       <v-col v-if="selectedItem == 'Bookmarks'" style="margin-left: 70px">
         <!-- Display all tags in the drawer -->
@@ -59,7 +59,6 @@ export default {
     NavDrawerTags,
     AddFolderDialog,
   },
-
   data() {
     return {
       selectedItem: 'Folders',
@@ -69,31 +68,17 @@ export default {
         { title: 'Folders', icon: mdijs['mdiFolderMultiple'] },
         { title: 'Bookmarks', icon: mdijs['mdiTag'] },
         { title: 'Public', icon: mdijs['mdiWeb'] },
-        { title: 'Settings', icon: mdijs['mdiCog'] },
+        // { title: 'Settings', icon: mdijs['mdiCog'] },
       ],
     };
   },
   methods: {
     // Pushes router to route based on clicked item
     navToItem(item) {
-      switch (item.title) {
-        case 'Folders' && item.title != 'Folders':
-          this.$router.push('/folders');
-          return;
-        case 'Bookmarks' && item.title != 'Bookmarks':
-          this.$router.push('/bookmarks');
-          return;
-        case 'Public' && item.title != 'Public':
-          this.$router.push('/public');
-          return;
-        case 'Settings' && item.title != 'Settings':
-          this.$router.push('/settings');
-          return;
-      }
       this.selectedItem = item.title;
     },
   },
-};
+}
 </script>
 
 <style>
