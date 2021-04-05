@@ -9,7 +9,12 @@ router.use('/api', apiRoutes);
 
 router.route('/*')
   .get((req, res) => {
-    res.sendFile(path.join(__dirname, '../../client/public/index.html'));
+    if (process.env.NODE_ENV === 'development') {
+      res.sendFile(path.join(__dirname, '../../client/public/index.html'));
+    }
+    if (process.env.NODE_ENV === 'production') {
+      res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
+    }
   });
 
 module.exports = router;
