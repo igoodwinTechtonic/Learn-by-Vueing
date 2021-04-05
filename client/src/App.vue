@@ -81,7 +81,7 @@ export default {
   computed: {
     ...mapState(['overlay']),
     disabledSearch() {
-      if (this.$route.params.action === 'add' || this.$route.params.action === 'edit') {
+      if (this.$route.params.action === 'add' || this.$route.params.action === 'edit' || this.$route.fullPath === '/') {
         return true;
       }
       return false;

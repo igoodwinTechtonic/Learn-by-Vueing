@@ -27,8 +27,15 @@
 
       <!-- This exists in the custom right-click menu -->
       <v-menu v-model="showMenu" :position-x="x" :position-y="y" absolute offset-y>
-        <v-list>
-          <v-list-item v-for="(item, idx) in rightClickItems" :key="idx" @click="item.event(); snackbar = true;">
+        <v-list v-if="!$auth.isAuthenticated">
+          <v-list-item @click="rightClickCOPY.event(); snackbar = true;">
+            <v-icon style="margin-right: 4px;">{{ rightClickCOPY.icon }}</v-icon>
+            <v-list-item-title>{{ rightClickCOPY.title }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+
+        <v-list v-if="$auth.isAuthenticated">
+          <v-list-item v-for="(item, idx) in rightClickItems" :key="idx" @click="item.event(); snackbar = true;"  >
             <v-icon style="margin-right: 4px;">{{ item.icon }}</v-icon>
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item>
@@ -82,6 +89,9 @@ export default {
     };
   },
   computed: {
+    rightClickCOPY() {
+      return this.rightClickItems[0]
+    },
     tags() {
       return this.$store.state.tags.list.filter((tag) => this.bookmark.tags.includes(tag))
     }

@@ -52,6 +52,11 @@
           Create a folder by clicking the Add Folder icon<v-icon class="icon-pos">{{ addFolderIcon }}</v-icon>on the left. 
           Public folders cannot be renamed!
         </p>
+        <p>
+          Share a public folder with a friend by pressing
+          <v-icon class="icon-pos">{{ copyIcon }}</v-icon>
+          to copy the link to your clipboard.
+        </p>
 
         <h2>Navigation</h2>
         <p>Click on a icon in the navigation view to display your folders, tags, and public folders.</p>
@@ -67,6 +72,7 @@
         <p>Right-click a bookmark to open the edit view, delete it, or copy the url.</p>
 
         <h2>Searching</h2>
+        <!-- <p>After logging in, you must first click a folder to enable searching.</p> -->
         <p>Search for any bookmark at any time by clicking and typing into the search bar at the top of the page.</p>
       </v-col>
 
@@ -87,6 +93,7 @@ export default {
       addFolderIcon: mdijs.mdiFolderPlus,
       bookmarkIcon: mdijs.mdiBookmark,
       folderIcon: mdijs.mdiFolder,
+      copyIcon: mdijs.mdiClipboardEditOutline,
       publicIcon: mdijs.mdiWeb,
       tagIcon: mdijs.mdiTag,
       icons: Object.keys(mdijs),

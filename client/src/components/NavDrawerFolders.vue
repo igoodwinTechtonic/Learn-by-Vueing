@@ -29,9 +29,7 @@
         style="margin-bottom: 0;"
         v-for="folder in folders"
         :key="folder._id"
-        :to="shareable
-                ? { name: 'ShareableFolder', params: { name: folder.name.toLowerCase().replace(/\s/g, '-'), id: folder._id } }
-                : { name: 'Folder', params: { name: folder.name.toLowerCase().replace(/\s/g, '-'), id: folder._id } }"
+        :to="path(folder)"
         @click="setSelectedFolder(folder)"
         link
       >
@@ -82,13 +80,27 @@ export default {
         return folderA < folderB ? -1 : folderA > folderB ? 1 : 0
       })
       return sortedFolders
-    },
+    }
   },
   methods: {
     ...mapActions('folders', ['getFolders']),
 
     displayIcon(icon) {
       return mdijs[icon]
+    },
+    path(folder) {
+      if (this.shareable && this.$auth.isAuthenticated) {
+        return { name: 'Folder', params: { name: folder.name.toLowerCase().replace(/\s/g, '-'), id: folder._id } }
+      }
+      if (!this.shareable && this.$auth.isAuthenticated) {
+        return { name: 'Folder', params: { name: folder.name.toLowerCase().replace(/\s/g, '-'), id: folder._id } }
+      }
+      if (this.shareable && !this.$auth.isAuthenticated) {
+        return { name: 'ShareableFolder', params: { name: folder.name.toLowerCase().replace(/\s/g, '-'), id: folder._id } }
+      }
+      // shareable
+      //   ? { name: 'ShareableFolder', params: { name: folder.name.toLowerCase().replace(/\s/g, '-'), id: folder._id } }
+      //   : { name: 'Folder', params: { name: folder.name.toLowerCase().replace(/\s/g, '-'), id: folder._id } }
     },
     // Sets currently selected folder when clicked
     setSelectedFolder(folder) {

@@ -23,13 +23,14 @@ export default {
     // Displays bookmarks based on route parameter, either a folder or tag name
     bookmarks() {
       if (this.$route.params.name) {
-        const filteredBookmarks = this.$store.state.bookmarks.list.filter(
-          (bookmark) => bookmark.folder_id === this.$store.state.folders.selectedFolder._id
+        const filteredBookmarks = this.$store.state.bookmarks.list.filter((bookmark) =>
+          bookmark.folder_id === this.$store.state.folders.selectedFolder._id
         );
         return this.sortedBookmarks(filteredBookmarks)
       }
       else if (this.$route.params.tag) {
-        const filteredBookmarks = this.$store.state.bookmarks.list.filter((bookmark) => bookmark.tags.includes(this.$route.params.tag));
+        const filteredBookmarks = this.$store.state.bookmarks.list.filter((bookmark) => 
+          bookmark.tags.includes(this.$route.params.tag));
         return this.sortedBookmarks(filteredBookmarks)
       }
       return {};
