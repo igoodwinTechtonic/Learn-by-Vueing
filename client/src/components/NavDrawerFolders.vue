@@ -22,7 +22,7 @@
           <v-list-item-title>Click <v-icon>{{ displayIcon('mdiFolderPlus') }}</v-icon> on the left to add one.</v-list-item-title>
         </v-list-item-content>
         <v-list-item-content v-if="filter !== ''">
-          <v-list-item-title>No folders found</v-list-item-title>
+          <v-list-item-title>No folders found.</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
       <v-list-item
@@ -98,9 +98,6 @@ export default {
       if (this.shareable && !this.$auth.isAuthenticated) {
         return { name: 'ShareableFolder', params: { name: folder.name.toLowerCase().replace(/\s/g, '-'), id: folder._id } }
       }
-      // shareable
-      //   ? { name: 'ShareableFolder', params: { name: folder.name.toLowerCase().replace(/\s/g, '-'), id: folder._id } }
-      //   : { name: 'Folder', params: { name: folder.name.toLowerCase().replace(/\s/g, '-'), id: folder._id } }
     },
     // Sets currently selected folder when clicked
     setSelectedFolder(folder) {

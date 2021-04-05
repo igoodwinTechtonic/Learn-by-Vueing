@@ -13,6 +13,27 @@
 // Cypress.Commands.add('login', (email, password) => { ... })
 //
 //
+Cypress.Commands.add('login', (overrides = {}) => {
+  Cypress.log({ name: "LearnByVueing Login with Auth0" })
+  // Cypress.log(Cypress.env("auth_password"))
+
+  const options = {
+    method: "POST",
+    url: Cypress.env("auth_url"),
+    body: {
+      grant_type: "password",
+      username: Cypress.env("auth_username"),
+      password: Cypress.env("auth_password"),
+      audience: Cypress.env("auth_audience"),
+      scope: "openid profile email",
+      client_Id: Cypress.env("auth_client_Id"),
+      client_secret: Cypress.env("auth_client_secret")
+    }
+  }
+  cy.request(options)
+
+})
+
 // -- This is a child command --
 // Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
 //

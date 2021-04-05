@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "co": "cypress open"
+    "test": "cypress open"
   },
   "dependencies": {
     "@auth0/auth0-spa-js": "^1.13.6",

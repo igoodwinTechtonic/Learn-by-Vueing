@@ -9,9 +9,10 @@
     <!-- <span>Delete Folder</span>
     </v-tooltip> -->
     <v-card>
-      <v-card-title class="dialog__title">Are you sure you want to delete {{ name }}?</v-card-title>
-      <v-card-subtitle class="dialog__title">This will delete ALL bookmarks in this folder.</v-card-subtitle>
-      <v-card-subtitle class="dialog__title">You cannot undo this action.</v-card-subtitle>
+      <v-card-title style="padding-bottom: 0;">Are you sure you want to delete:</v-card-title>
+      <v-card-title style="padding: 0 1.5rem 1rem 1.5rem;">{{ name }}?</v-card-title>
+      <v-card-subtitle>This will delete ALL bookmarks in this folder.</v-card-subtitle>
+      <v-card-subtitle>You cannot undo this action.</v-card-subtitle>
 
       <v-divider></v-divider>
 
