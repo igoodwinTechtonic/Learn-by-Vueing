@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="dialog" width="500">
     <template v-slot:activator="{ on, attrs }">
-      <v-btn class="btn--small" v-bind="attrs" v-on="on">
+      <v-btn id="new-folder-btn" v-bind="attrs" v-on="on">
         <v-icon>{{ displayIcon('mdiFolderPlus') }}</v-icon>
       </v-btn>
     </template>
@@ -12,20 +12,23 @@
         <v-row cols=12>
           <v-col sm="9">
             <v-text-field
-              class="dialog__input"
-              v-model="name"
-              label="Name"
+              clearable
               hint="A container for your bookmarks."
+              id="new-folder-input"
+              label="Name"
+              persistent-hint
               :prepend-inner-icon="displayIcon(icon)"
               :rules="validateName"
-              clearable
-              persistent-hint
+              style="margin: 0 1rem;"
+              v-model="name"
             ></v-text-field>
           </v-col>
           <v-col sm="3">
             <v-checkbox
-              v-model="shareable"
+              hide-details="auto"
+              id="new-folder-public-chbx"
               label="Public"
+              v-model="shareable"
             >
             </v-checkbox>
             <!-- <v-tooltip bottom>
@@ -46,18 +49,19 @@
         <v-menu offset-y>
           <template v-slot:activator="{ on, attrs }">
             <v-text-field
-              class="dialog__input"
-              v-model="input"
-              v-bind="attrs"
-              v-on="on"
-              label="Search for an icon"
-              hint="The icon cannot be changed once the folder has been added."
               @keyup="searchIcons(input)"
               clearable
+              hint="The icon cannot be changed once the folder has been added."
+              id="new-folder-icon"
+              label="Search for an icon"
               persistent-hint
+              style="margin: 1rem;"
+              v-bind="attrs"
+              v-model="input"
+              v-on="on"
             ></v-text-field>
           </template>
-          <v-list>
+          <v-list id="new-folder-icon-list">
             <v-virtual-scroll height="224" item-height="56" :bench="4" :items="filteredIcons">
               <template v-slot:default="{ item }">
                 <v-list-item :key="item" @click="setIcon(item)">
@@ -73,10 +77,10 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="red" text @click="dialog = false">
+        <v-btn color="red" @click="dialog = false" id="new-folder-cancel-btn" text>
           Cancel
         </v-btn>
-        <v-btn color="primary" text @click="submit()">
+        <v-btn color="primary" @click="submit()" id="new-folder-submit-btn" text>
           Submit
         </v-btn>
       </v-card-actions>
@@ -148,8 +152,5 @@ export default {
 };
 </script>
 
-<style lang="scss">
-.dialog__input {
-  margin: 1rem;
-}
+<style>
 </style>
