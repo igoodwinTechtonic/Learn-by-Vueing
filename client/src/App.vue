@@ -3,7 +3,7 @@
     <NavDrawer v-if="$auth.isAuthenticated" />
 
     <v-app-bar app clipped-left>
-      <div class="d-flex align-center" style="width: 300px;">
+      <div :class="$auth.isAuthenticated && 'display-user-name'" style="width: 300px;">
         <h2 v-if="$auth.isAuthenticated">{{ $auth.user.name }}</h2>
         <h2 v-if="!$auth.isAuthenticated" style="margin-left: 10vw">Bookmarkd</h2>
       </div>
@@ -134,9 +134,17 @@ export default {
 </script>
 
 <style>
+.display-user-name {
+  display: none;
+}
 .app-funcs-container {
   display: flex;
   flex-direction: row;
   align-items: center;
+}
+@media screen and (min-width: 750px) {
+  .display-user-name {
+    display: flex;
+  }
 }
 </style>

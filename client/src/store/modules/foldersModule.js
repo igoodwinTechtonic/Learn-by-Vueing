@@ -24,6 +24,7 @@ export default {
   },
   actions: {
     /** Retrieves all folders from a given user id
+     * Sets selected folder (not required, but just in case!)
      * 
      * @param {Object} param0 - Destructed into commit.
      * @param {string} user_id - The user id.
@@ -32,7 +33,8 @@ export default {
     async getFolders({ commit }, user_id) {
       try {
         const res = await axios.get('/api/folders?id=' + user_id)
-        return commit('setFolders', res.data)
+        commit('setFolders', res.data)
+        if (res.data.length !== 0) commit('setSelectedFolder', res.data[0])
       } catch (e) {
         return console.error(e)
       }

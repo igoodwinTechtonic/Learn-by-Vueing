@@ -4,7 +4,7 @@
       <v-col style="position: fixed; height: 100%; ">
         <!-- Right Nav drawer: Account, Folders, Bookmarks, Public, Settings -->
         <v-navigation-drawer dark permanent mini-variant mini-variant-width="70">
-          <v-list-item class="px-2">
+          <v-list-item class="px-2" @click="navToHome();" :ripple="false">
             <v-list-item-avatar>
               <v-img :src="this.$auth.user.picture"></v-img>
             </v-list-item-avatar>
@@ -77,12 +77,12 @@ export default {
     navToItem(item) {
       this.selectedItem = item.title;
     },
+    navToHome() {
+      if (this.$route.fullPath !== '/') this.$router.push({ name: "Home" })
+    }
   },
 }
 </script>
 
 <style>
-.title {
-  padding-bottom: 0.5rem;
-}
 </style>
