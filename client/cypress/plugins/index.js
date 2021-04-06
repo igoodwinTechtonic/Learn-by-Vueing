@@ -11,7 +11,7 @@
 
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
-
+const clipboardy = require('clipboardy');
 /**
  * @type {Cypress.PluginConfig}
  */
@@ -19,4 +19,12 @@
 module.exports = (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
+  on('task', {
+    getClipboard() {
+      return clipboardy.readSync();
+    },
+    pasteClipboard() {
+      return clipboardy.writeSync('https://docs.atlassian.com/jira-software/REST/7.0.4/#agile/1.0/board-getAllBoards')
+    }
+  });
 }

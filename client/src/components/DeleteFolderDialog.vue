@@ -18,10 +18,10 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="red" text @click="dialog = false">
+        <v-btn color="red" text @click="dialog = false" id="delete-folder-cancel-btn">
           Cancel
         </v-btn>
-        <v-btn color="primary" text @click="deleteFolder()">
+        <v-btn color="primary" text @click="deleteFolder()" id="delete-folder-submit-btn">
           Delete
         </v-btn>
       </v-card-actions>
