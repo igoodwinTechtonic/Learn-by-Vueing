@@ -1,21 +1,22 @@
 <template>
   <v-combobox
-    v-model="chips"
-    :items="items"
+    @change="setTags"
     chips
     clearable
+    hint="Add new tags or select existing tags."
+    id="add-bookmark-tag-selector"
+    :items="items"
     label="Tags"
     multiple
-    prepend-icon="mdi-filter-variant"
     persistent-hint
-    hint="Add new tags or select existing tags."
+    prepend-icon="mdi-filter-variant"
     solo
-    @change="setTags"
+    v-model="chips"
   >
     <template v-slot:selection="{ attrs, item, select, selected }">
       <v-chip v-bind="attrs" :input-value="selected" close @click="select" @click:close="remove(item)">
-        <strong>{{ item }}</strong
-        >&nbsp;
+        <strong>{{ item }}</strong>
+        &nbsp;
       </v-chip>
     </template>
   </v-combobox>

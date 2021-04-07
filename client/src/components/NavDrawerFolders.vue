@@ -15,7 +15,7 @@
       </v-list-item-content>
     </v-list-item>
 
-    <v-list>
+    <v-list id="nav-drawer-folders-list">
       <v-list-item v-if="folders.length === 0">
         <v-list-item-content v-if="filter === ''">
           <v-list-item-title>You don't have any folders yet.</v-list-item-title>

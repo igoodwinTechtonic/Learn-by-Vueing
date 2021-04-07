@@ -4,7 +4,7 @@
       <v-row>
         <v-col class="inner-grid">
           <v-card-title
-            ><v-text-field :placeholder="bookmarkToAdd.title" :rules="validateField" v-model="customTitle"></v-text-field
+            ><v-text-field id="add-bookmark-title" :placeholder="bookmarkToAdd.title" :rules="validateField" v-model="customTitle"></v-text-field
           ></v-card-title>
           <div class="img-link-grid">
             <v-img
@@ -15,14 +15,17 @@
             </v-img>
             <v-card-subtitle>{{ bookmarkToAdd.url }}</v-card-subtitle>
           </div>
-          <v-card-text><v-textarea :placeholder="bookmarkToAdd.description" v-model="customDesc"></v-textarea></v-card-text>
+          <v-card-text>
+            <v-textarea id="add-bookmark-description" :placeholder="bookmarkToAdd.description" v-model="customDesc"></v-textarea>
+          </v-card-text>
           <TagSelector />
         </v-col>
       </v-row>
       <v-card-actions style="justify-content: center; padding-bottom: 2rem;">
-        <v-btn ref="btn" @click="submit()"
-          ><v-icon style="padding-right: 1rem;">mdi-bookmark</v-icon>{{ action }} Bookmark</v-btn
-        >
+        <v-btn id="add-bookmark-btn" ref="btn" @click="submit()">
+          <v-icon style="padding-right: 1rem;">mdi-bookmark</v-icon>
+          {{ action }} Bookmark
+        </v-btn>
       </v-card-actions>
     </v-card>
   </v-container>

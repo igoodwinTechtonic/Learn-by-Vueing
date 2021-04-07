@@ -1,4 +1,4 @@
-package com.bookmarkd.lbv;
+package com.bookmarkd;
 
 import com.mongodb.client.*;
 import org.bson.Document;
