@@ -9,14 +9,6 @@
 // automatically serving support files with the
 // 'supportFile' configuration option.
 //
-// ================ CLEAR DATABASE =================
-
-import axios from 'axios'
-
-// axios.delete('/api/folders/' + '1234abcd')
-
-// ================ SEED DATABASE ==================
-
 // You can read more here:
 // https://on.cypress.io/configuration
 // ***********************************************************

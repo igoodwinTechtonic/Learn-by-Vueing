@@ -12,6 +12,7 @@
         style="flex: 20 1 auto"
         placeholder="Add bookmark or search..."
         hide-details="auto"
+        id="add-search-field"
         v-if="$auth.isAuthenticated"
         v-model="search"
         @click="navToSearch()"
@@ -33,7 +34,7 @@
       </v-btn>
 
       <div class="app-funcs-container" v-if="$auth.isAuthenticated">
-        <v-btn style="margin-right: 1rem;" @click="logout">Log out</v-btn>
+        <v-btn @click="logout" id="logout-btn" style="margin-right: 1rem;">Log out</v-btn>
         <v-switch
           style="display: flex; justify-content: center;"
           v-model="$vuetify.theme.dark"

@@ -14,7 +14,13 @@
       <v-col v-if="selectedFolder.shareable" style="flex-grow: 0;">
         <v-tooltip left>
           <template v-slot:activator="{ on, attrs }">
-            <v-btn @click="snackbar = true; copyLink();" v-on="on" v-bind="attrs" style="height: 48px;">
+            <v-btn
+              @click="snackbar = true; copyLink();"
+              id="copy-link-btn"
+              v-bind="attrs"
+              v-on="on"
+              style="height: 48px;"
+            >
               <v-icon>{{ copyIcon }}</v-icon>
             </v-btn>
           </template>
