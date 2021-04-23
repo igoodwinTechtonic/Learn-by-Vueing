@@ -32,7 +32,7 @@ export default {
      */
     async getFolders({ commit }, user_id) {
       try {
-        const res = await axios.get('/api/folders?id=' + user_id)
+        const res = await axios.get('/api/folders?userid=' + user_id)
         commit('setFolders', res.data)
         if (res.data.length !== 0) commit('setSelectedFolder', res.data[0])
       } catch (e) {
@@ -52,7 +52,7 @@ export default {
             "Content-Type": "application/json",
           }
         })
-        const addedFolder = res.data.ops[0]
+        const addedFolder = res.data
         const folders = [...state.list, addedFolder]
         commit('setSelectedFolder', addedFolder)
         commit('setFolders', folders)
@@ -85,7 +85,7 @@ export default {
     /** Deletes a folder and all bookmarks with the same folder_id, re-gets all tags after deletion
      * 
      * @param {Object} param0 - Destructed into commit, dispatch, state, and rootState.
-     * @param {*} id - The folder id to delete.
+     * @param {String} id - The folder id to delete.
      * @returns {Promise} A promise that awaits the completion of three async calls to the db to delete a folder.
      */
     async deleteFolder({ commit, dispatch, state, rootState }, id) {

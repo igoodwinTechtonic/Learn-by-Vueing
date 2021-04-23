@@ -34,6 +34,10 @@ Todos:
 4. `NODE_ENV=production node server.js`
 5. Navigate to http://localhost:3001/
 
+### FOR ME ONLY
+
+Obtain .env files from me before attempting to run this, or connect it to your own Auth0 and MongoDBs.
+
 - heroku git:remote -a learn-by-vueing
 - git push heroku HEAD:master
 - heroku logs --tail

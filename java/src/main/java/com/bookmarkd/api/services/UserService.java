@@ -1,21 +1,30 @@
 package com.bookmarkd.api.services;
 
+import com.bookmarkd.api.daos.UserDao;
+import com.bookmarkd.api.models.Login;
 import com.bookmarkd.api.models.User;
-import com.bookmarkd.api.repositories.UserRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
 @Service
+@Configuration
 public class UserService {
 
-  private final UserRepository userRepository;
+  @Autowired
+  private UserDao userDao;
 
-  public UserService(UserRepository userRepository) {
-    this.userRepository = userRepository;
+  public UserService() { super(); }
+
+  // Calls userDao to add user to users collection
+  public User createUser(User newUser) {
+    return userDao.addUser(newUser) ? userDao.getUser(newUser.getEmail()) : null;
   }
 
-  public void getUser() {}
-
-  public void postUser(User user) {
-    userRepository.insert(user);
+  // Calls userDao to get user from users collection
+  public User loadUser(String email) {
+    return userDao.getUser(email);
   }
+
 }

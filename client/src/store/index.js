@@ -32,11 +32,14 @@ export default new Vuex.Store({
     // bookmarks module when link is pasted into search field
     async scrapeUrl({ commit }, link) {
       try {
-        const res = await axios.post('/scrape', JSON.stringify(link), {
-          headers: {
-            "Content-Type": "application/json",
-          }
-        })
+        // console.log(link)
+        const res = await axios.post('/api/scrape', link)
+        // const res = await axios.post('/api/scrape', JSON.stringify(link), {
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //   }
+        // })
+        // console.log(res.data)
         commit('bookmarks/setBookmarkToAdd', res.data)
       } catch (e) {
         console.error(e)

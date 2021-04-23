@@ -1,9 +1,12 @@
 package com.bookmarkd.api.daos;
 
 import com.mongodb.ConnectionString;
+import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
+import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.codecs.pojo.PojoCodecProvider;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,21 +17,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
+import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
+
+// Runs after Application.java to set up connection to Mongo Atlas db
 @Configuration
 public abstract class AbstractBookmarkdDao {
 
   protected final String LBV_DATABASE;
   protected MongoDatabase db;
   protected MongoClient mongoClient;
-  @Value("${spring.mongodb.uri}")
-  private String connectionString;
+//  @Value("${spring.mongodb.uri}")
+//  private String connectionString;
 
   protected AbstractBookmarkdDao(MongoClient mongoClient, String databaseName) {
+
     this.mongoClient = mongoClient;
     LBV_DATABASE = databaseName;
     this.db = this.mongoClient.getDatabase(LBV_DATABASE);
   }
 
+  /*
   public ObjectId generateObjectId() {
     return new ObjectId();
   }
@@ -53,4 +62,5 @@ public abstract class AbstractBookmarkdDao {
     }
     return configuration;
   }
+   */
 }

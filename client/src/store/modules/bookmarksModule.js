@@ -35,7 +35,7 @@ export default {
     */
     async getBookmarks({ commit }, user_id) {
       try {
-        const res = await axios.get('/api/bookmarks?id=' + user_id)
+        const res = await axios.get('/api/bookmarks?userid=' + user_id)
         commit('setBookmarks', res.data)
       } catch (e) {
         console.error(e)
@@ -66,7 +66,7 @@ export default {
     async searchBookmarks({ commit, rootState }, keywords) {
       if (keywords === '') return
       try {
-        const res = await axios.get(`api/bookmarks?id=${rootState.users.currentUser._id}&search=${keywords}`)
+        const res = await axios.get(`api/bookmarks/search?userid=${rootState.users.currentUser._id}&search=${keywords}`)
         commit('searchResults', res.data)
       } catch (e) {
         console.error(e)
@@ -81,7 +81,7 @@ export default {
     async addBookmark({ commit, state }, bookmarkToAdd) {
       try {
         const res = await axios.post('/api/bookmarks', bookmarkToAdd)
-        const addedBookmark = res.data.ops[0]
+        const addedBookmark = res.data
         const bookmarkList = [...state.list, addedBookmark]
         commit('setBookmarks', bookmarkList)
       } catch (e) {

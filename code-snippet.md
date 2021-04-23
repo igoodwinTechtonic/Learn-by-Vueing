@@ -95,3 +95,96 @@ db.bookmarks.find({
   ],
 });
 ```
+
+## Bug post on mongo university
+
+I'm attempting to build my own application and backend API to further my understanding of the Mongo Java driver after completing the M220J course, but am running into a blocker.
+
+I'm creating a bookmark managing app and rebuilding the backend in Java using Mongo and Spring Boot. The error appears when using `.iterator()` or `.into()` after `.find()` to query my Atlas database. The error DOES NOT APPEAR when using `.first()` after `.find()`.
+
+My `pom.xml` includes version 4.2.2 of mongodb-driver-sync.
+
+In the code, the `user_id` field is stored as a String, not ObjectId, in the Folder documents (acts like a foreign key) This does not cause the error. The `.into()` trick was taken from [this article talking about Mongo and Java Pojos](https://developer.mongodb.com/quickstart/java-setup-crud-operations/?utm_campaign=javainsertingdocuments&utm_source=facebook&utm_medium=organic_social#lists).
+
+```java
+  // Returns an array of folders, given a user id
+  public List<Folder> getFolders(String id) {
+    if (id == null || id.isEmpty()) return null;
+    List<Folder> folders = foldersCollection.find(new Document("user_id", id)).into(new ArrayList<>());
+    return folders;
+  }
+```
+
+This code also does not work, which uses `.iterator()` after `.find()`.
+
+```java
+  public List<Folder> getFolders(String id) {
+    if (id == null || id.isEmpty()) return null;
+    List<Folder> folders = new ArrayList<>();
+    foldersCollection.find(new Document("user_id", id)).iterator().forEachRemaining(folders::add);
+    return folders;
+  }
+```
+
+I have verified that <i>this code works</i> with a test in Java and in Postman:
+
+```java
+  // Gets a folder from db given folder _id
+  public Folder getFolder(String id) {
+    if (id == null || id.isEmpty()) return null;
+    return foldersCollection.find(new Document("_id", new ObjectId(id))).first();
+  }
+```
+
+<h2>This is the error:</h2>
+
+```java
+
+java.lang.NoSuchMethodError: 'com.mongodb.internal.operation.ExplainableReadOperation com.mongodb.internal.operation.SyncOperations.find(org.bson.conversions.Bson, java.lang.Class, com.mongodb.internal.client.model.FindOptions)'
+
+	at com.mongodb.client.internal.FindIterableImpl.asReadOperation(FindIterableImpl.java:236)
+	at com.mongodb.client.internal.FindIterableImpl.asReadOperation(FindIterableImpl.java:40)
+	at com.mongodb.client.internal.MongoIterableImpl.execute(MongoIterableImpl.java:135)
+	at com.mongodb.client.internal.MongoIterableImpl.iterator(MongoIterableImpl.java:92)
+	at com.mongodb.client.internal.MongoIterableImpl.forEach(MongoIterableImpl.java:121)
+	at com.mongodb.client.internal.MongoIterableImpl.into(MongoIterableImpl.java:130)
+	at com.bookmarkd.api.daos.FolderDao.getFolders(FolderDao.java:46)
+    at com.bookmarkd.FolderTest.GetFolders(FolderTest.java:50) <31 internal lines>
+    at java.base/java.util.ArrayList.forEach(ArrayList.java:1511) <9 internal lines>
+    at java.base/java.util.ArrayList.forEach(ArrayList.java:1511) <23 internal lines>
+```
+
+---
+
+For more context, the `foldersCollection` is declared with a Pojo codec in the same exact way the UserDao.java file is from the M220J course. This enables me to use the Folder object instead of Document.
+
+```java
+@Configuration
+public class FolderDao extends AbstractBookmarkdDao {
+
+  private final MongoCollection<Folder> foldersCollection;
+
+  @Autowired
+  public FolderDao(MongoClient mongoClient, @Value("${spring.mongodb.database}") String databaseName) {
+    super(mongoClient, databaseName);
+
+    CodecRegistry pojoCodecRegistry = fromRegistries(
+            MongoClientSettings.getDefaultCodecRegistry(),
+            fromProviders(PojoCodecProvider.builder().automatic(true).build())
+    );
+    foldersCollection = db
+            .getCollection("folders", Folder.class)
+            .withWriteConcern(WriteConcern.MAJORITY)
+            .withCodecRegistry(pojoCodecRegistry);
+  }
+
+    // DAO methods to CRUD Folders
+    // getFolders
+    // getFolder
+    // addFolder ...
+}
+```
+
+
+
+Document{{queryPlanner=Document{{plannerVersion=1, namespace=LBV.bookmarks, indexFilterSet=false, parsedQuery=Document{{$and=[Document{{$or=[Document{{description=Document{{$eq=Document{{mongo=BsonRegularExpression{pattern='i', options=''}}}}}}}, Document{{title=Document{{$eq=Document{{mongo=BsonRegularExpression{pattern='i', options=''}}}}}}}]}}, Document{{user_id=Document{{$eq=6065e0a16fca1f8ee47b7a73}}}}]}}, optimizedPipeline=true, winningPlan=Document{{stage=SORT, sortPattern=Document{{title=1}}, memLimit=33554432, type=simple, inputStage=Document{{stage=COLLSCAN, filter=Document{{$and=[Document{{$or=[Document{{description=Document{{$eq=Document{{mongo=BsonRegularExpression{pattern='i', options=''}}}}}}}, Document{{title=Document{{$eq=Document{{mongo=BsonRegularExpression{pattern='i', options=''}}}}}}}]}}, Document{{user_id=Document{{$eq=6065e0a16fca1f8ee47b7a73}}}}]}}, direction=forward}}}}, rejectedPlans=[]}}, executionStats=Document{{executionSuccess=true, nReturned=0, executionTimeMillis=0, totalKeysExamined=0, totalDocsExamined=16, executionStages=Document{{stage=SORT, nReturned=0, executionTimeMillisEstimate=0, works=19, advanced=0, needTime=18, needYield=0, saveState=0, restoreState=0, isEOF=1, sortPattern=Document{{title=1}}, memLimit=33554432, type=simple, totalDataSizeSorted=0, usedDisk=false, inputStage=Document{{stage=COLLSCAN, filter=Document{{$and=[Document{{$or=[Document{{description=Document{{$eq=Document{{mongo=BsonRegularExpression{pattern='i', options=''}}}}}}}, Document{{title=Document{{$eq=Document{{mongo=BsonRegularExpression{pattern='i', options=''}}}}}}}]}}, Document{{user_id=Document{{$eq=6065e0a16fca1f8ee47b7a73}}}}]}}, nReturned=0, executionTimeMillisEstimate=0, works=18, advanced=0, needTime=17, needYield=0, saveState=0, restoreState=0, isEOF=1, direction=forward, docsExamined=16}}}}, allPlansExecution=[]}}, serverInfo=Document{{host=sandbox-shard-00-01.zutlo.mongodb.net, port=27017, version=4.4.4, gitVersion=8db30a63db1a9d84bdcad0c83369623f708e0397}}, ok=1.0, $clusterTime=Document{{clusterTime=Timestamp{value=6950366389081210887, seconds=1618258280, inc=7}, signature=Document{{hash=org.bson.types.Binary@34449eab, keyId=6922211967922864131}}}}, operationTime=Timestamp{value=6950366389081210887, seconds=1618258280, inc=7}}}
