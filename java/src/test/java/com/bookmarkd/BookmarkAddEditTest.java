@@ -7,10 +7,7 @@ import com.bookmarkd.api.models.Bookmark;
 import com.bookmarkd.api.models.Folder;
 import com.mongodb.client.MongoClient;
 import org.bson.BsonObjectId;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -31,7 +28,7 @@ public class BookmarkAddEditTest {
   private FolderDao folderDao;
   private Bookmark testBookmark;
   private Folder testFolder;
-  private final String userId = "604109a74c3b1cc5f71e9f00";
+  private final String userId = "604109a74c3b1cc5f71e9f00"; // ian.goodwin@techtonic.com
   private final String folderId = "6074c99a32929100155d33d3";
   private final List<String> tags = new ArrayList<>();
 
@@ -46,26 +43,48 @@ public class BookmarkAddEditTest {
     this.bookmarkDao = new BookmarkDao(mongoClient, databaseName);
     this.folderDao = new FolderDao(mongoClient, databaseName);
 
-    this.tags.add("Youtube");
-    this.tags.add("Testing this tag");
+    this.testFolder = this.folderDao.getFolders(this.userId).get(0);
+    Assertions.assertNotNull(this.testFolder);
+
+    this.tags.add("MongoDB");
+    this.tags.add("Databases");
     this.testBookmark = new Bookmark(
             this.userId,
             this.folderId,
-            "Test Bookmark",
-            "This is a description",
-            "https://www.youtube.com/",
+            "Databases and Collections",
+            "MongoDB stores documents in collections; the collections in databases.",
+            "https://mongodb.github.io/mongo-java-driver/4.2/driver/tutorials/databases-collections/",
             "https://www.mongodb.com/assets/images/global/favicon.ico",
             this.tags,
             (new Date()).toString()
     );
-    this.testFolder = folderDao.getFolder("6074c99a32929100155d33d3");
-    Assertions.assertNotNull(this.testFolder);
+    // Do I create a new folder for this bookmark, to be sure one exists?
+    // Do I add this bookmark to the folders collection here, edit it, then delete it?
+    // Do I create two bookmarks here, inserted one here, and use another to post in a test?
+    // Or do I create one bookmark for each CRUD operation?
+  }
+
+  @AfterAll
+  public void teardown() {
+
   }
 
   @Test
   public void AddBookmarkToFolder() {
+    // Verify if ObejctId is returned from bookmark dao, meaning bookmark was successfully inserted
     BsonObjectId addedBookmarkId = bookmarkDao.addBookmark(this.testBookmark);
     Assertions.assertNotNull(addedBookmarkId);
+
+    // Verify if new bookmark can be retrieved
+    Bookmark addedBookmark = bookmarkDao.getBookmark(addedBookmarkId);
+    Assertions.assertNotNull(addedBookmark);
+
+    // Verify bookmark was inserted with correct data
+    Assertions.assertEquals(addedBookmark.getTitle(), "Databases and Collections");
+    Assertions.assertEquals(addedBookmark.getDescription(), this.testBookmark.getDescription());
+    Assertions.assertEquals(addedBookmark.getFavicon(), this.testBookmark.getFavicon());
+    Assertions.assertEquals(addedBookmark.getUrl(), this.testBookmark.getUrl());
+    Assertions.assertEquals(addedBookmark.getTags(), this.testBookmark.getTags());
   }
 
   @Test
