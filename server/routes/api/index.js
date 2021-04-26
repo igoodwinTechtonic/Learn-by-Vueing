@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const jwt = require('jsonwebtoken')
 
 const { MongoClient, ObjectId } = require('mongodb');
 
@@ -18,11 +19,38 @@ const main = async () => {
     // USER ROUTES ================================================= USER ROUTES //
 
     const users = 'users'
+    const sessions = 'sessions'
     router.route('/users')
       .post(async (req, res) => {
+        // Check and see if user is already logged in in the Sessions collection, if so, return an error
+        const existingUserSession = await collection(sessions).findOne({ "email": req.body.email })
+        if (existingUserSession) {
+          res.status(401).send({ "status": 401, "message": "User already logged in" })
+          return
+        }
+
         const existingUser = await collection(users).findOne({ "email": req.body.email, "name": req.body.name })
-        if (existingUser) res.send(existingUser)
-        else res.send(await collection(users).insertOne(req.body))
+        if (existingUser) {
+          const token = jwt.sign({ existingUser }, process.env.JWT_SECRET_KEY)
+          const response = { ...existingUser, token }
+          await collection('sessions').insertOne(response)
+          res.send(response)
+        }
+        else {
+          const newUser = await collection(users).insertOne(req.body)
+          const token = jwt.sign({ newUser }, process.env.JWT_SECRET_KEY)
+          const response = { ...newUser.ops[0], token }
+          await collection('sessions').insertOne(response)
+          res.send(response)
+        }
+        // Create a user session in Sessions collection
+      })
+    router.route('/sessions/:email')
+      // .post(async (req, res) => {
+      // })
+      .delete(async (req, res) => {
+        // Delete user session
+        res.send(await collection(sessions).deleteOne({ "email": req.params.email }))
       })
 
     // FOLDER ROUTES ================================================= FOLDER ROUTES //

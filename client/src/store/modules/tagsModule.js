@@ -44,7 +44,8 @@ export default {
     async getUserTags({ commit }, user_id) {
       try {
         const res = await axios.get('/api/bookmarks/tags?userid=' + user_id)
-        commit('setTags', res.data.tags)
+        if (res.data.tags) commit('setTags', res.data.tags)
+        else commit('setTags', [])
       } catch (e) {
         console.error(e)
       }

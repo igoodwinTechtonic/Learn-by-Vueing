@@ -95,11 +95,20 @@ export const useAuth0 = ({
       } catch (e) {
         this.error = e;
       } finally {
-        this.isAuthenticated = await this.auth0Client.isAuthenticated();
         this.user = await this.auth0Client.getUser();
+        if (this.user) {
+          // Dispatch action to set user in state
+          // Returns the error object, or "false" if successful
+          const errorResponse = await this.$store.dispatch('users/getUser', this.user);
+          // If user has an existing session on another device, update isAuthenticated to false
+          if (errorResponse) {
+            this.isAuthenticated = false;
+            this.$store.commit('setError', errorResponse);
+          } else {
+            this.isAuthenticated = await this.auth0Client.isAuthenticated();
+          }
+        }
         this.loading = false;
-        // Dispatch action to set user in state and remove loading overlay
-        if (this.user) await this.$store.dispatch('users/getUser', this.user)
         this.$store.commit('setOverlay', false);
       }
     }

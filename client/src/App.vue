@@ -52,6 +52,7 @@
         <v-overlay :value="overlay">
           <v-progress-circular indeterminate size="64"> </v-progress-circular>
         </v-overlay>
+        <ErrorMsg v-if="$store.state.error" />
       </v-container>
     </v-main>
   </v-app>
@@ -60,11 +61,13 @@
 <script>
 import { mapState } from 'vuex';
 import { mdiWhiteBalanceSunny, mdiWeatherNight } from '@mdi/js';
+import ErrorMsg from './components/ErrorMsg.vue';
 import NavDrawer from './components/NavDrawer.vue';
 
 export default {
   name: 'App',
   components: {
+    ErrorMsg,
     NavDrawer,
   },
   data() {
@@ -72,38 +75,39 @@ export default {
       search: '',
       disabled: false,
       debounce: null,
-    };
+    }
   },
   updated() {
     if (!this.$auth.isAuthenticated) {
-      this.$store.dispatch('users/clearUserData');
+      this.$store.dispatch('users/clearUserData')
+      this.$store.commit('setError', null)
     }
   },
   computed: {
     ...mapState(['overlay']),
     disabledSearch() {
       if (this.$route.params.action === 'add' || this.$route.params.action === 'edit' || this.$route.fullPath === '/') {
-        return true;
+        return true
       }
-      return false;
+      return false
     },
     themeIcon() {
-      if (this.$vuetify.theme.dark) return mdiWeatherNight;
-      return mdiWhiteBalanceSunny;
+      if (this.$vuetify.theme.dark) return mdiWeatherNight
+      return mdiWhiteBalanceSunny
     }
   },
   methods: {
     navToSearch() {
-      if (this.$route.fullPath !== '/search') this.$router.push({ name: 'Search' });
+      if (this.$route.fullPath !== '/search') this.$router.push({ name: 'Search' })
     },
     searchBookmarks() {
       // Ignores updating search term if the previous input is the same as the new input
       // or if the input is a link that matches the regex pattern
       if (this.search !== this.$store.state.searchKeywords && !this.search.match(/^(https?|www)/)) {
-        clearTimeout(this.debounce);
+        clearTimeout(this.debounce)
         this.debounce = setTimeout(() => {
-          this.$store.commit('setSearchKeywords', this.search);
-          this.$store.dispatch('bookmarks/searchBookmarks', this.search);
+          this.$store.commit('setSearchKeywords', this.search)
+          this.$store.dispatch('bookmarks/searchBookmarks', this.search)
         }, 500);
       }
     },
@@ -111,24 +115,25 @@ export default {
       const link = event.clipboardData.getData('text/plain');
       // Some logic to prevent pushing to /add or folder/vue/add/add paths
       if (!this.$store.state.folders.selectedFolder.name) {
-        console.log('Please select a folder first before adding a new bookmark');
+        console.log('Please select a folder first before adding a new bookmark')
         return;
       }
       if (link.match(/^(https?|www)/)) {
-        this.$store.commit('setOverlay', true);
+        this.$store.commit('setOverlay', true)
         this.$store.dispatch('scrapeUrl', { link }).then(() => {
-          const toThisFolder = this.$store.state.folders.selectedFolder.name.toLowerCase().replace(/\s/g, '-');
-          this.$router.push({ name: 'AddBookmark', params: { name: toThisFolder, action: 'add' } });
-          this.$store.commit('setOverlay', false);
-          this.search = '';
+          const toThisFolder = this.$store.state.folders.selectedFolder.name.toLowerCase().replace(/\s/g, '-')
+          this.$router.push({ name: 'AddBookmark', params: { name: toThisFolder, action: 'add' } })
+          this.$store.commit('setOverlay', false)
+          this.search = ''
         });
       }
     },
     login() {
       this.$auth.loginWithRedirect();
     },
-    logout() {
-      this.$auth.logout({ returnTo: window.location.origin });
+    async logout() {
+      await this.$store.dispatch('users/deleteUserSession')
+      this.$auth.logout({ returnTo: window.location.origin })
     },
   },
 };

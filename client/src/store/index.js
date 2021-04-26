@@ -14,6 +14,7 @@ export default new Vuex.Store({
   state: {
     overlay: false,
     searchKeywords: '',
+    error: null
   },
   modules: {
     bookmarks: bookmarksModule,
@@ -24,15 +25,21 @@ export default new Vuex.Store({
   mutations: {
     // Sets loading overlay when long async actions are dispatched (app loading)
     setOverlay(state, payload) { state.overlay = payload },
+
     // Sets the search keywords for searching bookmarks
     setSearchKeywords(state, payload) { state.searchKeywords = payload },
+
+    // Updates the global error
+    setError(state, payload) {
+      state.error = payload
+      // console.log(payload)
+    }
   },
   actions: {
     // Scrapes URL and commits results to bookmarkToAdd in
     // bookmarks module when link is pasted into search field
     async scrapeUrl({ commit }, link) {
       try {
-        // console.log(link)
         const res = await axios.post('/api/scrape', link)
         // const res = await axios.post('/api/scrape', JSON.stringify(link), {
         //   headers: {
