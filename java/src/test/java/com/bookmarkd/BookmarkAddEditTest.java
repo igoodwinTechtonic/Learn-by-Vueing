@@ -7,6 +7,7 @@ import com.bookmarkd.api.models.Bookmark;
 import com.bookmarkd.api.models.Folder;
 import com.mongodb.client.MongoClient;
 import org.bson.BsonObjectId;
+import org.bson.conversions.Bson;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,8 +29,8 @@ public class BookmarkAddEditTest {
   private FolderDao folderDao;
   private Bookmark testBookmark;
   private Folder testFolder;
+  private BsonObjectId testFolderId;
   private final String userId = "604109a74c3b1cc5f71e9f00"; // ian.goodwin@techtonic.com
-  private final String folderId = "6074c99a32929100155d33d3";
   private final List<String> tags = new ArrayList<>();
 
   @Autowired
@@ -43,14 +44,17 @@ public class BookmarkAddEditTest {
     this.bookmarkDao = new BookmarkDao(mongoClient, databaseName);
     this.folderDao = new FolderDao(mongoClient, databaseName);
 
-    this.testFolder = this.folderDao.getFolders(this.userId).get(0);
+    this.testFolderId = this.folderDao.addFolder(
+            new Folder(userId, "Test Folder", "", false)
+    );
+    this.testFolder = this.folderDao.getFolder(this.testFolderId);
     Assertions.assertNotNull(this.testFolder);
 
     this.tags.add("MongoDB");
     this.tags.add("Databases");
     this.testBookmark = new Bookmark(
             this.userId,
-            this.folderId,
+            this.testFolderId.toString(),
             "Databases and Collections",
             "MongoDB stores documents in collections; the collections in databases.",
             "https://mongodb.github.io/mongo-java-driver/4.2/driver/tutorials/databases-collections/",
@@ -66,7 +70,29 @@ public class BookmarkAddEditTest {
 
   @AfterAll
   public void teardown() {
+    // data doesn't bleed to other tests, clean slate between each test suite
+  }
 
+  @Test
+  public void GetBookmarksByUserId() {
+    List<Bookmark> bookmarks = bookmarkDao.getBookmarksByUserId(userId);
+    Assertions.assertEquals(bookmarks.size(), 8);
+    // assert greater than 0 ??
+  }
+
+  @Test
+  public void GetBookmarksByFolderId() {
+    List<Bookmark> bookmarks = bookmarkDao.getBookmarksByFolderId(testFolderId.getValue().toString());
+    Assertions.assertEquals(bookmarks.size(), 7);
+  }
+
+  @Test
+  public void GetBookmarksBySearchKeywords() {
+    List<Bookmark> search1 = bookmarkDao.getBookmarksBySearchKeywords(userId, "vue");
+    Assertions.assertEquals(search1.size(), 7);
+
+    List<Bookmark> search2 = bookmarkDao.getBookmarksBySearchKeywords(userId, "ApI");
+    Assertions.assertEquals(search2.size(), 5);
   }
 
   @Test
@@ -106,6 +132,16 @@ public class BookmarkAddEditTest {
 
   @Test
   public void DeleteBookmark() {
-    Bookmark deletedBookmark = bookmarkDao.deleteBookmark("");
+    // Create
+    BsonObjectId idToDelete = bookmarkDao.addBookmark(testBookmark);
+    Assertions.assertNotNull(idToDelete);
+
+    // Delete
+    Bookmark deletedBookmark = bookmarkDao.deleteBookmark(idToDelete.getValue().toString());
+    Assertions.assertNotNull(deletedBookmark);
+
+    // Make sure it is deleted!
+    Bookmark didIDeleteThis = bookmarkDao.getBookmark(idToDelete);
+    Assertions.assertNull(didIDeleteThis);
   }
 }

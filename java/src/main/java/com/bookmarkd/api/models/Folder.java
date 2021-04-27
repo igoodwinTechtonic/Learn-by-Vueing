@@ -25,6 +25,14 @@ public class Folder {
 
   public Folder() { super(); }
 
+  public Folder(String userId, String name, String icon, boolean shareable) {
+    super();
+    this.userId = userId;
+    this.name = name;
+    this.icon = icon;
+    this.shareable = shareable;
+  }
+
   public ObjectId getOid() {
     return oid;
   }
