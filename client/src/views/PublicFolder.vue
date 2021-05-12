@@ -74,10 +74,10 @@
 <script>
 // PublicFolder.vue view displays all bookmarks in a selected folder in v-main
 // Router path: /public/:name/:id
-import * as mdijs from '@mdi/js';
-import { mapState } from 'vuex';
+import * as mdijs from '@mdi/js'
+import { mapState } from 'vuex'
 
-import Bookmark from '../components/Bookmark';
+import Bookmark from '../components/Bookmark'
 
 export default {
   name: 'PublicFolder',
@@ -104,7 +104,7 @@ export default {
       await this.$store.dispatch('bookmarks/getBookmarksFromPublicFolder', this.$route.params.id)
       if (this.$store.state.bookmarks.list.length === 0 ||
           Object.keys(this.$store.state.folders.selectedFolder).length === 0) {
-        this.errorView = true;
+        this.errorView = true
       }
     }
   },
@@ -137,21 +137,21 @@ export default {
   },
   methods: {
     sortBookmarksByTitle(bookmarks) {
-      if (bookmarks.length === 0) return [];
-      else if (bookmarks.length === 1) return bookmarks;
+      if (bookmarks.length === 0) return []
+      else if (bookmarks.length === 1) return bookmarks
       else {
         // Prevents infinite loop because of changing tags by reference
-        const sortedBookmarks = [...bookmarks];
+        const sortedBookmarks = [...bookmarks]
         sortedBookmarks.sort((a, b) => {
-          let tagA = a.title.toUpperCase();
-          let tagB = b.title.toUpperCase();
-          return tagA < tagB ? -1 : tagA > tagB ? 1 : 0;
-        });
-        return sortedBookmarks;
+          let tagA = a.title.toUpperCase()
+          let tagB = b.title.toUpperCase()
+          return tagA < tagB ? -1 : tagA > tagB ? 1 : 0
+        })
+        return sortedBookmarks
       }
     }
   }
-};
+}
 </script>
 
 <style lang="scss">

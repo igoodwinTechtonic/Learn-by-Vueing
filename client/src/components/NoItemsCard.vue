@@ -16,10 +16,10 @@ export default {
   name: 'NoItemsCard',
   computed: {
     selectedFolder() {
-      return this.$store.state.folders.selectedFolder;
+      return this.$store.state.folders.selectedFolder
     },
   },
-};
+}
 </script>
 
 <style lang="scss">

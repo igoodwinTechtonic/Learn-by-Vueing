@@ -64,7 +64,7 @@
 
 <script>
 // Bookmark.vue displays one bookmark, includes logic for editing, deleting, and click a bookmark
-import { mdiContentCopy, mdiSquareEditOutline, mdiTrashCan } from '@mdi/js';
+import { mdiContentCopy, mdiSquareEditOutline, mdiTrashCan } from '@mdi/js'
 
 export default {
   name: 'Bookmark',

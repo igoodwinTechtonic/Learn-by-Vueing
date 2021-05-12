@@ -54,12 +54,12 @@
 <script>
 // Folder.vue view displays all bookmarks in a selected folder in v-main
 // Router path: /folder/:name/:id
-import * as mdijs from '@mdi/js';
-import { mapState } from 'vuex';
+import * as mdijs from '@mdi/js'
+import { mapState } from 'vuex'
 
-import Bookmarks from './Bookmarks.vue';
-import DeleteFolderDialog from '../components/DeleteFolderDialog.vue';
-import NoItemsCard from '../components/NoItemsCard.vue';
+import Bookmarks from './Bookmarks.vue'
+import DeleteFolderDialog from '../components/DeleteFolderDialog.vue'
+import NoItemsCard from '../components/NoItemsCard.vue'
 
 export default {
   name: 'Folder',
@@ -83,7 +83,7 @@ export default {
     bookmarks() {
       return this.$store.state.bookmarks.list.filter(
         (bookmark) => bookmark.folder_id === this.$store.state.folders.selectedFolder._id
-      );
+      )
     },
   },
   methods: {
@@ -93,13 +93,13 @@ export default {
     },
     // Displays the trash icon in the delete folder button
     displayIcon(item) {
-      return mdijs[item];
+      return mdijs[item]
     },
     // Updates the folder name
     updateFolderName(newFolderName) {
       if (newFolderName.length > 0) {
-        const updatedFolder = { ...this.$store.state.folders.selectedFolder, name: newFolderName };
-        this.$store.dispatch('folders/updateFolderName', updatedFolder);
+        const updatedFolder = { ...this.$store.state.folders.selectedFolder, name: newFolderName }
+        this.$store.dispatch('folders/updateFolderName', updatedFolder)
       }
     },
   },

@@ -58,9 +58,9 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import { mdiWhiteBalanceSunny, mdiWeatherNight } from '@mdi/js';
-import NavDrawer from './components/NavDrawer.vue';
+import { mapState } from 'vuex'
+import { mdiWhiteBalanceSunny, mdiWeatherNight } from '@mdi/js'
+import NavDrawer from './components/NavDrawer.vue'
 
 export default {
   name: 'App',
@@ -72,66 +72,66 @@ export default {
       search: '',
       disabled: false,
       debounce: null,
-    };
+    }
   },
   updated() {
     if (!this.$auth.isAuthenticated) {
-      this.$store.dispatch('users/clearUserData');
+      this.$store.dispatch('users/clearUserData')
     }
   },
   computed: {
     ...mapState(['overlay']),
     disabledSearch() {
       if (this.$route.params.action === 'add' || this.$route.params.action === 'edit' || this.$route.fullPath === '/') {
-        return true;
+        return true
       }
-      return false;
+      return false
     },
     themeIcon() {
-      if (this.$vuetify.theme.dark) return mdiWeatherNight;
-      return mdiWhiteBalanceSunny;
+      if (this.$vuetify.theme.dark) return mdiWeatherNight
+      return mdiWhiteBalanceSunny
     }
   },
   methods: {
     navToSearch() {
-      if (this.$route.fullPath !== '/search') this.$router.push({ name: 'Search' });
+      if (this.$route.fullPath !== '/search') this.$router.push({ name: 'Search' })
     },
     searchBookmarks() {
       // Ignores updating search term if the previous input is the same as the new input
       // or if the input is a link that matches the regex pattern
       if (this.search !== this.$store.state.searchKeywords && !this.search.match(/^(https?|www)/)) {
-        clearTimeout(this.debounce);
+        clearTimeout(this.debounce)
         this.debounce = setTimeout(() => {
-          this.$store.commit('setSearchKeywords', this.search);
-          this.$store.dispatch('bookmarks/searchBookmarks', this.search);
-        }, 500);
+          this.$store.commit('setSearchKeywords', this.search)
+          this.$store.dispatch('bookmarks/searchBookmarks', this.search)
+        }, 500)
       }
     },
     onPaste(event) {
-      const link = event.clipboardData.getData('text/plain');
+      const link = event.clipboardData.getData('text/plain')
       // Some logic to prevent pushing to /add or folder/vue/add/add paths
       if (!this.$store.state.folders.selectedFolder.name) {
-        console.log('Please select a folder first before adding a new bookmark');
+        console.log('Please select a folder first before adding a new bookmark')
         return;
       }
       if (link.match(/^(https?|www)/)) {
-        this.$store.commit('setOverlay', true);
+        this.$store.commit('setOverlay', true)
         this.$store.dispatch('scrapeUrl', { link }).then(() => {
-          const toThisFolder = this.$store.state.folders.selectedFolder.name.toLowerCase().replace(/\s/g, '-');
-          this.$router.push({ name: 'AddBookmark', params: { name: toThisFolder, action: 'add' } });
-          this.$store.commit('setOverlay', false);
-          this.search = '';
+          const toThisFolder = this.$store.state.folders.selectedFolder.name.toLowerCase().replace(/\s/g, '-')
+          this.$router.push({ name: 'AddBookmark', params: { name: toThisFolder, action: 'add' } })
+          this.$store.commit('setOverlay', false)
+          this.search = ''
         });
       }
     },
     login() {
-      this.$auth.loginWithRedirect();
+      this.$auth.loginWithRedirect()
     },
     logout() {
-      this.$auth.logout({ returnTo: window.location.origin });
+      this.$auth.logout({ returnTo: window.location.origin })
     },
   },
-};
+}
 </script>
 
 <style>

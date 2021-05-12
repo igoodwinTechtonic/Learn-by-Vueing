@@ -50,8 +50,8 @@
 // NavDrawerFolders.vue displays a nav drawer that contains a list of folder links.
 // When a folder link is clicked, the folders's bookmarks are displayed in the main
 // router-view in the Bookmarks.vue view
-import * as mdijs from '@mdi/js';
-import { mapActions } from 'vuex';
+import * as mdijs from '@mdi/js'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'NavDrawerFolders',
@@ -106,5 +106,3 @@ export default {
   },
 }
 </script>
-
-<style></style>

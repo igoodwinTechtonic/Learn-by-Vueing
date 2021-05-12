@@ -18,10 +18,10 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="red" text @click="dialog = false" id="delete-folder-cancel-btn">
+        <v-btn color="primary" text @click="dialog = false" id="delete-folder-cancel-btn">
           Cancel
         </v-btn>
-        <v-btn color="primary" text @click="deleteFolder()" id="delete-folder-submit-btn">
+        <v-btn color="red" text @click="deleteFolder()" id="delete-folder-submit-btn">
           Delete
         </v-btn>
       </v-card-actions>
@@ -35,7 +35,7 @@
 
 <script>
 // DeleteFolderDialog.vue displays a dialog when the trash can icon in the Folder.vue view is clicked
-import { mdiTrashCanOutline } from '@mdi/js';
+import { mdiTrashCanOutline } from '@mdi/js'
 
 export default {
   name: 'DeleteFolderDialog',
@@ -44,22 +44,22 @@ export default {
       dialog: false,
       overlay: false,
       trashcanIcon: mdiTrashCanOutline,
-    };
+    }
   },
   computed: {
     name() {
-      return this.$store.state.folders.selectedFolder.name;
+      return this.$store.state.folders.selectedFolder.name
     },
   },
   methods: {
     deleteFolder() {
-      const id = this.$store.state.folders.selectedFolder._id;
-      this.overlay = true;
+      const id = this.$store.state.folders.selectedFolder._id
+      this.overlay = true
       this.$store.dispatch('folders/deleteFolder', id).then(() => {
-        this.overlay = false;
-        this.dialog = false;
-        this.$router.push('/');
-      });
+        this.overlay = false
+        this.dialog = false
+        this.$router.push('/')
+      })
     },
   },
 };

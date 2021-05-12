@@ -19,9 +19,9 @@ Vue.use(Auth0Plugin, {
       appState && appState.targetUrl
         ? appState.targetUrl
         : window.location.pathname
-    );
+    )
   }
-});
+})
 
 new Vue({
   router,
