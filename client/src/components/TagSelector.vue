@@ -34,22 +34,20 @@ export default {
   },
   computed: {
     items() {
-      return this.$store.state.tags.list;
+      return this.$store.state.tags.list
     },
   },
   methods: {
     // Removes a chip from the list when the x is clicked
     remove(item) {
-      this.chips.splice(this.chips.indexOf(item), 1);
-      this.chips = [...this.chips];
-      this.setTags();
+      this.chips.splice(this.chips.indexOf(item), 1)
+      this.chips = [...this.chips]
+      this.setTags()
     },
     // Set tag list in state, tags are posted to db in parent component, AddBookmark, when bookmark is submitted
     setTags() {
-      this.$store.commit('tags/setCurrentBookmarkTags', this.chips);
+      this.$store.commit('tags/setCurrentBookmarkTags', this.chips)
     },
   },
-};
+}
 </script>
-
-<style></style>

@@ -69,10 +69,8 @@ export default {
   },
   methods: {
     setSelectedTag(tag) {
-      this.$store.commit('tags/setSelectedTag', tag);
+      this.$store.commit('tags/setSelectedTag', tag)
     },
   },
-};
+}
 </script>
-
-<style></style>

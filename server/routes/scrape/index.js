@@ -1,6 +1,6 @@
-const router = require('express').Router();
+const router = require('express').Router()
 
-const { getLinkPreview } = require('link-preview-js');
+const { getLinkPreview } = require('link-preview-js')
 
 router.post('/', async (req, res) => {
   const data = await getLinkPreview(req.body.link, {
@@ -19,4 +19,4 @@ router.post('/', async (req, res) => {
   res.send(data)
 })
 
-module.exports = router;
+module.exports = router

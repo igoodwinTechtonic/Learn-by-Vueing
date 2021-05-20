@@ -14,7 +14,7 @@
 	<name>lbv</name>
 	<description>Spring Boot backend for LBV</description>
 	<properties>
-		<java.version>15.0.1</java.version>
+		<java.version>15.0.2</java.version>
 	</properties>
 	<dependencies>
 		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-mongodb-reactive -->

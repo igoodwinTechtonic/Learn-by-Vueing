@@ -84,7 +84,7 @@
 <script>
 // Home.vue view displays app landing page and details once logged in
 // Router path: /
-import * as mdijs from '@mdi/js';
+import * as mdijs from '@mdi/js'
 
 export default {
   name: 'Home',
@@ -103,18 +103,18 @@ export default {
   computed: {
     randomIcon() {
       // The mdi/js paackage has 5955 icons as of version 5.9.55
-      return mdijs[this.icons[this.idx]];
+      return mdijs[this.icons[this.idx]]
     }
   },
   methods: {
     randomIndex() {
-      this.idx = Math.floor(Math.random() * 5955);
+      this.idx = Math.floor(Math.random() * 5955)
     },
     login() {
-      this.$auth.loginWithRedirect();
+      this.$auth.loginWithRedirect()
     }
   }
-};
+}
 </script>
 
 <style lang="scss">

@@ -80,7 +80,7 @@
         <v-btn color="red" @click="dialog = false" id="new-folder-cancel-btn" text>
           Cancel
         </v-btn>
-        <v-btn color="primary" @click="submit()" id="new-folder-submit-btn" text>
+        <v-btn color="primary" @click="submit()" id="new-folder-submit-btn" text :disabled="name === '' ? true : false">
           Submit
         </v-btn>
       </v-card-actions>
@@ -91,8 +91,8 @@
 <script>
 // AddFolder.vue displays a dialog the add folder button in the main nav is clicked.
 // Includes logic to search for a folder icon using the whole mdijs icon library. It's cool!
-import * as mdijs from '@mdi/js';
-import { mapState } from 'vuex';
+import * as mdijs from '@mdi/js'
+import { mapState } from 'vuex'
 
 export default {
   name: 'AddFolderDialog',
@@ -106,12 +106,12 @@ export default {
       icons: Object.keys(mdijs),
       filteredIcons: Object.keys(mdijs),
       validateName: [(name) => (name && name.length > 0) || 'Required.'],
-    };
+    }
   },
   computed: {
     ...mapState(['overlay']),
     iconList() {
-      return Object.keys(mdijs);
+      return Object.keys(mdijs)
     },
   },
   methods: {
@@ -123,34 +123,32 @@ export default {
           name: this.name,
           icon: this.icon,
           shareable: this.shareable
-        };
-        this.$store.commit('setOverlay', true);
+        }
+        this.$store.commit('setOverlay', true)
         this.$store.dispatch('folders/addFolder', newFolder).then(() => {
-          this.dialog = false;
-          this.$store.commit('setOverlay', false);
-          this.$router.push({ name: 'Folder', params: { name: this.name.toLowerCase().replace(/\s/g, '-') } });
+          this.dialog = false
+          this.$store.commit('setOverlay', false)
+          this.$router.push({ name: 'Folder', params: { name: this.name.toLowerCase().replace(/\s/g, '-') } })
           // Resets name and icon after a short delay
           setTimeout(() => {
-            this.name = '';
-            this.icon = 'mdiFolder';
-          }, 200);
-        });
+            this.name = ''
+            this.icon = 'mdiFolder'
+          }, 200)
+        })
       }
     },
     displayIcon(item) {
-      return mdijs[item];
+      return mdijs[item]
     },
     searchIcons(input) {
-      this.filteredIcons = this.icons.filter((icon) =>
-        icon.includes('mdi' + input.charAt(0).toUpperCase() + input.slice(1))
-      );
+      this.filteredIcons = this.icons.filter((icon) => {
+        let res = icon.match(new RegExp(input, 'gi'))
+        if (res) return res[0]
+      })
     },
     setIcon(selectedIcon) {
-      this.icon = selectedIcon;
+      this.icon = selectedIcon
     },
   },
-};
+}
 </script>
-
-<style>
-</style>
