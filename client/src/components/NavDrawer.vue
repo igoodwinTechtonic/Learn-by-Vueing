@@ -83,3 +83,10 @@ export default {
   },
 }
 </script>
+
+<style>
+.nav-title {
+  font-size: 1.25rem !important;
+  padding-bottom: 0.4rem;
+}
+</style>

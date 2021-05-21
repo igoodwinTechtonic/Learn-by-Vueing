@@ -9,8 +9,8 @@
       <v-card-title>Add a new folder</v-card-title>
 
       <form autocomplete="off">
-        <v-row cols=12>
-          <v-col sm="9">
+        <v-row cols="12" style="margin: 0;">
+          <v-col sm="9" style="padding: 0;">
             <v-text-field
               clearable
               hint="A container for your bookmarks."
@@ -23,7 +23,7 @@
               v-model="name"
             ></v-text-field>
           </v-col>
-          <v-col sm="3">
+          <v-col sm="3" style="padding: 0;">
             <v-checkbox
               hide-details="auto"
               id="new-folder-public-chbx"

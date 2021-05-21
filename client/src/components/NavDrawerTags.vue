@@ -2,7 +2,7 @@
   <v-list width="230" nav dense>
     <v-list-item>
       <v-list-item-content>
-        <v-list-item-title class="title">
+        <v-list-item-title class="nav-title">
           Tags
         </v-list-item-title>
         <v-text-field

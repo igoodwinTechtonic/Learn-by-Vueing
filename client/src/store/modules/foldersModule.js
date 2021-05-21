@@ -30,11 +30,12 @@ export default {
      * @param {string} user_id - The user id.
      * @returns {Promise} A promise after the folders state is set.
      */
-    async getFolders({ commit }, user_id) {
+    async getFolders({ commit, rootState }, user_id) {
       try {
         const res = await axios.get('/api/folders?userid=' + user_id)
         commit('setFolders', res.data)
-        if (res.data.length !== 0) commit('setSelectedFolder', res.data[0])
+        // console.log(rootState.folders.selectedFolder)
+        if (res.data.length !== 0) commit('setSelectedFolder', rootState.folders.selectedFolder)
       } catch (e) {
         return console.error(e)
       }
