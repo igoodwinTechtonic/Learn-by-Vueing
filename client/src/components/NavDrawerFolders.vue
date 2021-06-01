@@ -2,7 +2,7 @@
   <v-list width="230" nav dense>
     <v-list-item>
       <v-list-item-content>
-        <v-list-item-title class="nav-title">
+        <v-list-item-title class="nav-title" data-test="nav-view-folders-title">
           {{ shareable ? 'Public Folders' : 'Folders' }}
         </v-list-item-title>
         <v-text-field
@@ -15,7 +15,7 @@
       </v-list-item-content>
     </v-list-item>
 
-    <v-list id="nav-drawer-folders-list">
+    <v-list data-test="nav-view-folders-list">
       <v-list-item v-if="folders.length === 0">
         <v-list-item-content v-if="filter === ''">
           <v-list-item-title>You don't have any folders yet.</v-list-item-title>

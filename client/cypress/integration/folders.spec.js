@@ -1,3 +1,4 @@
+import HomePage from './page-objects/HomePage.js'
 // Page-object models do NOT use any cy.get
 // Instead put the HTML elements in a class in a separate file!
 
@@ -9,12 +10,16 @@
 describe('Folder actions', () => {
 
   // You will have to log in your Google account before the first time running the test
-  it('Should nav to home page and log in', () => {
-    cy.visit('http://localhost:3000')
-    cy.get('#login-btn').should('exist', true).click()
-    cy.contains('Continue with Google').click()
+  const login = new HomePage()
+  it('Should nav to home page', () => {
+    login.visit()
   })
-
+  it('Click the log in button', () => {
+    login.login()
+  })
+  it('Click the log in with google button', () => {
+    login.loginWithGoogle()
+  })
   it('Should delete the Cypress Testing folder', () => {
     cy.get('a[href^="/folder/cypress-testing"]').click()
     cy.get('.delete-button').click()

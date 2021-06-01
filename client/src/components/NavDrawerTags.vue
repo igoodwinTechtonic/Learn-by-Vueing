@@ -2,7 +2,7 @@
   <v-list width="230" nav dense>
     <v-list-item>
       <v-list-item-content>
-        <v-list-item-title class="nav-title">
+        <v-list-item-title class="nav-title" data-test="nav-view-tags-title">
           Tags
         </v-list-item-title>
         <v-text-field
@@ -15,7 +15,7 @@
       </v-list-item-content>
     </v-list-item>
 
-    <v-list>
+    <v-list data-test="nav-view-tags-list">
       <v-list-item v-if="tags.length === 0">
         <v-list-item-content>
           <v-list-item-title v-if="filter === ''">
@@ -61,7 +61,7 @@ export default {
     tags() {
       let tags = this.$store.state.tags.list
       if (this.filter) {
-        const filteredTags = tags.filter(tag => tag.toLowerCase().includes(this.filter.toLowerCase()))
+        const filteredTags = tags.filter((tag) => tag.toLowerCase().includes(this.filter.toLowerCase()))
         tags = filteredTags
       }
       return tags;

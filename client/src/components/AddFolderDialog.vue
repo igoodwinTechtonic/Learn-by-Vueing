@@ -1,11 +1,11 @@
 <template>
   <v-dialog v-model="dialog" width="500">
     <template v-slot:activator="{ on, attrs }">
-      <v-btn id="new-folder-btn" v-bind="attrs" v-on="on">
+      <v-btn data-test="nav-add-folder-btn" v-bind="attrs" v-on="on">
         <v-icon>{{ displayIcon('mdiFolderPlus') }}</v-icon>
       </v-btn>
     </template>
-    <v-card>
+    <v-card data-test="nav-add-folder-dialog">
       <v-card-title>Add a new folder</v-card-title>
 
       <form autocomplete="off">
@@ -13,8 +13,8 @@
           <v-col sm="9" style="padding: 0;">
             <v-text-field
               clearable
+              data-test="new-folder-input"
               hint="A container for your bookmarks."
-              id="new-folder-input"
               label="Name"
               persistent-hint
               :prepend-inner-icon="displayIcon(icon)"
@@ -25,8 +25,8 @@
           </v-col>
           <v-col sm="3" style="padding: 0;">
             <v-checkbox
+              data-test="new-folder-public-chbx"
               hide-details="auto"
-              id="new-folder-public-chbx"
               label="Public"
               v-model="shareable"
             >
@@ -51,8 +51,8 @@
             <v-text-field
               @keyup="searchIcons(input)"
               clearable
+              data-test="new-folder-icon"
               hint="The icon cannot be changed once the folder has been added."
-              id="new-folder-icon"
               label="Search for an icon"
               persistent-hint
               style="margin: 1rem;"
@@ -61,7 +61,7 @@
               v-on="on"
             ></v-text-field>
           </template>
-          <v-list id="new-folder-icon-list">
+          <v-list data-test="new-folder-icon-list">
             <v-virtual-scroll height="224" item-height="56" :bench="4" :items="filteredIcons">
               <template v-slot:default="{ item }">
                 <v-list-item :key="item" @click="setIcon(item)">
@@ -77,10 +77,10 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="red" @click="dialog = false" id="new-folder-cancel-btn" text>
+        <v-btn color="red" @click="dialog = false" data-test="new-folder-cancel-btn" text>
           Cancel
         </v-btn>
-        <v-btn color="primary" @click="submit()" id="new-folder-submit-btn" text :disabled="name === '' ? true : false">
+        <v-btn color="primary" @click="submit()" data-test="new-folder-submit-btn" text :disabled="name === '' ? true : false">
           Submit
         </v-btn>
       </v-card-actions>
