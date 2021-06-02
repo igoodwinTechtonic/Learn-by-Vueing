@@ -1,8 +1,8 @@
-require('dotenv').config()
+// require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
-const path = require("path")
-const logger = require('morgan')
+const path = require('path')
+// const logger = require('morgan')
 
 const routes = require('./routes')
 
@@ -13,7 +13,7 @@ if (process.env.NODE_ENV === 'production') origin = 'https://learn-by-vueing.her
 const corsOptions = { origin }
 const PORT = process.env.PORT || 3001
 
-app.use(logger('dev'))
+// app.use(logger('dev'))
 app.use(cors(corsOptions))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
