@@ -23,9 +23,9 @@
 
 <script>
 // Search.vue displays search results when a user searches for bookmarks
-import * as mdijs from '@mdi/js';
+import * as mdijs from '@mdi/js'
 
-import Bookmark from '../components/Bookmark';
+import Bookmark from '../components/Bookmark'
 
 export default {
   name: 'Search',
@@ -34,19 +34,17 @@ export default {
   },
   computed: {
     searchKeywords() {
-      return this.$store.state.searchKeywords;
+      return this.$store.state.searchKeywords
     },
     bookmarks() {
-      return this.$store.state.bookmarks.searchResults;
+      return this.$store.state.bookmarks.searchResults
     },
     selectedFolderName() {
-      return this.$store.state.folders.selectedFolder.name;
+      return this.$store.state.folders.selectedFolder.name
     },
     selectedFolderIcon() {
-      return mdijs[this.$store.state.folders.selectedFolder.icon];
+      return mdijs[this.$store.state.folders.selectedFolder.icon]
     },
   },
-};
+}
 </script>
-
-<style></style>

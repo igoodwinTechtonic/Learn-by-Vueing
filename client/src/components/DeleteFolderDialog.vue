@@ -9,18 +9,19 @@
     <!-- <span>Delete Folder</span>
     </v-tooltip> -->
     <v-card>
-      <v-card-title class="dialog__title">Are you sure you want to delete {{ name }}?</v-card-title>
-      <v-card-subtitle class="dialog__title">This will delete ALL bookmarks in this folder.</v-card-subtitle>
-      <v-card-subtitle class="dialog__title">You cannot undo this action.</v-card-subtitle>
+      <v-card-title style="padding-bottom: 0;">Are you sure you want to delete:</v-card-title>
+      <v-card-title style="padding: 0 1.5rem 1rem 1.5rem;">{{ name }}?</v-card-title>
+      <v-card-subtitle>This will delete ALL bookmarks in this folder.</v-card-subtitle>
+      <v-card-subtitle>You cannot undo this action.</v-card-subtitle>
 
       <v-divider></v-divider>
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="red" text @click="dialog = false">
+        <v-btn color="primary" text @click="dialog = false" id="delete-folder-cancel-btn">
           Cancel
         </v-btn>
-        <v-btn color="primary" text @click="deleteFolder()">
+        <v-btn color="red" text @click="deleteFolder()" id="delete-folder-submit-btn">
           Delete
         </v-btn>
       </v-card-actions>
@@ -34,7 +35,7 @@
 
 <script>
 // DeleteFolderDialog.vue displays a dialog when the trash can icon in the Folder.vue view is clicked
-import { mdiTrashCanOutline } from '@mdi/js';
+import { mdiTrashCanOutline } from '@mdi/js'
 
 export default {
   name: 'DeleteFolderDialog',
@@ -43,22 +44,22 @@ export default {
       dialog: false,
       overlay: false,
       trashcanIcon: mdiTrashCanOutline,
-    };
+    }
   },
   computed: {
     name() {
-      return this.$store.state.folders.selectedFolder.name;
+      return this.$store.state.folders.selectedFolder.name
     },
   },
   methods: {
     deleteFolder() {
-      const id = this.$store.state.folders.selectedFolder._id;
-      this.overlay = true;
+      const id = this.$store.state.folders.selectedFolder._id
+      this.overlay = true
       this.$store.dispatch('folders/deleteFolder', id).then(() => {
-        this.overlay = false;
-        this.dialog = false;
-        this.$router.push('/');
-      });
+        this.overlay = false
+        this.dialog = false
+        this.$router.push('/')
+      })
     },
   },
 };

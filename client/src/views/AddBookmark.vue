@@ -3,28 +3,41 @@
     <v-card class="insert-bookmark-card">
       <v-row>
         <v-col class="inner-grid">
-          <v-card-title
-            ><v-text-field :placeholder="title" :rules="validateField" v-model="customTitle"></v-text-field
-          ></v-card-title>
+          <v-card-title>
+            <v-text-field
+              id="add-bookmark-title"
+              :placeholder="bookmarkToAdd.title"
+              :rules="validateField"
+              v-model="customTitle"
+            >
+            </v-text-field>
+          </v-card-title>
           <div class="img-link-grid">
-            <v-img v-if="favicon" :src="favicon" max-height="40" max-width="40" style="align-self: center;"></v-img>
-            <v-card-subtitle>{{ url }}</v-card-subtitle>
+            <v-img
+              v-if="bookmarkToAdd.favicon"
+              :src="bookmarkToAdd.favicon"
+              max-height="40" max-width="40"
+              style="align-self: center;">
+            </v-img>
+            <v-card-subtitle>{{ bookmarkToAdd.url }}</v-card-subtitle>
           </div>
-          <v-card-text><v-textarea :placeholder="description" v-model="customDesc"></v-textarea></v-card-text>
+          <v-card-text>
+            <v-textarea
+              id="add-bookmark-description"
+              :placeholder="bookmarkToAdd.description"
+              v-model="customDesc"
+            >
+            </v-textarea>
+          </v-card-text>
           <TagSelector />
         </v-col>
       </v-row>
       <v-card-actions style="justify-content: center; padding-bottom: 2rem;">
-        <v-btn ref="btn" @click="submit()"
-          ><v-icon style="padding-right: 1rem;">mdi-bookmark</v-icon>{{ action }} Bookmark</v-btn
-        >
+        <v-btn id="add-bookmark-btn" ref="btn" @click="submit()" :disabled="customTitle === '' ? true : false">
+          <v-icon style="padding-right: 1rem;">mdi-bookmark</v-icon>
+          {{ action }} Bookmark
+        </v-btn>
       </v-card-actions>
-      <!-- <v-card-actions style="justify-content: center; padding-bottom: 2rem;">
-        <v-card-title
-          >{{ action2 }} <v-icon style="padding: 0 4px;">{{ selectedFolderIcon }}</v-icon>
-          {{ selectedFolder.name }} folder
-        </v-card-title>
-      </v-card-actions> -->
     </v-card>
   </v-container>
 </template>
@@ -33,9 +46,10 @@
 // AddBookmark.vue displays a bookmark to add after a link has been pasted into the search field
 // or displays a bookmark to edit. Router :action parameter is 'add' or 'edit'.
 // Router path: /bookmarks/:name/:action
-import * as mdijs from '@mdi/js';
+import * as mdijs from '@mdi/js'
+import { mapState } from 'vuex'
 
-import TagSelector from '../components/TagSelector.vue';
+import TagSelector from '../components/TagSelector.vue'
 
 export default {
   name: 'AddBookmark',
@@ -51,81 +65,62 @@ export default {
   },
   created() {
     if (this.$route.params.action === 'edit') {
-      this.$store.commit('tags/setCurrentBookmarkTags', this.$store.state.bookmarks.bookmarkToAdd.tags);
+      this.$store.commit('tags/setCurrentBookmarkTags', this.$store.state.bookmarks.bookmarkToAdd.tags)
     }
-    if (this.$route.params.action === 'add') this.$store.commit('tags/setCurrentBookmarkTags', []);
+    if (this.$route.params.action === 'add') this.$store.commit('tags/setCurrentBookmarkTags', [])
   },
   computed: {
+    // Displays currently selected bookmark's parts and displays them in <template>
+    ...mapState('bookmarks', ['bookmarkToAdd']),
     // action and action2 display different words based on route parameters
     action() {
-      if (this.$route.params.action === 'add') return 'Add';
-      return 'Edit';
+      if (this.$route.params.action === 'add') return 'Add'
+      return 'Edit'
     },
     action2() {
-      if (this.$route.params.action === 'add') return 'to';
-      return 'in';
-    },
-    // Displays currently selected bookmark's parts and displays them in <template>
-    title() {
-      return this.$store.state.bookmarks.bookmarkToAdd.title;
-    },
-    description() {
-      return this.$store.state.bookmarks.bookmarkToAdd.description;
-    },
-    url() {
-      return this.$store.state.bookmarks.bookmarkToAdd.url;
-    },
-    // image() {
-    //   const images = this.$store.state.bookmarks.bookmarkToAdd.images;
-    //   return images && images.length != 0 && images[0];
-    // },
-    favicon() {
-      const favicons = this.$store.state.bookmarks.bookmarkToAdd.favicons;
-      return favicons && favicons.length != 0 && favicons[0];
-    },
-    // Displays the currently selected folder's parts and displays them in <template>
-    selectedFolder() {
-      return this.$store.state.folders.selectedFolder;
-    },
-    selectedFolderIcon() {
-      return this.displayIcon(this.$store.state.folders.selectedFolder.icon);
+      if (this.$route.params.action === 'add') return 'to'
+      return 'in'
     },
   },
   methods: {
     async submit() {
       const newBookmark = {
         ...this.$store.state.bookmarks.bookmarkToAdd,
-        title: this.customTitle,
-        description: this.customDesc,
         user_id: this.$store.state.users.currentUser._id,
         folder_id: this.$store.state.folders.selectedFolder._id,
+        title: this.customTitle,
+        description: this.customDesc,
+        url: this.$store.state.bookmarks.bookmarkToAdd.url,
         tags: this.$store.state.tags.currentBookmarkTags,
-        dateCreated: new Date(),
+        dateCreated: new Date()
       };
       // POST bookmark if adding
       if (this.$route.params.action === 'add') {
-        await this.$store.dispatch('bookmarks/addBookmark', newBookmark);
+        await this.$store.dispatch('bookmarks/addBookmark', newBookmark)
       }
       // UPDATE bookmark if editing
       else if (this.$route.params.action === 'edit') {
-        await this.$store.dispatch('bookmarks/editBookmark', newBookmark);
+        await this.$store.dispatch('bookmarks/editBookmark', newBookmark)
       }
       // GET tags and update list
-      await this.$store.dispatch('tags/getUserTags', this.$store.state.users.currentUser._id);
+      await this.$store.dispatch('tags/getUserTags', this.$store.state.users.currentUser._id)
       // Push to folder once async actions are completed
       this.$router.push({
         name: 'Folder',
-        params: { name: this.$store.state.folders.selectedFolder.name.toLowerCase().replace(/\s/g, '-') },
-      });
+        params: {
+          name: this.$store.state.folders.selectedFolder.name.toLowerCase().replace(/\s/g, '-'),
+          id: this.$store.state.folders.selectedFolder._id
+        },
+      })
       // Clear selected tags from state
-      this.$store.commit('tags/setCurrentBookmarkTags', []);
+      this.$store.commit('tags/setCurrentBookmarkTags', [])
     },
     // Display icon for selected folder icon in <template>
     displayIcon(icon) {
-      return mdijs[icon];
+      return mdijs[icon]
     },
   },
-};
+}
 </script>
 
 <style scoped>

@@ -1,21 +1,22 @@
 <template>
   <v-combobox
-    v-model="chips"
-    :items="items"
+    @change="setTags"
     chips
     clearable
+    hint="Add new tags or select existing tags."
+    id="add-bookmark-tag-selector"
+    :items="items"
     label="Tags"
     multiple
-    prepend-icon="mdi-filter-variant"
     persistent-hint
-    hint="Add new tags or select existing tags."
+    prepend-icon="mdi-filter-variant"
     solo
-    @change="setTags"
+    v-model="chips"
   >
     <template v-slot:selection="{ attrs, item, select, selected }">
       <v-chip v-bind="attrs" :input-value="selected" close @click="select" @click:close="remove(item)">
-        <strong>{{ item }}</strong
-        >&nbsp;
+        <strong>{{ item }}</strong>
+        &nbsp;
       </v-chip>
     </template>
   </v-combobox>
@@ -33,22 +34,20 @@ export default {
   },
   computed: {
     items() {
-      return this.$store.state.tags.list;
+      return this.$store.state.tags.list
     },
   },
   methods: {
     // Removes a chip from the list when the x is clicked
     remove(item) {
-      this.chips.splice(this.chips.indexOf(item), 1);
-      this.chips = [...this.chips];
-      this.setTags();
+      this.chips.splice(this.chips.indexOf(item), 1)
+      this.chips = [...this.chips]
+      this.setTags()
     },
     // Set tag list in state, tags are posted to db in parent component, AddBookmark, when bookmark is submitted
     setTags() {
-      this.$store.commit('tags/setCurrentBookmarkTags', this.chips);
+      this.$store.commit('tags/setCurrentBookmarkTags', this.chips)
     },
   },
-};
+}
 </script>
-
-<style></style>

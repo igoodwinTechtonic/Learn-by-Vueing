@@ -1,0 +1,4 @@
+{
+  "chromeWebSecurity": false,
+  "supportFile": "cypress/support/index.js"
+}

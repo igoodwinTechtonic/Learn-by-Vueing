@@ -1,24 +1,29 @@
-import axios from 'axios';
+import axios from 'axios'
 
 export default {
   namespaced: true,
   state: {
     list: [],
-    searchResults: [],
     bookmarkToAdd: {},
+    searchResults: [],
   },
   mutations: {
     // Sets all user's bookmarks in state
     setBookmarks(state, bookmarks) {
-      state.list = bookmarks;
+      state.list = bookmarks
     },
     // Sets the bookmark to add or edit here
     setBookmarkToAdd(state, bookmark) {
-      state.bookmarkToAdd = bookmark;
+      state.bookmarkToAdd = bookmark
     },
     // Sets the search results and displays in bookmarks view
     searchResults(state, bookmarks) {
-      state.searchResults = bookmarks;
+      state.searchResults = bookmarks
+    },
+    resetState(state) {
+      state.list = []
+      state.bookmarkToAdd = {}
+      state.searchResults = []
     }
   },
   actions: {
@@ -28,10 +33,29 @@ export default {
     * @param {string} user_id - The user id from the users collection.
     * @returns {Promise} A promise containing the user's bookmarks.
     */
-    getBookmarks({ commit }, user_id) {
-      return axios.get('/api/bookmarks?id=' + user_id)
-        .then((res) => commit('setBookmarks', res.data))
-        .catch((err) => console.error(err));
+    async getBookmarks({ commit }, user_id) {
+      try {
+        const res = await axios.get('/api/bookmarks?userid=' + user_id)
+        commit('setBookmarks', res.data)
+      } catch (e) {
+        console.error(e)
+      }
+    },
+    /** GETS all bookmarks from db given a public folder id
+     * 
+     * @param {Object} param0 - Destructed into commit.
+     * @param {string} folder_id - The folder id to get.
+     */
+    async getBookmarksFromPublicFolder({ commit }, folder_id) {
+      try {
+        const bookmarks = await axios.get('/api/bookmarks/all/' + folder_id)
+        const folder = await axios.get('/api/folders/' + folder_id)
+        commit('setBookmarks', bookmarks.data)
+        commit('folders/setSelectedFolder', folder.data, { root: true })
+      } catch (e) {
+        // If 404, the folder was deleted or is empty
+        console.error(e)
+      }
     },
     /** Searches bookmarks given a keyword entered from the search menu
      * 
@@ -39,11 +63,14 @@ export default {
      * @param {string} keywords - The user's inputted search keywords.
      * @returns {Promise} A promise containing the queried bookmarks.
      */
-    searchBookmarks({ commit, rootState }, keywords) {
-      if (keywords === '') return;
-      return axios.get(`api/bookmarks?id=${rootState.users.currentUser._id}&search=${keywords}`)
-        .then((res) => commit('searchResults', res.data))
-        .catch((err) => console.error(err))
+    async searchBookmarks({ commit, rootState }, keywords) {
+      if (keywords === '') return
+      try {
+        const res = await axios.get(`api/bookmarks/search?userid=${rootState.users.currentUser._id}&search=${keywords}`)
+        commit('searchResults', res.data)
+      } catch (e) {
+        console.error(e)
+      }
     },
     /** POSTS a new bookmark to db and updates bookmark list
      * 
@@ -51,15 +78,15 @@ export default {
      * @param {Object} bookmarkToAdd - The bookmark to add to the user's account.
      * @returns {Promise} A promise after inserting the bookmark.
      */
-    addBookmark({ commit, state }, bookmarkToAdd) {
-      return axios
-        .post('/api/bookmarks', bookmarkToAdd)
-        .then((res) => {
-          const addedBookmark = res.data.ops[0]
-          const bookmarkList = [...state.list, addedBookmark];
-          commit('setBookmarks', bookmarkList)
-        })
-        .catch((err) => console.error(err));
+    async addBookmark({ commit, state }, bookmarkToAdd) {
+      try {
+        const res = await axios.post('/api/bookmarks', bookmarkToAdd)
+        const addedBookmark = res.data
+        const bookmarkList = [...state.list, addedBookmark]
+        commit('setBookmarks', bookmarkList)
+      } catch (e) {
+        console.error(e)
+      }
     },
     /** PUTS / UPDATES a bookmark to db and updates bookmarks list
      * 
@@ -67,16 +94,16 @@ export default {
      * @param {Object} bookmarkToEdit - The bookmark to edit in the user's account.
      * @returns {Promise} A promise after reinserting the bookmark.
      */
-    editBookmark({ commit, state }, bookmarkToEdit) {
+    async editBookmark({ commit, state }, bookmarkToEdit) {
       const { _id, ...bookmarkWithoutId } = bookmarkToEdit
-      return axios
-        .put('/api/bookmarks/' + bookmarkToEdit._id, bookmarkWithoutId)
-        .then(() => {
-          const bookmarkListRemove = state.list.filter(bookmark => bookmark._id !== _id);
-          const bookmarkListReadd = [...bookmarkListRemove, bookmarkToEdit];
-          commit('setBookmarks', bookmarkListReadd)
-        })
-        .catch((err) => console.error(err));
+      try {
+        await axios.put('/api/bookmarks/' + bookmarkToEdit._id, bookmarkWithoutId)
+        const bookmarkListRemove = state.list.filter(bookmark => bookmark._id !== _id)
+        const bookmarkListReadd = [...bookmarkListRemove, bookmarkToEdit]
+        commit('setBookmarks', bookmarkListReadd)
+      } catch (e) {
+        console.error(e)
+      }
     },
     /** DELETES a single bookmark and updates bookmarks list
      * 
@@ -84,12 +111,14 @@ export default {
      * @param {Object} bookmarkToDelete - The bookmark to delete in the user's account.
      * @returns {Promise} A promise after deleting the bookmark.
      */
-    deleteBookmark({ commit, state }, bookmarkToDelete) {
-      const bookmarkList = state.list.filter(bookmark => bookmark._id !== bookmarkToDelete.id);
-      return axios
-        .delete('/api/bookmarks/' + bookmarkToDelete.id)
-        .then(() => commit('setBookmarks', bookmarkList))
-        .catch((err) => console.error(err));
+    async deleteBookmark({ commit, state }, bookmarkToDelete) {
+      const bookmarkList = state.list.filter(bookmark => bookmark._id !== bookmarkToDelete.id)
+      try {
+        await axios.delete('/api/bookmarks/' + bookmarkToDelete.id)
+        commit('setBookmarks', bookmarkList)
+      } catch (e) {
+        console.error(e)
+      }
     },
     /** DELETES all bookmarks from a folder when a folder is deleted, given folder id
      * Dispatches getBookmarks to re-get all user's bookmarks to refresh folder state.
@@ -98,11 +127,13 @@ export default {
      * @param {string} folderId - The folder id to delete.
      * @returns {Promise} A promise after the bookmark is deleted.
      */
-    deleteAllBookmarksInFolder({ dispatch, rootState }, folderId) {
-      return axios
-        .delete('/api/bookmarks/all/' + folderId)
-        .then(() => dispatch('getBookmarks'), rootState.users.currentUser._id)
-        .catch((err) => console.error(err));
+    async deleteAllBookmarksInFolder({ dispatch, rootState }, folderId) {
+      try {
+        await axios.delete('/api/bookmarks/all/' + folderId)
+        dispatch('getBookmarks', rootState.users.currentUser._id)
+      } catch (e) {
+        console.error(e)
+      }
     }
   }
 }

@@ -1,46 +1,45 @@
-# Bugs
+# Learn By Vueing
 
-## BUG REPORT - 25 March 2021
+**A project to help me learn Vue and other backend techs.**
 
-> Bug 001 - When adding a folder, searching icons does not display correct results
+Todos:
 
-### To replicate
+- Use JWT to provide a more authenticated experience for users
+- Create a sessions collection in MongoDB. Create a doc when user logs in, delete it when they log out
+- Refactor backend to use MongoDB MVC as per the M220JS class
+- Refactor backend to use MongoDB and Spring Boot as per M220J class
+- Refactor backend to use sequelize and a PostgreSQL database
+- Actually write tests
 
-1. Click the Add Folder button to add a folder
-2. Type "python" into the icon input field. Nothing shows up!
-3. Now type "language". All the icons for the programming languages appear, including the python icon!
+## Setup
 
-### Current functionality
+1. `cd client`
+2. `npm install`
+3. `cd ../server`
+4. `npm install`
 
-On `@keyup`, the input text in the field is sent to this searchIcons and searches based on the text that comes immediately after `mdi`, instead of searching any matching characters in the string.
+## Running on local machine
 
-`this.filteredIcons` - a local state variable to hold an array of filtered icons  
-`this.icons` - a local state variable to hold an array of all icons from mdijs package
+1. `cd client`
+2. `npm run serve`
+3. `cd ../server`
+4. `npm start`
+5. Navigate to http://localhost:3000/
 
-```js
-searchIcons(input) {
-  this.filteredIcons = this.icons.filter((icon) =>
-    icon.includes('mdi' + input.charAt(0).toUpperCase() + input.slice(1))
-  );
-},
-```
+### You can simulate the production build. The static build files from client/dist are served.
 
-For example. searching "language" displays all the programming language icons because the mdi icon names for the icons look like this:
+1. `cd client`
+2. `npm run build`
+3. `cd ../server`
+4. `NODE_ENV=production node server.js`
+5. Navigate to http://localhost:3001/
 
-```js
-// ...
-export declare const mdiLanguageMarkdown: string;
-export declare const mdiLanguageMarkdownOutline: string;
-export declare const mdiLanguagePhp: string;
-export declare const mdiLanguagePython: string;
-export declare const mdiLanguageR: string;
-export declare const mdiLanguageRuby: string;
-export declare const mdiLanguageRubyOnRails: string;
-// ...
-```
+### FOR ME ONLY
 
-### Proposed functionality
+Obtain .env files from me before attempting to run this, or connect it to your own Auth0 and MongoDBs.
 
-Logic to search based on matches at any point in the string, rather than what comes immediately after `mdi`.
+- heroku git:remote -a learn-by-vueing
+- git push heroku HEAD:master
+- heroku logs --tail
 
----
+If the app is stuck at a loading screen and fails to sign in, it's possible that the Auth0 authorization request failed with a 403. Make sure that no other apps are running on ports 3000 or 3001, then restart the server / client.
